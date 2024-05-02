@@ -70,7 +70,7 @@ BiteReserve is an intuitive web application that simplifies restaurant reservati
 
 ## API Routes
 
-![API Routes](./planning/)
+![API Routes](./planning/API-Route.png)
 
 ## React Routes
 
