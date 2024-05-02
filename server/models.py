@@ -35,9 +35,9 @@ class Restaurant(db.Model, SerializerMixin):
     logo = db.Column(db.String)
     menu_link = db.Column(db.String)
     capacity = db.Column(db.Integer)
-    open_time = db.Column(db.Integer)
-    close_time = db.Column(db.Integer)
-    res_duration = db.Column(db.Integer)
+    open_time = db.Column(db.Integer) #not in schema
+    close_time = db.Column(db.Integer) #not in schema
+    res_duration = db.Column(db.Integer) #not in schema
 
     # add relationship
     reservations = db.relationship('Reservation', back_populates='restaurant', cascade ='all, delete-orphan')
@@ -83,11 +83,7 @@ class Restaurant(db.Model, SerializerMixin):
             raise ValueError(f"Invalid {key} URL format")
         return value
 
-    @validates('rating')
-    def validate_rating(self, key, value):
-        if not isinstance(value, int) or value < 0 or value > 5:
-            raise ValueError("Rating must be an integer between 0 and 5")
-        return value
+
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
