@@ -1,9 +1,5 @@
-import React from 'react'
-
 function RestaurantForm() {
-    return (
-        <div>RestaurantForm</div>
-    )
+  return <div>RestaurantForm</div>;
 }
 
-export default RestaurantForm
+export default RestaurantForm;

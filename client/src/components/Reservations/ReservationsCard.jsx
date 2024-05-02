@@ -1,9 +1,5 @@
-import React from 'react'
-
 function ReservationsCard() {
-    return (
-        <div>ReservationsCard</div>
-    )
+  return <div>ReservationsCard</div>;
 }
 
-export default ReservationsCard
+export default ReservationsCard;

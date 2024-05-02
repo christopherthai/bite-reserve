@@ -1,9 +1,5 @@
-import React from 'react'
-
 function RestaurantDetail() {
-    return (
-        <div>RestaurantDetail</div>
-    )
+  return <div>RestaurantDetail</div>;
 }
 
-export default RestaurantDetail
+export default RestaurantDetail;

@@ -1,9 +1,5 @@
-import React from 'react'
-
 function ReviewsList() {
-    return (
-        <div>ReviewsList</div>
-    )
+  return <div>ReviewsList</div>;
 }
 
-export default ReviewsList
+export default ReviewsList;

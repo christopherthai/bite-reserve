@@ -1,9 +1,5 @@
-import React from 'react'
-
 function ReservationsPage() {
-    return (
-        <div>ReservationsPage</div>
-    )
+  return <div>ReservationsPage</div>;
 }
 
-export default ReservationsPage
+export default ReservationsPage;

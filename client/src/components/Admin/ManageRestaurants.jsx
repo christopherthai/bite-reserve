@@ -1,9 +1,5 @@
-import React from 'react'
-
 function ManageRestaurants() {
-    return (
-        <div>ManageRestaurants</div>
-    )
+  return <div>ManageRestaurants</div>;
 }
 
-export default ManageRestaurants
+export default ManageRestaurants;
