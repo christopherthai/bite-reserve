@@ -18,7 +18,7 @@ BiteReserve is an intuitive web application that simplifies restaurant reservati
 
 ### Reservations Page
 
-![ReservationsPage](./planning/Wireframe.png)
+![ReservationsPage](./planning/ReservationsPage.png)
 
 ### Admin Dashboard Page
 
