@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="FtEbee-XCXTfJkGimnTI" name="Page-1">
-        <mxGraphModel dx="4570" dy="2760" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="4856" dy="2888" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -199,7 +199,7 @@
                         <mxPoint x="1877" y="270" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="94" value="DeleteRestaurantButtom" style="whiteSpace=wrap;html=1;fontSize=22;" parent="1" vertex="1">
+                <mxCell id="94" value="DeleteRestaurantButton" style="whiteSpace=wrap;html=1;fontSize=22;" parent="1" vertex="1">
                     <mxGeometry x="1940" y="310" width="270" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="95" value="" style="edgeStyle=none;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;exitX=1;exitY=1;exitDx=0;exitDy=0;" parent="1" source="58" target="94" edge="1">
@@ -214,7 +214,7 @@
                 <mxCell id="99" value="ReservationForm" style="whiteSpace=wrap;html=1;fontSize=22;" parent="1" vertex="1">
                     <mxGeometry x="2300" y="210" width="200" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="100" value="CancelReservationButtom" style="whiteSpace=wrap;html=1;fontSize=22;" parent="1" vertex="1">
+                <mxCell id="100" value="CancelReservationButton" style="whiteSpace=wrap;html=1;fontSize=22;" parent="1" vertex="1">
                     <mxGeometry x="2530" y="210" width="290" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="102" value="" style="edgeStyle=none;html=1;entryX=0.7;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.144;exitY=0.983;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="59" target="96" edge="1">
