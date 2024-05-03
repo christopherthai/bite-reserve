@@ -1,2 +1,6 @@
-INSERT INTO Restaurants (name, phone, email, address, city, state, zip, image, website, logo, menu_link, capacity, open_time, close_time, res_duration) VALUES
+INSERT INTO Restaurants (name, phone, address, city, state, zip, image, website, menu_link, capacity, open_time, close_time, res_duration) VALUES
+('Little Alley', '646-998-3976', '550 3rd Avenue', 'New York', 'NY', '10016', 'https://assets-global.website-files.com/645aecde0bd10564f39f4379/64e73f688681676ffdf401d0_20230103%20Little%20Alley_367%20WHD.jpg', 'https://www.littlealley.nyc/', 'https://www.littlealley.nyc/menu', 60, 1600, 2000, 90),
+('Bua Thai Ramen & Robata Grill', '212-879-7999', '1611 2nd Ave', 'New York', 'NY', '10028', 'https://res.cloudinary.com/simplemenu/image/upload/q_auto:low/v1634061774/510163478_nn3wcy.jpg', 'https://orderbuathairamenandrobatagrill.com/Home/index', 'https://orderbuathairamenandrobatagrill.com/menu', 50, 1700, 2000, 90),
+('Piccola Cucina Estiatorio', '646-781-9183', '75 Thompson St', 'New, York', 'NY', '10012', 'https://resizer.otstatic.com/v2/photos/wide-huge/3/51692061.jpg', 'https://www.piccolacucinagroup.com/piccola-cucina-estiatorio-soho-nyc/', 'https://www.piccolacucinagroup.com/menu/estiatorio_menu.html', 75, 1600, 2000, 120),
+('Club A Steakhouse', '212-688-4190', '240 E 58th St', 'New York', 'NY', '10022', 'https://images.squarespace-cdn.com/content/5693eb6ae0327c47e4964074/1460563297902-DWUQ5YB2V2SGMWVSN3OO/IMG_2584.jpg?content-type=image%2Fjpeg', 'https://www.clubasteakhouse.com/', 'https://www.clubasteakhouse.com/menu', 80, 1700, 2000, 120),
 
