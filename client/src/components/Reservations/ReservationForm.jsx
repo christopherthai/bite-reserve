@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 import ReactDOM from 'react-dom';
+
+
 
 function ReservationForm() {
   const [name, setName] = useState('');
@@ -18,6 +21,7 @@ function ReservationForm() {
 
   return (
     <div>
+      <h1></h1>
       <h2>Reservation Form</h2>
       <form onSubmit={handleSubmit}>
         <label>
@@ -57,7 +61,9 @@ function ReservationForm() {
           />
         </label>
         <br />
-        <button type="submit">Submit</button>
+        <Link to ="/reservations">
+            <button type="submit">Submit</button>
+        </Link>
       </form>
     </div>
   );
