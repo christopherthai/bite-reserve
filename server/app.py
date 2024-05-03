@@ -31,6 +31,9 @@ def index():
     return "<h1>Project Server</h1>"
 
 
+#Restaurants Routes
+#get
+#post
 class Restaurants(Resource):
 
     def get(self):
@@ -71,6 +74,10 @@ class Restaurants(Resource):
 api.add_resource(Restaurants, "/restuarants")
 
 
+#RestaurantsById Routes
+#get
+#patch
+#delete
 class RestaurantsById(Resource):
 
     def get(self, id):
@@ -117,6 +124,9 @@ class RestaurantsById(Resource):
 api.add_resource(RestaurantsById, "/restuarants/<int:id>")
 
 
+#Reviews Routes
+#get
+#post
 class Reviews(Resource):
 
     def get(self):
@@ -145,6 +155,9 @@ class Reviews(Resource):
 api.add_resource(Reviews, "/reviews")
 
 
+#ReviewsById Routes
+#patch
+#delete
 class ReviewsById(Resource):
 
     def patch(self, id):
@@ -184,6 +197,9 @@ class ReviewsById(Resource):
 api.add_resource(ReviewsById, "/reviews/<int:id>")
 
 
+#Reservations Routes
+#get
+#post
 class Reservations(Resource):
 
     def get(self):
@@ -212,6 +228,10 @@ class Reservations(Resource):
 api.add_resource(Reservations, "/reservations")
 
 
+#ReservationsById
+#get
+#patch
+#delete
 class ReservationsById(Resource):
 
     def get(self, id):
@@ -259,6 +279,9 @@ class ReservationsById(Resource):
 api.add_resource(ReservationsById, "/reservations/<int:id>")
 
 
+#Users Routes
+#get
+#post
 class Users(Resource):
 
     def get(self):
@@ -291,6 +314,10 @@ class Users(Resource):
 api.add_resource(Users, "/users")
 
 
+#UsersById Routes
+#get
+#patch
+#delete
 class UsersById(Resource):
 
     def get(self, id):
