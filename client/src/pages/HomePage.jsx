@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
-import React from "react";
-import "./HomePage.css"; // CSS 파일 import
-import ReservationsPage from "./ReservationsPage"; // 예약 페이지 컴포넌트 import
+import { Link } from 'react-router-dom';
+import React from 'react';
+import './HomePage.css'; // CSS 파일 import
 
 function HomePage() {
   return (
+  <>
+    <p className="home-header">Find your table for any occasion</p>
     <div className="page-container">
       <div className={"card-container blue-card"}>
         <Card title="Card 1" content="Content for Card 1" />
@@ -18,6 +19,7 @@ function HomePage() {
         <Card title="Card 9" content="Content for Card 9" />
       </div>
     </div>
+  </>
   );
 }
 
