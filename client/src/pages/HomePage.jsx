@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import React from 'react';
-import './HomePage.css'; // CSS 파일 import
-import ReservationsPage from './ReservationsPage'; // 예약 페이지 컴포넌트 import
+import { Link } from "react-router-dom";
+import React from "react";
+import "./HomePage.css"; // CSS 파일 import
+import ReservationsPage from "./ReservationsPage"; // 예약 페이지 컴포넌트 import
 
 function HomePage() {
   return (
