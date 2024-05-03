@@ -1,0 +1,10 @@
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* 각 줄의 아이템들을 양 끝에 배치합니다. */
+  }
+  
+  .card {
+    width: calc(33.33% - 20px); /* 각 카드의 너비를 조정합니다. 여기서는 간격 20px을 고려하여 계산합니다. */
+    margin-bottom: 20px; /* 각 줄의 아이템 사이의 간격을 설정합니다. */
+  }
