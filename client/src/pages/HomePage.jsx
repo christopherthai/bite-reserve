@@ -1,5 +1,7 @@
+import { Link } from 'react-router-dom';
 import React from 'react';
 import '/src/HomePage.css'; // CSS 파일 import
+import ReservationsPage from './ReservationsPage'; // 예약 페이지 컴포넌트 import
 
 function HomePage() {
   return (
@@ -21,10 +23,12 @@ function HomePage() {
 
 function Card({ title, content }) {
   return (
-    <div className="card">
-      <h2>{title}</h2>
-      <p>{content}</p>
-    </div>
+    <Link to="/reservations" className="card-link">
+      <div className="card">
+        <h2>{title}</h2>
+        <p>{content}</p>
+      </div>
+    </Link>
   );
 }
 
