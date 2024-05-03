@@ -157,7 +157,7 @@ class Reservation(db.Model, SerializerMixin):
     reservation_time = db.Column(db.DateTime, nullable=False)
     table_size = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String, nullable=False)
-    guest_name = db.Column(db.String, nullable=False)
+    notes = db.Column(db.String)
     
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
