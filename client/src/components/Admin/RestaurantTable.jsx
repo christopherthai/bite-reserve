@@ -9,6 +9,7 @@ import {
   Paper,
   Grid,
   Button,
+  Typography,
 } from "@mui/material";
 
 function RestaurantTable() {
@@ -37,6 +38,9 @@ function RestaurantTable() {
       }}
     >
       <Grid item>
+        <Typography variant="h4" component="h2" gutterBottom>
+          Restaurant List
+        </Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 1090 }} aria-label="simple table">
             <TableHead>
