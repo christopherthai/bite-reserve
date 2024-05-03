@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
   //   AppBar,
   //   Toolbar,
@@ -9,6 +10,7 @@ import {
   ListItemText,
   makeStyles,
   Grid,
+  Paper,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -36,41 +38,63 @@ function ManageRestaurant() {
     },
   ];
 
-  //   const [drawerItems, setDrawerItems] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
 
   //   useEffect(() => {
-  //     fetch('/api/my-model')
-  //       .then(response => response.json())
-  //       .then(data => setDrawerItems(data));
+  //     fetch("/api/restaurants") // replace with your actual API endpoint
+  //       .then((response) => response.json())
+  //       .then((data) => setRestaurants(data));
   //   }, []);
 
   return (
-    <Grid container direction="column">
-      <Grid item>
-        {/* <AppBar position="static" className={classes.appBar}>
+    <>
+      <Grid container direction="column">
+        <Grid item>
+          {/* <AppBar position="static" className={classes.appBar}>
           <Toolbar>
             <Typography variant="h6">Admin Dashboard</Typography>
           </Toolbar>
         </AppBar> */}
+        </Grid>
+        <Grid item>
+          <Drawer
+            className={classes.drawer}
+            variant="permanent"
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <List>
+              {drawerItems.map((item, index) => (
+                <ListItem button key={index} component={Link} to={item.path}>
+                  <ListItemText primary={item.name} />
+                </ListItem>
+              ))}
+            </List>
+          </Drawer>
+        </Grid>
       </Grid>
-      <Grid item>
-        <Drawer
-          className={classes.drawer}
-          variant="permanent"
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <List>
-            {drawerItems.map((item, index) => (
-              <ListItem button key={index} component={Link} to={item.path}>
-                <ListItemText primary={item.name} />
-              </ListItem>
-            ))}
-          </List>
-        </Drawer>
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: "100vh" }}
+      >
+        <Grid item>
+          <Paper elevation={3}>
+            <List>
+              {restaurants.map((restaurant, index) => (
+                <ListItem button key={index}>
+                  <ListItemText primary={restaurant.name} />{" "}
+                  {/* replace 'name' with the actual property name */}
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }
 

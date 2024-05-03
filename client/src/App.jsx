@@ -7,6 +7,7 @@ import RegistrationForm from "./components/RegistrationForm";
 import RestaurantDetail from "./components/Restaurants/RestaurantDetail";
 import ReservationsPage from "./pages/ReservationsPage";
 import ReservationDetail from "./components/Reservations/ReservationDetail";
+import ReservationForm from "./components/Reservations/ReservationForm";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import ManageRestaurants from "./components/Admin/ManageRestaurants";
 import ManageReservations from "./components/Admin/ManageReservations";
@@ -25,6 +26,7 @@ function App() {
           <Route path="/restaurant/:id" element={<RestaurantDetail />} />
           <Route path="/reservations" element={<ReservationsPage />} />
           <Route path="/reservation/:id" element={<ReservationDetail />} />
+          <Route path="/reservationsform" element={<ReservationForm />} />
           <Route path="/admindashboard" element={<AdminDashboardPage />} />
           <Route
             path="/admindashboard/manage-restaurants"
