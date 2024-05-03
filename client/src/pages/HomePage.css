@@ -4,11 +4,12 @@
     align-items: center; /* 페이지를 수직으로 가운데 정렬 */
     height: 100vh; /* 뷰포트 높이만큼 페이지의 높이 설정 */
     margin-left: 60px;
-    margin-top: -100px;
+    margin-top: -200px;
   }
   
   .card-container {
     display: grid;
+    place-items: center; /* 요소들을 가운데로 정렬 */
     grid-template-columns: repeat(3, 1fr); /* 3개의 열로 설정 */
     gap: 20px; /* 카드와 카드 사이의 간격 설정 */
     max-width: 900px; /* 페이지의 최대 너비 설정 */
@@ -32,4 +33,10 @@
     flex-direction: column;
     justify-content: flex-end; /* 아래로 정렬 */
     height: 100%; /* 부모 요소에 맞춰서 전체 높이 설정 */
+  }
+
+  .home-header {
+    font-size: 50px;
+    text-align: center;
+    margin-top: 100px; /* 원하는 만큼 아래로 내리기 */
   }
