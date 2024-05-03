@@ -15,7 +15,7 @@ CREATE TABLE Reservations (
     reservation_time INTEGER NOT NULL,
     table_size INTEGER NOT NULL,
     status TEXT NOT NULL,
-    guest_name TEXT NOT NULL,
+    notes TEXT NOT NULL,
     user_id INTEGER NOT NULL,
     restaurant_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(id),
