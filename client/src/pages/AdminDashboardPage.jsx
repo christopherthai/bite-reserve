@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: 200,
     height: "100vh",
-    marginTop: "64px",
+    marginTop: "64px", // Add this line
   },
 }));
 

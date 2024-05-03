@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: 200,
     height: "100vh",
-    marginTop: "64px",
+    marginTop: "64px", // Add this line
   },
 }));
 
@@ -35,14 +35,6 @@ function ManageReservations() {
       path: "/admindashboard/manage-reservations",
     },
   ];
-
-  //   const [drawerItems, setDrawerItems] = useState([]);
-
-  //   useEffect(() => {
-  //     fetch('/api/my-model')
-  //       .then(response => response.json())
-  //       .then(data => setDrawerItems(data));
-  //   }, []);
 
   return (
     <Grid container direction="column">

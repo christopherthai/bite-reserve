@@ -5,18 +5,18 @@ import ReactDOM from 'react-dom';
 
 
 function ReservationForm() {
-  const [name, setName] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
   const [partySize, setPartySize] = useState(1);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Name:", name);
     // 여기서 폼 데이터를 처리하거나 전달합니다.
-    console.log('Name:', name);
-    console.log('Date:', date);
-    console.log('Time:', time);
-    console.log('Party Size:', partySize);
+    console.log("Date:", date);
+    console.log("Time:", time);
+    console.log("Party Size:", partySize);
   };
 
   return (

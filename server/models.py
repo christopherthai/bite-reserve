@@ -36,6 +36,7 @@ class Restaurant(db.Model, SerializerMixin):
     image = db.Column(db.String, nullable=False)
     website = db.Column(db.String, nullable=False)
     menu_link = db.Column(db.String, nullable=False)
+    category = db.Column(db.String, nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
     open_time = db.Column(db.Integer, nullable=False)
     close_time = db.Column(db.Integer, nullable=False)
@@ -57,7 +58,7 @@ class Restaurant(db.Model, SerializerMixin):
     
     
     # validations for Restaurants.  Validates name, phone and address.
-    @validates("name", "phone", "address")
+    @validates("name", "phone", "address", "category")
     def validate_not_empty(self, key, value):
         if not value:
             raise ValueError(f"{key} cannot be empty")

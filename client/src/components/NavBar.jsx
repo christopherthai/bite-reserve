@@ -7,13 +7,21 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+  appBar: {
+    backgroundColor: "Light Blue",
+  },
+});
 
 function NavBar() {
+  const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" className={classes.appBar}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           BiteReserve

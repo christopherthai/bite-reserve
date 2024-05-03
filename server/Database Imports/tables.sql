@@ -34,6 +34,7 @@ CREATE TABLE Restaurants (
     image TEXT NOT NULL,
     website TEXT NOT NULL,
     menu_link TEXT NOT NULL,
+    category TEXT NOT NULL,
     capacity INTEGER NOT NULL,
     open_time INTEGER NOT NULL,
     close_time INTEGER NOT NULL,

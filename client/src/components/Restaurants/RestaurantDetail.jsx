@@ -5,7 +5,7 @@ function RestaurantDetail() {
   return (
     <div className="restaurant-detail">
       <div className="restaurant-image">
-        {/* <img src={imageUrl} alt="Restaurant" /> */}
+        <img src="/src/test pic 003.jpeg" alt="Restaurant" />
       </div>
       <div className="restaurant-info">
         <h2>Restaurant Name </h2>
