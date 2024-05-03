@@ -3,9 +3,8 @@ import '/src/HomePage.css'; // CSS 파일 import
 
 function HomePage() {
   return (
-    <div>
-      <h1>HomePage</h1>
-      <div className="card-container">
+    <div className="page-container">
+      <div className={"card-container blue-card"}>
         <Card title="Card 1" content="Content for Card 1" />
         <Card title="Card 2" content="Content for Card 2" />
         <Card title="Card 3" content="Content for Card 3" />
@@ -15,7 +14,6 @@ function HomePage() {
         <Card title="Card 7" content="Content for Card 7" />
         <Card title="Card 8" content="Content for Card 8" />
         <Card title="Card 9" content="Content for Card 9" />
-        {/* Add more Card components as needed */}
       </div>
     </div>
   );
