@@ -18,6 +18,7 @@
     display: block; /* 인라인 요소를 블록 요소로 변경하여 중앙 정렬이 적용되도록 합니다. */
     margin-left: 190px; /* 왼쪽 여백을 자동으로 설정하여 가운데 정렬합니다. */
     margin-right: auto; /* 오른쪽 여백을 자동으로 설정하여 가운데 정렬합니다. */
+    margin-top: -100px;
   }
   
   .about-description {

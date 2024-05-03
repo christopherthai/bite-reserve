@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
-import '/src/HomePage.css'; // CSS 파일 import
+import './HomePage.css'; // CSS 파일 import
 import ReservationsPage from './ReservationsPage'; // 예약 페이지 컴포넌트 import
 
 function HomePage() {
@@ -23,10 +23,11 @@ function HomePage() {
 
 function Card({ title, content }) {
   return (
-    <Link to="/reservations" className="card-link">
+    <Link to="/restaurant/:id" className="card-link">
       <div className="card">
         <div className="card-content">
           <h2 className="card-title">{title}</h2>
+          <img src="/src/test pic 002.jpeg" alt="Restaurant" />
           <p className="card-content">{content}</p>
         </div>
       </div>
