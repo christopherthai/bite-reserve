@@ -10,7 +10,6 @@ import re  # add to pipfile
 
 from config import db
 
-# Models go here!
 
 metadata = MetaData(
     naming_convention={
@@ -23,21 +22,19 @@ metadata = MetaData(
 
 db = SQLAlchemy(metadata=metadata)
 
-
+#Establish Restaurant class
 class Restaurant(db.Model, SerializerMixin):
     __tablename__ = "restaurants"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     phone = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, nullable=False)
     address = db.Column(db.String, nullable=False)
     city = db.Column(db.String, nullable=False)
     state = db.Column(db.String, nullable=False)
     zip = db.Column(db.String, nullable=False)
     image = db.Column(db.String, nullable=False)
     website = db.Column(db.String, nullable=False)
-    logo = db.Column(db.String, nullable=False)
     menu_link = db.Column(db.String, nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
     open_time = db.Column(db.Integer, nullable=False)
@@ -54,36 +51,34 @@ class Restaurant(db.Model, SerializerMixin):
     reservation_users = association_proxy("reservations", "user")
     review_users = association_proxy("reviews", "user")
 
-    # add serialization rules
-    serialize_rules = ("-reviews.restaurant",)
+    # serialization rules
+    serialize_rules = ("-reviews.restaurant", )
 
-    # add validations
-    @validates("name", "phone", "email", "location")
+    
+    
+    # validations for Restaurants.  Validates name, phone and address.
+    @validates("name", "phone", "address")
     def validate_not_empty(self, key, value):
         if not value:
             raise ValueError(f"{key} cannot be empty")
         return value
-
+    
+    # validates restaurant capacity upon entry.
     @validates("capacity")
     def validate_capacity(self, key, value):
         if not isinstance(value, int) or value <= 0:
             raise ValueError("Capacity must be a positive integer")
         return value
-
-    @validates("email")
-    def validate_email(self, key, value):
-        email_regex = r"^[\w\.-]+@[\w\.-]+\.\w+$"
-        if not re.match(email_regex, value):
-            raise ValueError("Invalid email format")
-        return value
-
+    
+    # validates phone number upon entry
     @validates("phone")
     def validate_phone(self, key, value):
         phone_regex = r"^\+?1?\d{9,15}$"
         if not re.match(phone_regex, value):
             raise ValueError("Invalid phone number format")
         return value
-
+    
+    #validates that the website and menu link are in the proper html format
     @validates("website", "menu_link")
     def validate_url(self, key, value):
         url_regex = r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
@@ -91,7 +86,7 @@ class Restaurant(db.Model, SerializerMixin):
             raise ValueError(f"Invalid {key} URL format")
         return value
 
-
+    #Establish User Class
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
@@ -104,44 +99,48 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String, nullable=False)
     IsAdmin = db.Column(db.Boolean, nullable=False)
 
-    # Define relationships
+    # relationships with reservations and reviews
     reservations = db.relationship("Reservation", back_populates="user")
     reviews = db.relationship("Review", back_populates="user")
 
-    # Define association proxies
+    # association proxies
     reservation_restaurants = association_proxy("reservations", "restaurant")
     review_restaurants = association_proxy("reviews", "restaurant")
 
-    # add serialization rules
-    serialize_rules = "-reviews.user"
-
-    # add validations
+    # serialization rules
+    serialize_rules = ("-reviews.user", )
+    
+    # validates the user's username, password, email and phone # upon entry
     @validates("username", "password", "email", "phone")
     def validate_not_empty(self, key, value):
         if not value:
             raise ValueError(f"{key} cannot be empty")
         return value
 
+    # validates that the isAdmin is a boolean value
     @validates("IsAdmin")
     def validate_is_admin(self, key, value):
         if not isinstance(value, bool):
             raise ValueError("IsAdmin must be a boolean value")
         return value
-
+    
+    # validatse that the users email is valid upon entry    
     @validates("email")
     def validate_email(self, key, value):
         email_regex = r"^[\w\.-]+@[\w\.-]+\.\w+$"
         if not re.match(email_regex, value):
             raise ValueError("Invalid email format")
         return value
-
+    
+    # validates that the user's phone number is in the correct format upon entry
     @validates("phone")
     def validate_phone(self, key, value):
         phone_regex = r"^\+?1?\d{9,15}$"
         if not re.match(phone_regex, value):
             raise ValueError("Invalid phone number format")
         return value
-
+    
+    # validates that the user's username and email are both unique
     @validates("username", "email")
     def validate_unique(self, key, value):
         existing_user = User.query.filter(getattr(User, key) == value).first()
@@ -150,6 +149,7 @@ class User(db.Model, SerializerMixin):
         return value
 
 
+    # Establish Reservation class
 class Reservation(db.Model, SerializerMixin):
     __tablename__ = "reservations"
 
@@ -157,31 +157,35 @@ class Reservation(db.Model, SerializerMixin):
     reservation_time = db.Column(db.DateTime, nullable=False)
     table_size = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String, nullable=False)
-    guest_name = db.Column(db.String, nullable=False)
+    notes = db.Column(db.String)
+    
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
 
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    restaurant_id = db.Column(db.Integer, db.ForeignKey("restaurants.id"))
-
-    # add relationships
+    
+    # relationships with user and restaurant
     user = db.relationship("User", back_populates="reservations")
     restaurant = db.relationship("Restaurant", back_populates="reservations")
 
-    # add serialization rules
+    # serialization rules
     serialize_rules = ("-user.reservations", "-restaurant.reservations")
 
-    # add validations
+    # validates the table size as a positive integer
     @validates("table_size")
     def validate_table_size(self, key, value):
         if not isinstance(value, int) or value <= 0:
             raise ValueError("Table size must be a positive integer")
         return value
 
+    # validates the table size as less than the restaurant's total capacity
     @validates("table_size")
     def validate_table_size(self, key, value):
         if value > self.restaurant.capacity:
             raise ValueError("Party size exceeds restaurant's capacity")
         return value
 
+    # validates that the reservation is unique and not a duplicate
     @validates("restaurant_id", "reservation_time")
     def validate_unique_reservation(self, key, value):
         existing_reservation = Reservation.query.filter_by(
@@ -195,6 +199,8 @@ class Reservation(db.Model, SerializerMixin):
             )
         return value
 
+    # Calculates a window of time based on the reservation duration.  15 minutes before
+    # and 15 miutes after the reservation time.  
     @staticmethod
     def get_reservation_time_window(reservation_time, res_duration):
         """
@@ -205,6 +211,8 @@ class Reservation(db.Model, SerializerMixin):
             reservation_time + timedelta(minutes=res_duration),
         )
 
+    # Uses the time window to query the sum of table sizes of all reservations in 
+    # the specified window. 
     @staticmethod
     def get_total_table_sizes(restaurant_id, start_time, end_time):
         """
@@ -221,7 +229,9 @@ class Reservation(db.Model, SerializerMixin):
         )
 
         return total_table_sizes or 0
-
+    
+    # Validates that the reservation is in the future
+    # Validates that the restaurant is not at capacity when the reservation is made
     @validates("reservation_time")
     def validate_reservation_time(self, key, value):
         if value <= datetime.now():
@@ -239,7 +249,7 @@ class Reservation(db.Model, SerializerMixin):
 
         return value
 
-
+    # Establish Review class
 class Review(db.Model, SerializerMixin):
     __tablename__ = "reviews"
 
@@ -251,26 +261,29 @@ class Review(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     restaurant_id = db.Column(db.Integer, db.ForeignKey("restaurants.id"))
 
-    # add relationships
+    # relationships with user and restaurant
     user = db.relationship("User", back_populates="reviews")
     restaurant = db.relationship("Restaurant", back_populates="reviews")
 
-    # add serialization rules
+    # serialization rules
     serialize_rules = ("-user.reviews", "-restaurant.reviews")
 
-    # add validations
+    # validates the rating of the review as b/w 1-5
     @validates("rating")
     def validate_rating(self, key, value):
         if not isinstance(value, int) or value < 1 or value > 5:
             raise ValueError("Rating must be an integer between 1 and 5")
         return value
-
+    
+    # validates that the rating comment is not empty
     @validates("comment")
     def validate_comment(self, key, value):
         if not value:
             raise ValueError("Comment cannot be empty")
         return value
 
+    # validates that the user is not submitting multiple reviews for 
+    # the same restaurant in a specified period of time
     @validates("restaurant_id", "user_id", "timestamp")
     def validate_unique_review(self, key, value):
         existing_review = (
@@ -285,12 +298,13 @@ class Review(db.Model, SerializerMixin):
                 "You have already submitted a review for this restaurant within the last week"
             )
         return value
-
+    
+    
+    # validates the comment length to keep it under 500 characters
     @validates("comment")
     def validate_comment(self, key, value):
-        if len(value) > 500:  # Assuming a maximum of 500 characters for the comment
+        if len(value) > 500:  # maximum of 500 characters for the comment
             raise ValueError("Comment exceeds maximum character limit (500 characters)")
         return value
 
 
-# add any models you may need.
