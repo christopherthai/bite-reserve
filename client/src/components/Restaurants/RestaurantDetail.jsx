@@ -15,7 +15,7 @@ function RestaurantDetail() {
         <p>Web Site</p>
         <p>Rating</p>
       </div>
-      <Link to="client/src/components/Reservations/ReservationForm.jsx">
+      <Link to="/Reservations/ReservationForm.jsx">
         <button>reservation</button>
       </Link>
     </div>
