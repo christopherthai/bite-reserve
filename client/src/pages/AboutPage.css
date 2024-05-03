@@ -1,0 +1,28 @@
+
+
+.about-page {
+    display: flex;
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    height: 100vh; /* 화면 전체 높이 */
+  }
+  
+  .about-content {
+    text-align: center; /* 내용 가운데 정렬 */
+  }
+  
+  .about-image {
+    width: 700px; /* 이미지 너비 설정 */
+    height: auto; /* 이미지 높이 자동 조절 */
+    margin-bottom: 20px; /* 이미지 아래 여백 */
+    display: block; /* 인라인 요소를 블록 요소로 변경하여 중앙 정렬이 적용되도록 합니다. */
+    margin-left: 190px; /* 왼쪽 여백을 자동으로 설정하여 가운데 정렬합니다. */
+    margin-right: auto; /* 오른쪽 여백을 자동으로 설정하여 가운데 정렬합니다. */
+    margin-top: -100px;
+  }
+  
+  .about-description {
+    font-size: 18px; /* 설명 텍스트 크기 */
+    margin-left: 200px; /* 왼쪽 여백 추가 */
+    margin-right: 200px;
+  }
