@@ -35,12 +35,12 @@ def index():
 #get
 #post
 class Restaurants(Resource):
-
+    
     def get(self):
         restaurants = Restaurant.query.all()
-        restuarants_list = [restaurant.to_dict for restaurant in restaurants]
+        restaurants_list = [restaurant.to_dict() for restaurant in restaurants]
 
-        return make_response(restuarants_list, 200)
+        return make_response(restaurants_list, 200)
 
     def post(self):
         data = request.get_json()
@@ -71,7 +71,7 @@ class Restaurants(Resource):
             return make_response({"errors": ["validation errors"]}, 400)
 
 
-api.add_resource(Restaurants, "/restuarants")
+api.add_resource(Restaurants, "/restaurants")
 
 
 #RestaurantsById Routes
@@ -195,6 +195,13 @@ class ReviewsById(Resource):
 
 
 api.add_resource(ReviewsById, "/reviews/<int:id>")
+
+
+
+
+
+##Spencer Below this~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 
 #Reservations Routes
