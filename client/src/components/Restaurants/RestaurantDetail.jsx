@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import React from 'react';
+import { Link } from "react-router-dom";
+import React from "react";
 
 function RestaurantDetail() {
   return (
@@ -15,7 +15,7 @@ function RestaurantDetail() {
         <p>Web Site</p>
         <p>Rating</p>
       </div>
-      <Link to="/Reservations/ReservationForm.jsx">
+      <Link to="/reservationsform">
         <button>reservation</button>
       </Link>
     </div>
