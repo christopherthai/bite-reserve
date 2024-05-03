@@ -25,8 +25,10 @@ function Card({ title, content }) {
   return (
     <Link to="/reservations" className="card-link">
       <div className="card">
-        <h2>{title}</h2>
-        <p>{content}</p>
+        <div className="card-content">
+          <h2 className="card-title">{title}</h2>
+          <p className="card-content">{content}</p>
+        </div>
       </div>
     </Link>
   );
