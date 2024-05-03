@@ -10,6 +10,7 @@ import {
   makeStyles,
   Grid,
 } from "@material-ui/core";
+import RestaurantTable from "./RestaurantTable";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -22,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: 200,
     height: "100vh",
-    marginTop: "64px", // Add this line
+    marginTop: "64px",
+    backgroundColor: "#3f51b5",
   },
 }));
 
@@ -37,32 +39,35 @@ function ManageRestaurant() {
   ];
 
   return (
-    <Grid container direction="column">
-      <Grid item>
-        {/* <AppBar position="static" className={classes.appBar}>
+    <>
+      <Grid container direction="column">
+        <Grid item>
+          {/* <AppBar position="static" className={classes.appBar}>
           <Toolbar>
             <Typography variant="h6">Admin Dashboard</Typography>
           </Toolbar>
         </AppBar> */}
+        </Grid>
+        <Grid item>
+          <Drawer
+            className={classes.drawer}
+            variant="permanent"
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <List>
+              {drawerItems.map((item, index) => (
+                <ListItem button key={index} component={Link} to={item.path}>
+                  <ListItemText primary={item.name} />
+                </ListItem>
+              ))}
+            </List>
+          </Drawer>
+        </Grid>
       </Grid>
-      <Grid item>
-        <Drawer
-          className={classes.drawer}
-          variant="permanent"
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <List>
-            {drawerItems.map((item, index) => (
-              <ListItem button key={index} component={Link} to={item.path}>
-                <ListItemText primary={item.name} />
-              </ListItem>
-            ))}
-          </List>
-        </Drawer>
-      </Grid>
-    </Grid>
+      <RestaurantTable />
+    </>
   );
 }
 
