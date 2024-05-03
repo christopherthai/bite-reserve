@@ -51,7 +51,7 @@ class Restaurant(db.Model, SerializerMixin):
     review_users = association_proxy('reviews', 'user')
     
     # add serialization rules
-    serialize_rules = ("-reviews.restaurant")
+    serialize_rules = ("-reviews.restaurant", )
 
     
     
@@ -114,7 +114,7 @@ class User(db.Model, SerializerMixin):
     review_restaurants = association_proxy('reviews', 'restaurant')
 
     # add serialization rules
-    serialize_rules = ("-reviews.user")
+    serialize_rules = ("-reviews.user", )
     
     # add validations
     @validates('username', 'password', 'email', 'phone')
