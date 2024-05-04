@@ -55,6 +55,9 @@ const LoginForm = () => {
           </Form>
         )}
       </Formik>
+      <p>
+        Not registered? <Link to="/register">Register Here</Link>
+      </p>
     </div>
   );
 };
