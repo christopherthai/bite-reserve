@@ -5,47 +5,23 @@ import { Link } from 'react-router-dom';
 import './HomePage.css'; // CSS 파일 import
 import RestaurantList from '../components/Restaurants/RestaurantList.jsx';
 
-
-
-
-
-
 function HomePage() {
+  const restaurants = RestaurantList(); // RestaurantList를 함수로부터 데이터 받아오기
 
-  //create state for the restaurant
-  const [restaurant, setRestaurant] = useState([])
+  return (
+    <>
+      <p className="home-header">Find your table for any occasion</p>
+      <div className="page-container">
+        <div className="card-container">
+          {restaurants.map((card, index) => (
+            <Card key={index} title={card.title} content={card.content} />
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
 
-  //use useEffect to fetch restaurant and update state
-  useEffect(() => {
-    fetch('/restaurant-list')
-    .then (res => {
-      if(res.ok){
-        return res.json()
-      } else {
-        console.log('restaurant-list not found')
-      }
-    })
-    .then(data => setRestaurant(data))
-  }, [])
-  return
-
-  // <>
-  //   <p className="home-header">Find your table for any occasion</p>
-  //   <div className="page-container">
-  //     <div className={"card-container blue-card"}>
-  //       <Card title="Card 1" content="Content for Card 1" />
-  //       <Card title="Card 2" content="Content for Card 2" />
-  //       <Card title="Card 3" content="Content for Card 3" />
-  //       <Card title="Card 4" content="Content for Card 4" />
-  //       <Card title="Card 5" content="Content for Card 5" />
-  //       <Card title="Card 6" content="Content for Card 6" />
-  //       <Card title="Card 7" content="Content for Card 7" />
-  //       <Card title="Card 8" content="Content for Card 8" />
-  //       <Card title="Card 9" content="Content for Card 9" />
-  //     </div>
-  //   </div>
-  // </>
-  
 
 function Card({ title, content }) {
   return (
@@ -60,6 +36,6 @@ function Card({ title, content }) {
     </Link>
   )
 }
-}
+
 
 export default HomePage;
