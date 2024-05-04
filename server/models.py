@@ -57,35 +57,40 @@ class Restaurant(db.Model, SerializerMixin):
 
     
     
-    # # validations for Restaurants.  Validates name, phone and address.
-    # @validates("name", "phone", "address", "category")
-    # def validate_not_empty(self, key, value):
-    #     if not value:
-    #         raise ValueError(f"{key} cannot be empty")
-    #     return value
+    # validations for Restaurants.  Validates name, phone and address.
+    @validates("name", "address", "category")
+    def validate_not_empty(self, key, value):
+        if not value:
+            raise ValueError(f"{key} cannot be empty")
+        return value
     
-    # # validates restaurant capacity upon entry.
-    # @validates("capacity")
-    # def validate_capacity(self, key, value):
-    #     if not isinstance(value, int) or value <= 0:
-    #         raise ValueError("Capacity must be a positive integer")
-    #     return value
+    # validates restaurant capacity upon entry.
+    @validates("capacity")
+    def validate_capacity(self, key, value):
+        if not isinstance(value, int) or value <= 0:
+            raise ValueError("Capacity must be a positive integer")
+        return value
     
-    # # validates phone number upon entry
-    # @validates("phone")
-    # def validate_phone(self, key, value):
-    #     phone_regex = r"^\+?1?\d{9,15}$"
-    #     if not re.match(phone_regex, value):
-    #         raise ValueError("Invalid phone number format")
-    #     return value
+    # validates phone number upon entry
+    @validates("phone")
+    def validate_phone(self, key, value):
+        phone_regex = r"^\+?1?\d{9,15}$"
+        if not re.match(phone_regex, value):
+            raise ValueError("Invalid phone number format")
+        return value
+    
+    def validate_not_empty(self, key, value):
+        if not value:
+            raise ValueError(f"{key} cannot be empty")
+        return value
     
     #validates that the website and menu link are in the proper html format
-    # @validates("website", "menu_link")
-    # def validate_url(self, key, value):
-    #     url_regex = r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
-    #     if not re.match(url_regex, value):
-    #         raise ValueError(f"Invalid {key} URL format")
-    #     return value
+    @validates("website", "menu_link")
+    def validate_url(self, key, value):
+        url_regex = r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+        if not re.match(url_regex, value):
+            raise ValueError(f"Invalid {key} URL format")
+        return value
 
     #Establish User Class
 class User(db.Model, SerializerMixin):
@@ -111,21 +116,21 @@ class User(db.Model, SerializerMixin):
     # serialization rules
     serialize_rules = ("-reviews", "-reservations")
     
-    # # validates the user's username, password, email and phone # upon entry
-    # @validates("username", "password", "email", "phone")
-    # def validate_not_empty(self, key, value):
+    # validates the user's username, password, email and phone # upon entry
+    # @validates("password")
+    # def validate_password_not_empty(self, key, value):
     #     if not value:
     #         raise ValueError(f"{key} cannot be empty")
     #     return value
 
-    # # validates that the isAdmin is a boolean value
+    # # # validates that the isAdmin is a boolean value
     # @validates("IsAdmin")
     # def validate_is_admin(self, key, value):
     #     if not isinstance(value, bool):
     #         raise ValueError("IsAdmin must be a boolean value")
     #     return value
     
-    # # validatse that the users email is valid upon entry    
+    # # # validatse that the users email is valid upon entry    
     # @validates("email")
     # def validate_email(self, key, value):
     #     email_regex = r"^[\w\.-]+@[\w\.-]+\.\w+$"
@@ -133,20 +138,41 @@ class User(db.Model, SerializerMixin):
     #         raise ValueError("Invalid email format")
     #     return value
     
-    # # validates that the user's phone number is in the correct format upon entry
-    # @validates("phone")
-    # def validate_phone(self, key, value):
-    #     phone_regex = r"^\+?1?\d{9,15}$"
-    #     if not re.match(phone_regex, value):
-    #         raise ValueError("Invalid phone number format")
-    #     return value
-    
-    # # validates that the user's username and email are both unique
-    # @validates("username", "email")
-    # def validate_unique(self, key, value):
+    # def validate_unique_email(self, key, value):
     #     existing_user = User.query.filter(getattr(User, key) == value).first()
     #     if existing_user:
     #         raise ValueError(f"{key.capitalize()} must be unique")
+    #     return value
+    
+    # def validate_email_not_empty(self, key, value):
+    #     if not value:
+    #         raise ValueError(f"{key} cannot be empty")
+    #     return value
+    
+    # # validates that the user's phone number is in the correct format upon entry
+    # # @validates("phone")
+    # # def validate_phone(self, key, value):
+    # #     phone_regex = r"^\+?1?\d{9,15}$"
+    # #     if not re.match(phone_regex, value):
+    # #         raise ValueError("Invalid phone number format")
+    # #     return value
+    
+    # def validate_phone_not_empty(self, key, value):
+    #     if not value:
+    #         raise ValueError(f"{key} cannot be empty")
+    #     return value
+    
+    # # validates that the user's username and email are both unique
+    # @validates("username")
+    # def validate_username_unique(self, key, value):
+    #     existing_user = User.query.filter(getattr(User, key) == value).first()
+    #     if existing_user:
+    #         raise ValueError(f"{key.capitalize()} must be unique")
+    #     return value
+    
+    # def validate_username_not_empty(self, key, value):
+    #     if not value:
+    #         raise ValueError(f"{key} cannot be empty")
     #     return value
 
 
@@ -173,18 +199,18 @@ class Reservation(db.Model, SerializerMixin):
     serialize_rules = ("-user.reservations", "-restaurant.reservations")
 
     # # validates the table size as a positive integer
-    # @validates("table_size")
-    # def validate_table_size(self, key, value):
-    #     if not isinstance(value, int) or value <= 0:
-    #         raise ValueError("Table size must be a positive integer")
-    #     return value
+    @validates("table_size")
+    def validate_table_size(self, key, value):
+        if not isinstance(value, int) or value <= 0:
+            raise ValueError("Table size must be a positive integer")
+        return value
 
-    # # validates the table size as less than the restaurant's total capacity
-    # @validates("table_size")
-    # def validate_table_size(self, key, value):
-    #     if value > self.restaurant.capacity:
-    #         raise ValueError("Party size exceeds restaurant's capacity")
-    #     return value
+    # validates the table size as less than the restaurant's total capacity
+    
+    def validate_table_size_capacity(self, key, value):
+        if value > self.restaurant.capacity:
+            raise ValueError("Party size exceeds restaurant's capacity")
+        return value
 
     # # validates that the reservation is unique and not a duplicate
     # @validates("restaurant_id", "reservation_time")
@@ -248,14 +274,14 @@ class Reservation(db.Model, SerializerMixin):
     #     if total_table_sizes + self.table_size > self.restaurant.capacity:
     #         raise ValueError("Restaurant capacity exceeded for the selected time")
 
-        #return value
+    #     return value
     
     # # validates the notes length to keep it under 500 characters
-    # @validates("notes")
-    # def validate_comment(self, key, value):
-    #     if len(value) > 500:  # maximum of 500 characters for the comment
-    #         raise ValueError("Notes exceeds maximum character limit (500 characters)")
-    #     return value
+    @validates("notes")
+    def validate_comment(self, key, value):
+        if len(value) > 500:  # maximum of 500 characters for the comment
+            raise ValueError("Notes exceeds maximum character limit (500 characters)")
+        return value
 
     # Establish Review class
 class Review(db.Model, SerializerMixin):
@@ -277,18 +303,24 @@ class Review(db.Model, SerializerMixin):
     serialize_rules = ("-user.reviews", "-restaurant.reviews")
 
     # # validates the rating of the review as b/w 1-5
-    # @validates("rating")
-    # def validate_rating(self, key, value):
-    #     if not isinstance(value, int) or value < 1 or value > 5:
-    #         raise ValueError("Rating must be an integer between 1 and 5")
-    #     return value
+    @validates("rating")
+    def validate_rating(self, key, value):
+        if not isinstance(value, int) or value < 1 or value > 5:
+            raise ValueError("Rating must be an integer between 1 and 5")
+        return value
     
-    # # validates that the rating comment is not empty
-    # @validates("comment")
-    # def validate_comment(self, key, value):
-    #     if not value:
-    #         raise ValueError("Comment cannot be empty")
-    #     return value
+    # validates that the rating comment is not empty
+    @validates("comment")
+    def validate_comment(self, key, value):
+        if not value:
+            raise ValueError("Comment cannot be empty")
+        return value
+    
+    # validates the comment length to keep it under 500 characters
+    def validate_comment_length(self, key, value):
+        if len(value) > 500:  # maximum of 500 characters for the comment
+            raise ValueError("Comment exceeds maximum character limit (500 characters)")
+        return value
 
     # # validates that the user is not submitting multiple reviews for 
     # # the same restaurant in a specified period of time
@@ -308,11 +340,6 @@ class Review(db.Model, SerializerMixin):
     #     return value
     
     
-    # # validates the comment length to keep it under 500 characters
-    # @validates("comment")
-    # def validate_comment(self, key, value):
-    #     if len(value) > 500:  # maximum of 500 characters for the comment
-    #         raise ValueError("Comment exceeds maximum character limit (500 characters)")
-    #     return value
+
 
 
