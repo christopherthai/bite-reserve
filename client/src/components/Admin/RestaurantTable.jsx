@@ -31,7 +31,6 @@ function RestaurantTable() {
         position: "absolute",
         top: "100px",
         right: "-720px",
-        backgroundColor: "Blue",
         marginLeft: 0,
         marginRight: 100,
         width: "80%",

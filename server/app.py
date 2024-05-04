@@ -31,20 +31,22 @@ def index():
     return "<h1>Project Server</h1>"
 
 
-#Restaurants Routes
-#get
-#post
+# Restaurants Routes
+# get
+# post
 class Restaurants(Resource):
-    
+
     def get(self):
         restaurants = Restaurant.query.all()
-        restaurants_list = [restaurant.to_dict(rules=("-reservations", )) for restaurant in restaurants]
+        restaurants_list = [
+            restaurant.to_dict(rules=("-reservations",)) for restaurant in restaurants
+        ]
 
         return make_response(restaurants_list, 200)
-    
-    #First restaurant in a list of all restaurants, with first comment in a list of all comments.  
-    # Response in this format.        
-    '''[
+
+    # First restaurant in a list of all restaurants, with first comment in a list of all comments.
+    # Response in this format.
+    """[
     {
         "address": "550 3rd Avenue",
         "capacity": 60,
@@ -76,9 +78,7 @@ class Restaurants(Resource):
                     "username": "johndoe"
                 },
                 "user_id": 1
-            },'''
-            
-            
+            },"""
 
     def post(self):
         data = request.get_json()
@@ -106,11 +106,10 @@ class Restaurants(Resource):
 
         except ValueError:
             return make_response({"errors": ["validation errors"]}, 400)
-     
-     
-    #Restaurant created by posting.  
-    # Response in this format.        
-    '''{
+
+    # Restaurant created by posting.
+    # Response in this format.
+    """{
     "address": "what street test",
     "capacity": 1000000,
     "category": "Cat Food",
@@ -128,16 +127,16 @@ class Restaurants(Resource):
     "state": "MN",
     "website": "WEBSITE",
     "zip": "55555"
-}'''
-        
+}"""
+
 
 api.add_resource(Restaurants, "/restaurants")
 
 
-#RestaurantsById Routes
-#get
-#patch
-#delete
+# RestaurantsById Routes
+# get
+# patch
+# delete
 class RestaurantsById(Resource):
 
     def get(self, id):
@@ -145,11 +144,11 @@ class RestaurantsById(Resource):
 
         if not restaurant:
             return make_response({"error": "Restaurant not found"}, 404)
-        return make_response(restaurant.to_dict(rules= ("-reservations.user",)), 200)
-    
-    #Restaurant with id, with first reservation in a list of all reservations,
+        return make_response(restaurant.to_dict(rules=("-reservations.user",)), 200)
+
+    # Restaurant with id, with first reservation in a list of all reservations,
     # with first comment in a list of all comments. Response in this format.
-    '''{
+    """{
     "address": "550 3rd Avenue",
     "capacity": 60,
     "category": "Chinese",
@@ -196,10 +195,9 @@ class RestaurantsById(Resource):
         
      }   
         
-        '''
-    
+        """
 
-    #Restaurant by ID patch
+    # Restaurant by ID patch
     def patch(self, id):
         restaurant = Restaurant.query.filter_by(id=id).first()
 
@@ -213,13 +211,15 @@ class RestaurantsById(Resource):
 
             db.session.add(restaurant)
             db.session.commit()
-            return make_response(restaurant.to_dict(rules=("-reservations", "-reviews")), 202)
+            return make_response(
+                restaurant.to_dict(rules=("-reservations", "-reviews")), 202
+            )
 
         except ValueError:
             return ({"errors": ["validation errors"]}, 400)
-        
+
     # Restaurant by ID with only address changed. Response in this format:
-    '''   
+    """   
         {
     "address": "CHANGED",
     "capacity": 1000000,
@@ -236,10 +236,9 @@ class RestaurantsById(Resource):
     "state": "MN",
     "website": "WEBSITE",
     "zip": "55555"
-}'''
-        
-        
-    #Restaurant by ID detele
+}"""
+
+    # Restaurant by ID detele
     def delete(self, id):
         restaurant = Restaurant.query.filter_by(id=id).first()
 
@@ -254,31 +253,33 @@ class RestaurantsById(Resource):
         except Exception as e:
             print(f"Error deleting restaurant: {str(e)}")
             return ({"errors": ["validation errors"]}, 400)
-        
-    '''
+
+    """
     Empty response 204, tested and persists
-    '''
-        
+    """
+
 
 api.add_resource(RestaurantsById, "/restaurants/<int:id>")
 
 
-#Reviews Routes
-#get
-#post
+# Reviews Routes
+# get
+# post
 class Reviews(Resource):
 
     def get(self, restaurant_id):
         restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
-        
-        
-        reviews_list = [review.to_dict(rules=("-restaurant.reservations",)) for review in restaurant.reviews]
+
+        reviews_list = [
+            review.to_dict(rules=("-restaurant.reservations",))
+            for review in restaurant.reviews
+        ]
 
         return make_response(reviews_list, 200)
-    
-    #Single review in a list of all reviews for a specific restaurant.  Response in format:
-    
-    '''
+
+    # Single review in a list of all reviews for a specific restaurant.  Response in format:
+
+    """
     [
     {
         "comment": "The food was amazing!",
@@ -315,33 +316,33 @@ class Reviews(Resource):
         },
         "user_id": 1
     },
-    '''
-    
+    """
+
     def post(self, restaurant_id):
         data = request.get_json()
-        
+
         restaurant = Restaurant.query.get(restaurant_id)
-        
+
         if not restaurant:
-            return make_response({'error': 'Restaurant not found'}, 404)
+            return make_response({"error": "Restaurant not found"}, 404)
 
         try:
             review = Review(
                 timestamp=data.get("timestamp"),
                 rating=data.get("rating"),
                 comment=data.get("comment"),
-                user_id = data.get("user_id"),
-                restaurant_id = restaurant_id
+                user_id=data.get("user_id"),
+                restaurant_id=restaurant_id,
             )
             db.session.add(review)
             db.session.commit()
-            return make_response(review.to_dict(rules =("-restaurant", )), 201)
+            return make_response(review.to_dict(rules=("-restaurant",)), 201)
 
         except ValueError:
             return make_response({"errors": ["validation errors"]}, 400)
-        
-    #Posting a review to a specific restaurant. Response:
-    '''
+
+    # Posting a review to a specific restaurant. Response:
+    """
     {
         "comment": "ISHHH WHO EATS CAT FOOD",
         "id": 84,
@@ -360,14 +361,15 @@ class Reviews(Resource):
         },
         "user_id": 1
     }
-    '''
-    
+    """
+
+
 api.add_resource(Reviews, "/restaurants/<int:restaurant_id>/reviews")
 
 
-#ReviewsById Routes
-#patch
-#delete
+# ReviewsById Routes
+# patch
+# delete
 class ReviewsById(Resource):
 
     def patch(self, restaurant_id, review_id):
@@ -375,9 +377,11 @@ class ReviewsById(Resource):
 
         if not restaurant:
             return make_response({"error": "Restaurant not found"}, 404)
-        
-        review = Review.query.filter_by(restaurant_id=restaurant_id, id = review_id).first()
-        
+
+        review = Review.query.filter_by(
+            restaurant_id=restaurant_id, id=review_id
+        ).first()
+
         if not review:
             return make_response({"error": "Review not found"}, 404)
 
@@ -388,7 +392,6 @@ class ReviewsById(Resource):
             for key, value in data.items():
                 if hasattr(review, key):
                     setattr(review, key, value)
-            
 
             db.session.add(review)
             db.session.commit()
@@ -396,8 +399,8 @@ class ReviewsById(Resource):
 
         except ValueError:
             return ({"errors": ["validation errors"]}, 400)
-        
-    '''
+
+    """
     {
         "comment": "YUM CAT FOOD!",
         "id": 85,
@@ -416,17 +419,18 @@ class ReviewsById(Resource):
         },
         "user_id": 1
     }
-    '''
-        
+    """
 
     def delete(self, restaurant_id, review_id):
         restaurant = Restaurant.query.get(restaurant_id)
 
         if not restaurant:
             return make_response({"error": "Restaurant not found"}, 404)
-        
-        review = Review.query.filter_by(restaurant_id=restaurant_id, id = review_id).first()
-        
+
+        review = Review.query.filter_by(
+            restaurant_id=restaurant_id, id=review_id
+        ).first()
+
         if not review:
             return make_response({"error": "Review not found"}, 404)
 
@@ -438,38 +442,40 @@ class ReviewsById(Resource):
         except Exception as e:
             print(f"Error deleting review: {str(e)}")
             return ({"errors": ["validation errors"]}, 400)
-        
-        
-    '''
+
+    """
     Empty response 204, tested and persists
-    '''
+    """
 
 
-api.add_resource(ReviewsById, "/restaurants/<int:restaurant_id>/reviews/<int:review_id>")
+api.add_resource(
+    ReviewsById, "/restaurants/<int:restaurant_id>/reviews/<int:review_id>"
+)
 
 
-
-#Reservations Routes
-#get
-#post
+# Reservations Routes
+# get
+# post
 class Reservations(Resource):
 
     def get(self, restaurant_id):
         restaurant = Restaurant.query.get(restaurant_id)
-        
+
         if not restaurant:
             return make_response({"error": "Restaurant not found"}, 404)
-        
-        reservations = [reservation.to_dict(rules=("-restaurant.reviews",)) for reservation in restaurant.reservations]
-        
+
+        reservations = [
+            reservation.to_dict(rules=("-restaurant.reviews",))
+            for reservation in restaurant.reservations
+        ]
+
         if not reservations:
             return make_response({"error": "Review not found"}, 404)
 
         return make_response(reservations, 200)
-    
-    
-    #Single reservation in a list of reserations for a single restaurant. Format:
-    '''
+
+    # Single reservation in a list of reserations for a single restaurant. Format:
+    """
     [
     {
         "id": 1,
@@ -507,17 +513,15 @@ class Reservations(Resource):
         },
         "user_id": 1
     },
-    '''
-    
-    
-    
+    """
+
     def post(self, restaurant_id):
         data = request.get_json()
-        
+
         restaurant = Restaurant.query.get(restaurant_id)
-        
+
         if not restaurant:
-            return make_response({'error': 'Restaurant not found'}, 404)
+            return make_response({"error": "Restaurant not found"}, 404)
 
         try:
             reservation = Reservation(
@@ -526,17 +530,19 @@ class Reservations(Resource):
                 status=data.get("status"),
                 notes=data.get("notes"),
                 user_id=data.get("user_id"),
-                restaurant_id = restaurant_id
+                restaurant_id=restaurant_id,
             )
-            
+
             db.session.add(reservation)
             db.session.commit()
-            return make_response(reservation.to_dict(rules=("-restaurant.reviews",)), 201)
+            return make_response(
+                reservation.to_dict(rules=("-restaurant.reviews",)), 201
+            )
 
         except ValueError:
             return make_response({"errors": ["validation errors"]}, 400)
-        
-    '''
+
+    """
     {
         "id": 704,
         "notes": "I like shellfish",
@@ -573,16 +579,16 @@ class Reservations(Resource):
         },
         "user_id": 1
     }
-    '''
+    """
 
 
 api.add_resource(Reservations, "/restaurants/<int:restaurant_id>/reservations")
 
 
-#ReservationsById
-#get
-#patch
-#delete
+# ReservationsById
+# get
+# patch
+# delete
 class ReservationsById(Resource):
 
     def get(self, id):
@@ -592,8 +598,8 @@ class ReservationsById(Resource):
             return make_response({"error": "Reservation not found"}, 404)
 
         return make_response(reservation.to_dict(rules=("-restaurant.reviews",)), 200)
-    
-    '''
+
+    """
     {
         "id": 1,
         "notes": " ",
@@ -629,9 +635,7 @@ class ReservationsById(Resource):
             "username": "johndoe"
         },
         "user_id": 1
-    }'''
-    
-    
+    }"""
 
     def patch(self, id):
         reservation = Reservation.query.filter_by(id=id).first()
@@ -646,12 +650,14 @@ class ReservationsById(Resource):
 
             db.session.add(reservation)
             db.session.commit()
-            return make_response(reservation.to_dict(rules=("-restaurant.reviews",)), 202)
+            return make_response(
+                reservation.to_dict(rules=("-restaurant.reviews",)), 202
+            )
 
         except ValueError:
             return ({"errors": ["validation errors"]}, 400)
-        
-    '''{
+
+    """{
         "id": 704,
         "notes": "I hate shellfish",
         "reservation_time": 2,
@@ -686,8 +692,7 @@ class ReservationsById(Resource):
             "username": "johndoe"
         },
         "user_id": 1
-    }'''
-
+    }"""
 
     def delete(self, id):
         reservation = Reservation.query.filter_by(id=id).first()
@@ -703,18 +708,18 @@ class ReservationsById(Resource):
         except Exception as e:
             print(f"Error deleting reservation: {str(e)}")
             return ({"errors": ["validation errors"]}, 400)
-        
-    '''
+
+    """
     Empty response 204, tested and persists
-    '''
+    """
 
 
 api.add_resource(ReservationsById, "/reservation/<int:id>")
 
 
-#Users Routes
-#get
-#post
+# Users Routes
+# get
+# post
 class Users(Resource):
 
     def get(self):
@@ -747,10 +752,10 @@ class Users(Resource):
 api.add_resource(Users, "/users")
 
 
-#UsersById Routes
-#get
-#patch
-#delete
+# UsersById Routes
+# get
+# patch
+# delete
 class UsersById(Resource):
 
     def get(self, id):
