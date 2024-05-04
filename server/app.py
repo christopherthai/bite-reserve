@@ -270,6 +270,8 @@ class Reviews(Resource):
 
     def get(self, restaurant_id):
         restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
+        
+        
         reviews_list = [review.to_dict(rules=("-restaurant.reservations",)) for review in restaurant.reviews]
 
         return make_response(reviews_list, 200)
@@ -447,41 +449,134 @@ api.add_resource(ReviewsById, "/restaurants/<int:restaurant_id>/reviews/<int:rev
 
 
 
-
-
-##Spencer Below this~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
 #Reservations Routes
 #get
 #post
 class Reservations(Resource):
 
-    def get(self):
-        reservations = Reservation.query.all()
-        reservations_list = [reservation.to_dict() for reservation in reservations]
+    def get(self, restaurant_id):
+        restaurant = Restaurant.query.get(restaurant_id)
+        
+        if not restaurant:
+            return make_response({"error": "Restaurant not found"}, 404)
+        
+        reservations = [reservation.to_dict(rules=("-restaurant.reviews",)) for reservation in restaurant.reservations]
+        
+        if not reservations:
+            return make_response({"error": "Review not found"}, 404)
 
-        return make_response(reservations_list, 200)
-
-    def post(self):
+        return make_response(reservations, 200)
+    
+    
+    #Single reservation in a list of reserations for a single restaurant. Format:
+    '''
+    [
+    {
+        "id": 1,
+        "notes": " ",
+        "reservation_time": 1730500200,
+        "restaurant": {
+            "address": "550 3rd Avenue",
+            "capacity": 60,
+            "category": "Chinese",
+            "city": "New York",
+            "close_time": 2000,
+            "id": 1,
+            "image": "https://assets-global.website-files.com/645aecde0bd10564f39f4379/64e73f688681676ffdf401d0_20230103%20Little%20Alley_367%20WHD.jpg",
+            "menu_link": "https://www.littlealley.nyc/menu",
+            "name": "Little Alley",
+            "open_time": 1600,
+            "phone": "646-998-3976",
+            "res_duration": 90,
+            "state": "NY",
+            "website": "https://www.littlealley.nyc/",
+            "zip": "10016"
+        },
+        "restaurant_id": 1,
+        "status": "confirmed",
+        "table_size": 4,
+        "user": {
+            "IsAdmin": false,
+            "email": "john@example.com",
+            "first_name": "John",
+            "id": 1,
+            "last_name": "Doe",
+            "password": "password123",
+            "phone": "123-456-7890",
+            "username": "johndoe"
+        },
+        "user_id": 1
+    },
+    '''
+    
+    
+    
+    def post(self, restaurant_id):
         data = request.get_json()
+        
+        restaurant = Restaurant.query.get(restaurant_id)
+        
+        if not restaurant:
+            return make_response({'error': 'Restaurant not found'}, 404)
 
         try:
             reservation = Reservation(
-                timestamp=data.get("timestamp"),
-                rating=data.get("rating"),
-                comment=data.get("comment"),
+                reservation_time=data.get("reservation_time"),
+                table_size=data.get("table_size"),
+                status=data.get("status"),
+                notes=data.get("notes"),
+                user_id=data.get("user_id"),
+                restaurant_id = restaurant_id
             )
+            
             db.session.add(reservation)
             db.session.commit()
-            return make_response(reservation.to_dict(), 201)
+            return make_response(reservation.to_dict(rules=("-restaurant.reviews",)), 201)
 
         except ValueError:
             return make_response({"errors": ["validation errors"]}, 400)
+        
+    '''
+    {
+        "id": 704,
+        "notes": "I like shellfish",
+        "reservation_time": 1,
+        "restaurant": {
+            "address": "550 3rd Avenue",
+            "capacity": 60,
+            "category": "Chinese",
+            "city": "New York",
+            "close_time": 2000,
+            "id": 1,
+            "image": "https://assets-global.website-files.com/645aecde0bd10564f39f4379/64e73f688681676ffdf401d0_20230103%20Little%20Alley_367%20WHD.jpg",
+            "menu_link": "https://www.littlealley.nyc/menu",
+            "name": "Little Alley",
+            "open_time": 1600,
+            "phone": "646-998-3976",
+            "res_duration": 90,
+            "state": "NY",
+            "website": "https://www.littlealley.nyc/",
+            "zip": "10016"
+        },
+        "restaurant_id": 1,
+        "status": "confirmed",
+        "table_size": 4,
+        "user": {
+            "IsAdmin": false,
+            "email": "john@example.com",
+            "first_name": "John",
+            "id": 1,
+            "last_name": "Doe",
+            "password": "password123",
+            "phone": "123-456-7890",
+            "username": "johndoe"
+        },
+        "user_id": 1
+    }
+    '''
 
 
-api.add_resource(Reservations, "/reservations")
+api.add_resource(Reservations, "/restaurants/<int:restaurant_id>/reservations")
 
 
 #ReservationsById
@@ -496,7 +591,47 @@ class ReservationsById(Resource):
         if not reservation:
             return make_response({"error": "Reservation not found"}, 404)
 
-        return make_response(reservation.to_dict(), 200)
+        return make_response(reservation.to_dict(rules=("-restaurant.reviews",)), 200)
+    
+    '''
+    {
+        "id": 1,
+        "notes": " ",
+        "reservation_time": 1730500200,
+        "restaurant": {
+            "address": "550 3rd Avenue",
+            "capacity": 60,
+            "category": "Chinese",
+            "city": "New York",
+            "close_time": 2000,
+            "id": 1,
+            "image": "https://assets-global.website-files.com/645aecde0bd10564f39f4379/64e73f688681676ffdf401d0_20230103%20Little%20Alley_367%20WHD.jpg",
+            "menu_link": "https://www.littlealley.nyc/menu",
+            "name": "Little Alley",
+            "open_time": 1600,
+            "phone": "646-998-3976",
+            "res_duration": 90,
+            "state": "NY",
+            "website": "https://www.littlealley.nyc/",
+            "zip": "10016"
+        },
+        "restaurant_id": 1,
+        "status": "confirmed",
+        "table_size": 4,
+        "user": {
+            "IsAdmin": false,
+            "email": "john@example.com",
+            "first_name": "John",
+            "id": 1,
+            "last_name": "Doe",
+            "password": "password123",
+            "phone": "123-456-7890",
+            "username": "johndoe"
+        },
+        "user_id": 1
+    }'''
+    
+    
 
     def patch(self, id):
         reservation = Reservation.query.filter_by(id=id).first()
@@ -511,10 +646,48 @@ class ReservationsById(Resource):
 
             db.session.add(reservation)
             db.session.commit()
-            return make_response(reservation.to_dict(), 202)
+            return make_response(reservation.to_dict(rules=("-restaurant.reviews",)), 202)
 
         except ValueError:
             return ({"errors": ["validation errors"]}, 400)
+        
+    '''{
+        "id": 704,
+        "notes": "I hate shellfish",
+        "reservation_time": 2,
+        "restaurant": {
+            "address": "550 3rd Avenue",
+            "capacity": 60,
+            "category": "Chinese",
+            "city": "New York",
+            "close_time": 2000,
+            "id": 1,
+            "image": "https://assets-global.website-files.com/645aecde0bd10564f39f4379/64e73f688681676ffdf401d0_20230103%20Little%20Alley_367%20WHD.jpg",
+            "menu_link": "https://www.littlealley.nyc/menu",
+            "name": "Little Alley",
+            "open_time": 1600,
+            "phone": "646-998-3976",
+            "res_duration": 90,
+            "state": "NY",
+            "website": "https://www.littlealley.nyc/",
+            "zip": "10016"
+        },
+        "restaurant_id": 1,
+        "status": "confirmed",
+        "table_size": 4,
+        "user": {
+            "IsAdmin": false,
+            "email": "john@example.com",
+            "first_name": "John",
+            "id": 1,
+            "last_name": "Doe",
+            "password": "password123",
+            "phone": "123-456-7890",
+            "username": "johndoe"
+        },
+        "user_id": 1
+    }'''
+
 
     def delete(self, id):
         reservation = Reservation.query.filter_by(id=id).first()
@@ -530,9 +703,13 @@ class ReservationsById(Resource):
         except Exception as e:
             print(f"Error deleting reservation: {str(e)}")
             return ({"errors": ["validation errors"]}, 400)
+        
+    '''
+    Empty response 204, tested and persists
+    '''
 
 
-api.add_resource(ReservationsById, "/reservations/<int:id>")
+api.add_resource(ReservationsById, "/reservation/<int:id>")
 
 
 #Users Routes

@@ -259,22 +259,22 @@ class Reservation(db.Model, SerializerMixin):
     
     # Validates that the reservation is in the future
     # Validates that the restaurant is not at capacity when the reservation is made
-    @validates("reservation_time")
-    def validate_reservation_time(self, key, value):
-        if value <= datetime.now():
-            raise ValueError("Reservation time must be in the future")
+    # @validates("reservation_time")
+    # def validate_reservation_time(self, key, value):
+    #     if value <= datetime.now():
+    #         raise ValueError("Reservation time must be in the future")
 
-        start_time, end_time = self.get_reservation_time_window(
-            value, self.restaurant.res_duration
-        )
-        total_table_sizes = self.get_total_table_sizes(
-            self.restaurant_id, start_time, end_time
-        )
+    #     start_time, end_time = self.get_reservation_time_window(
+    #         value, self.restaurant.res_duration
+    #     )
+    #     total_table_sizes = self.get_total_table_sizes(
+    #         self.restaurant_id, start_time, end_time
+    #     )
 
-        if total_table_sizes + self.table_size > self.restaurant.capacity:
-            raise ValueError("Restaurant capacity exceeded for the selected time")
+    #     if total_table_sizes + self.table_size > self.restaurant.capacity:
+    #         raise ValueError("Restaurant capacity exceeded for the selected time")
 
-        return value
+    #     return value
     
     # # validates the notes length to keep it under 500 characters
     @validates("notes")
