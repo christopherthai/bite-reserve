@@ -249,6 +249,13 @@ class Reservation(db.Model, SerializerMixin):
             raise ValueError("Restaurant capacity exceeded for the selected time")
 
         return value
+    
+    # validates the notes length to keep it under 500 characters
+    @validates("notes")
+    def validate_comment(self, key, value):
+        if len(value) > 500:  # maximum of 500 characters for the comment
+            raise ValueError("Notes exceeds maximum character limit (500 characters)")
+        return value
 
     # Establish Review class
 class Review(db.Model, SerializerMixin):
