@@ -25,4 +25,5 @@
     font-size: 18px; /* 설명 텍스트 크기 */
     margin-left: 200px; /* 왼쪽 여백 추가 */
     margin-right: 200px;
+    color: black;
   }

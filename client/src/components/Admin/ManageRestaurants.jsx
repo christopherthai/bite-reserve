@@ -12,6 +12,10 @@ import {
 } from "@material-ui/core";
 import RestaurantTable from "./RestaurantTable";
 
+/*
+useStyles is a function that will be used to style the components.
+It uses the makeStyles hook from Material-UI to define the styles.
+*/
 const useStyles = makeStyles((theme) => ({
   appBar: {
     backgroundColor: "#3f51b5",
@@ -24,10 +28,15 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
     height: "100vh",
     marginTop: "64px",
-    backgroundColor: "#3f51b5",
+    backgroundColor: "#f5f5f5",
   },
 }));
 
+/*
+This is the ManageRestaurant component that will display the Manage Restaurants page.
+It will contain a Drawer component with links to the Manage Restaurants and Manage Reservations pages.
+It will also contain a RestaurantTable component that will display the list of restaurants.
+*/
 function ManageRestaurant() {
   const classes = useStyles();
   const drawerItems = [
