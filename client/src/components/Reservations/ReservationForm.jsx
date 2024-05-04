@@ -1,75 +1,83 @@
-import React, { useState } from 'react';
-import { Link } from "react-router-dom";
-import ReactDOM from 'react-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
+const ReservationsForm = () => {
+    const { restaurantId } = useParams(); // URL에서 레스토랑 ID 추출
+    const [restaurant, setRestaurant] = useState(null);
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        // 레스토랑 정보를 서버에서 불러오기
+        fetch(`/api/restaurants/${restaurantId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch');
+                }
+                return response.json();
+            })
+            .then(data => setRestaurant(data))
+            .catch(error => {
+                console.error('Error fetching restaurant details:', error);
+                // 오류 처리 로직 (예: 오류 메시지 표시)
+            });
+    }, [restaurantId]);
 
-function ReservationForm() {
-  const [name, setName] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [partySize, setPartySize] = useState(1);
+    if (!restaurant) return <div>Loading...</div>;
 
-  const [selectedTime, setSelectedTime] = useState('');
-  const times = [];
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const reservationData = {
+            date: event.target.date.value,
+            time: event.target.time.value,
+            partySize: event.target.partySize.value,
+            restaurantId: restaurantId,
+        };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Name:", name);
-    // 여기서 폼 데이터를 처리하거나 전달합니다.
-    console.log("Date:", date);
-    console.log("Time:", time);
-    console.log("Party Size:", partySize);
-  };
+        fetch('/api/reservations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reservationData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to create reservation');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Reservation created:', data);
+            navigate('/reservations');
+        })
+        .catch(error => {
+            console.error('Error creating reservation:', error);
+            // 추가적인 오류 처리
+        });
+    };
 
-  return (
-    <div>
-      <h1></h1>
-      <h2>Reservation Form</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Date:
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Time:
-          <input
-            type="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Party Size:
-          <input
-            type="number"
-            value={partySize}
-            onChange={(e) => setPartySize(parseInt(e.target.value))}
-            min="1"
-          />
-        </label>
-        <br />
-        <Link to ="/reservations">
-            <button type="submit">Submit</button>
-        </Link>
-      </form>
-    </div>
-  );
-}
+    return (
+        <form onSubmit={handleSubmit} style={{ padding: '20px' }}>
+            <img src={restaurant.image} alt={restaurant.name} style={{ width: '200px', height: '200px' }} />
+            <h2>{restaurant.name}</h2>
+            <p>{restaurant.phone}</p>
+            <div>
+                <label>Date:</label>
+                <input type="date" name="date" required />
+            </div>
+            <div>
+                <label>Time:</label>
+                <input type="time" name="time" required />
+            </div>
+            <div>
+                <label>Party Size:</label>
+                <input type="number" name="partySize" min="1" required />
+            </div>
+            <button type="submit" style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>
+                Complete Reservation
+            </button>
+        </form>
+    );
+};
 
-export default ReservationForm;
+export default ReservationsForm;
