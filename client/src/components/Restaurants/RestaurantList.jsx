@@ -1,5 +1,7 @@
+
+
 function RestaurantList() {
-  return <div>RestaurantList</div>;
+    return
 }
 
 export default RestaurantList;

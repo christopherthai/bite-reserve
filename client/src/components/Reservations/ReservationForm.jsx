@@ -10,6 +10,9 @@ function ReservationForm() {
   const [time, setTime] = useState("");
   const [partySize, setPartySize] = useState(1);
 
+  const [selectedTime, setSelectedTime] = useState('');
+  const times = [];
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Name:", name);

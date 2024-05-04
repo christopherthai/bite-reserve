@@ -9,7 +9,6 @@
   
   .card-container {
     display: grid;
-    place-items: center; /* 요소들을 가운데로 정렬 */
     grid-template-columns: repeat(3, 1fr); /* 3개의 열로 설정 */
     gap: 20px; /* 카드와 카드 사이의 간격 설정 */
     max-width: 900px; /* 페이지의 최대 너비 설정 */
