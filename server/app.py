@@ -41,6 +41,44 @@ class Restaurants(Resource):
         restaurants_list = [restaurant.to_dict(rules=("-reservations", )) for restaurant in restaurants]
 
         return make_response(restaurants_list, 200)
+    
+    #First restaurant in a list of all restaurants, with first comment in a list of all comments.  
+    # Response in this format.        
+    '''[
+    {
+        "address": "550 3rd Avenue",
+        "capacity": 60,
+        "category": "Chinese",
+        "city": "New York",
+        "close_time": 2000,
+        "id": 1,
+        "image": "https://assets-global.website-files.com/645aecde0bd10564f39f4379/64e73f688681676ffdf401d0_20230103%20Little%20Alley_367%20WHD.jpg",
+        "menu_link": "https://www.littlealley.nyc/menu",
+        "name": "Little Alley",
+        "open_time": 1600,
+        "phone": "646-998-3976",
+        "res_duration": 90,
+        "reviews": [
+            {
+                "comment": "The food was amazing!",
+                "id": 1,
+                "rating": 5,
+                "restaurant_id": 1,
+                "timestamp": 1735012800,
+                "user": {
+                    "IsAdmin": false,
+                    "email": "john@example.com",
+                    "first_name": "John",
+                    "id": 1,
+                    "last_name": "Doe",
+                    "password": "password123",
+                    "phone": "123-456-7890",
+                    "username": "johndoe"
+                },
+                "user_id": 1
+            },'''
+            
+            
 
     def post(self):
         data = request.get_json()
@@ -49,15 +87,14 @@ class Restaurants(Resource):
             restaurant = Restaurant(
                 name=data.get("name"),
                 phone=data.get("phone"),
-                email=data.get("email"),
                 address=data.get("address"),
                 city=data.get("city"),
                 state=data.get("state"),
                 zip=data.get("zip"),
                 image=data.get("image"),
                 website=data.get("website"),
-                logo=data.get("logo"),
                 menu_link=data.get("menu_link"),
+                category=data.get("category"),
                 capacity=data.get("capacity"),
                 open_time=data.get("open_time"),
                 close_time=data.get("close_time"),
@@ -69,7 +106,30 @@ class Restaurants(Resource):
 
         except ValueError:
             return make_response({"errors": ["validation errors"]}, 400)
-
+     
+     
+    #Restaurant created by posting.  
+    # Response in this format.        
+    '''{
+    "address": "what street test",
+    "capacity": 1000000,
+    "category": "Cat Food",
+    "city": "TEST TEST",
+    "close_time": 1,
+    "id": 10,
+    "image": "WEBSITE",
+    "menu_link": "MENU",
+    "name": "WE SERVE CAT FOOD",
+    "open_time": 1600,
+    "phone": "777-777-7777",
+    "res_duration": 90,
+    "reservations": [],
+    "reviews": [],
+    "state": "MN",
+    "website": "WEBSITE",
+    "zip": "55555"
+}'''
+        
 
 api.add_resource(Restaurants, "/restaurants")
 
