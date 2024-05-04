@@ -38,7 +38,7 @@ class Restaurants(Resource):
     
     def get(self):
         restaurants = Restaurant.query.all()
-        restaurants_list = [restaurant.to_dict() for restaurant in restaurants]
+        restaurants_list = [restaurant.to_dict(rules=("-reservations", )) for restaurant in restaurants]
 
         return make_response(restaurants_list, 200)
 
