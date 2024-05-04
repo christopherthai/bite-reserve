@@ -17,7 +17,13 @@ function RestaurantTable() {
 
   useEffect(() => {
     fetch("/api/restaurants") // replace with your actual API endpoint
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          console.error("Failed to fetch data from server"); // if response status is not 200-299
+        } else {
+          return response.json();
+        }
+      })
       .then((data) => setRestaurants(data));
   }, []);
 
@@ -31,7 +37,6 @@ function RestaurantTable() {
         position: "absolute",
         top: "100px",
         right: "-720px",
-        backgroundColor: "Blue",
         marginLeft: 0,
         marginRight: 100,
         width: "80%",
@@ -39,15 +44,25 @@ function RestaurantTable() {
     >
       <Grid item>
         <Typography variant="h4" component="h2" gutterBottom>
-          Restaurant List
+          <strong>Restaurant Lists</strong>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ float: "right" }}
+          >
+            Add New Restaurant
+          </Button>
         </Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 1090 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Restaurant Name</TableCell>
-                <TableCell align="right">Address</TableCell>
-                {/* Add more table cells for other properties */}
+                <TableCell>
+                  <strong>Restaurants</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>View</strong>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -56,7 +71,6 @@ function RestaurantTable() {
                   <TableCell component="th" scope="row">
                     {restaurant.name}
                   </TableCell>
-                  <TableCell align="right">{restaurant.address}</TableCell>
                   <TableCell align="right">
                     <Button variant="contained" color="primary">
                       View

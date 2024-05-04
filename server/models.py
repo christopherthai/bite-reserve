@@ -117,63 +117,63 @@ class User(db.Model, SerializerMixin):
     serialize_rules = ("-reviews", "-reservations")
     
     # validates the user's username, password, email and phone # upon entry
-    @validates("password")
-    def validate_password_not_empty(self, key, value):
-        if not value:
-            raise ValueError(f"{key} cannot be empty")
-        return value
+    # @validates("password")
+    # def validate_password_not_empty(self, key, value):
+    #     if not value:
+    #         raise ValueError(f"{key} cannot be empty")
+    #     return value
 
-    # # validates that the isAdmin is a boolean value
-    @validates("IsAdmin")
-    def validate_is_admin(self, key, value):
-        if not isinstance(value, bool):
-            raise ValueError("IsAdmin must be a boolean value")
-        return value
+    # # # validates that the isAdmin is a boolean value
+    # @validates("IsAdmin")
+    # def validate_is_admin(self, key, value):
+    #     if not isinstance(value, bool):
+    #         raise ValueError("IsAdmin must be a boolean value")
+    #     return value
     
-    # # validatse that the users email is valid upon entry    
-    @validates("email")
-    def validate_email(self, key, value):
-        email_regex = r"^[\w\.-]+@[\w\.-]+\.\w+$"
-        if not re.match(email_regex, value):
-            raise ValueError("Invalid email format")
-        return value
+    # # # validatse that the users email is valid upon entry    
+    # @validates("email")
+    # def validate_email(self, key, value):
+    #     email_regex = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+    #     if not re.match(email_regex, value):
+    #         raise ValueError("Invalid email format")
+    #     return value
     
-    def validate_unique_email(self, key, value):
-        existing_user = User.query.filter(getattr(User, key) == value).first()
-        if existing_user:
-            raise ValueError(f"{key.capitalize()} must be unique")
-        return value
+    # def validate_unique_email(self, key, value):
+    #     existing_user = User.query.filter(getattr(User, key) == value).first()
+    #     if existing_user:
+    #         raise ValueError(f"{key.capitalize()} must be unique")
+    #     return value
     
-    def validate_email_not_empty(self, key, value):
-        if not value:
-            raise ValueError(f"{key} cannot be empty")
-        return value
+    # def validate_email_not_empty(self, key, value):
+    #     if not value:
+    #         raise ValueError(f"{key} cannot be empty")
+    #     return value
     
-    # validates that the user's phone number is in the correct format upon entry
-    @validates("phone")
-    def validate_phone(self, key, value):
-        phone_regex = r"^\+?1?\d{9,15}$"
-        if not re.match(phone_regex, value):
-            raise ValueError("Invalid phone number format")
-        return value
+    # # validates that the user's phone number is in the correct format upon entry
+    # # @validates("phone")
+    # # def validate_phone(self, key, value):
+    # #     phone_regex = r"^\+?1?\d{9,15}$"
+    # #     if not re.match(phone_regex, value):
+    # #         raise ValueError("Invalid phone number format")
+    # #     return value
     
-    def validate_phone_not_empty(self, key, value):
-        if not value:
-            raise ValueError(f"{key} cannot be empty")
-        return value
+    # def validate_phone_not_empty(self, key, value):
+    #     if not value:
+    #         raise ValueError(f"{key} cannot be empty")
+    #     return value
     
-    # validates that the user's username and email are both unique
-    @validates("username")
-    def validate_username_unique(self, key, value):
-        existing_user = User.query.filter(getattr(User, key) == value).first()
-        if existing_user:
-            raise ValueError(f"{key.capitalize()} must be unique")
-        return value
+    # # validates that the user's username and email are both unique
+    # @validates("username")
+    # def validate_username_unique(self, key, value):
+    #     existing_user = User.query.filter(getattr(User, key) == value).first()
+    #     if existing_user:
+    #         raise ValueError(f"{key.capitalize()} must be unique")
+    #     return value
     
-    def validate_username_not_empty(self, key, value):
-        if not value:
-            raise ValueError(f"{key} cannot be empty")
-        return value
+    # def validate_username_not_empty(self, key, value):
+    #     if not value:
+    #         raise ValueError(f"{key} cannot be empty")
+    #     return value
 
 
     # Establish Reservation class
@@ -259,22 +259,22 @@ class Reservation(db.Model, SerializerMixin):
     
     # Validates that the reservation is in the future
     # Validates that the restaurant is not at capacity when the reservation is made
-    @validates("reservation_time")
-    def validate_reservation_time(self, key, value):
-        if value <= datetime.now():
-            raise ValueError("Reservation time must be in the future")
+    # @validates("reservation_time")
+    # def validate_reservation_time(self, key, value):
+    #     if value <= datetime.now():
+    #         raise ValueError("Reservation time must be in the future")
 
-        start_time, end_time = self.get_reservation_time_window(
-            value, self.restaurant.res_duration
-        )
-        total_table_sizes = self.get_total_table_sizes(
-            self.restaurant_id, start_time, end_time
-        )
+    #     start_time, end_time = self.get_reservation_time_window(
+    #         value, self.restaurant.res_duration
+    #     )
+    #     total_table_sizes = self.get_total_table_sizes(
+    #         self.restaurant_id, start_time, end_time
+    #     )
 
-        if total_table_sizes + self.table_size > self.restaurant.capacity:
-            raise ValueError("Restaurant capacity exceeded for the selected time")
+    #     if total_table_sizes + self.table_size > self.restaurant.capacity:
+    #         raise ValueError("Restaurant capacity exceeded for the selected time")
 
-        return value
+    #     return value
     
     # # validates the notes length to keep it under 500 characters
     @validates("notes")
