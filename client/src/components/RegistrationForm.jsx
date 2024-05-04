@@ -109,8 +109,11 @@ const RegistrationForm = () => {
           </Form>
         )}
       </Formik>
+      <p>
+        Not registered? <Link to="/register">Register Here</Link>
+      </p>
     </div>
   );
 };
 
-export default RegistrationForm;
+export default LoginForm;
