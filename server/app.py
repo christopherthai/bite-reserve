@@ -727,9 +727,9 @@ class Users(Resource):
         users_list = [user.to_dict() for user in users]
 
         return make_response(users_list, 200)
-    
-    #First user in a list of all users. Format:
-    '''   {
+
+    # First user in a list of all users. Format:
+    """   {
         "IsAdmin": false,
         "email": "john@example.com",
         "first_name": "John",
@@ -739,8 +739,8 @@ class Users(Resource):
         "phone": "123-456-7890",
         "username": "johndoe"
         },
-        '''
-    
+        """
+
     def post(self):
         data = request.get_json()
 
@@ -760,9 +760,8 @@ class Users(Resource):
 
         except ValueError:
             return make_response({"errors": ["validation errors"]}, 400)
-        
-        
-    '''{
+
+    """{
         "IsAdmin": false,
         "email": "email@email.com",
         "first_name": "JR",
@@ -771,7 +770,7 @@ class Users(Resource):
         "password": "99999999",
         "phone": "999999999",
         "username": "999999999999"
-}'''
+}"""
 
 
 api.add_resource(Users, "/users")
@@ -789,8 +788,8 @@ class UsersById(Resource):
             return make_response({"error": "User not found"}, 404)
 
         return make_response(user.to_dict(), 200)
-    
-    '''{
+
+    """{
         "IsAdmin": false,
         "email": "john@example.com",
         "first_name": "John",
@@ -799,9 +798,8 @@ class UsersById(Resource):
         "password": "password123",
         "phone": "123-456-7890",
         "username": "johndoe"
-    }'''
-    
-    
+    }"""
+
     def patch(self, id):
         user = User.query.filter_by(id=id).first()
         if not user:
@@ -818,8 +816,8 @@ class UsersById(Resource):
 
         except ValueError:
             return ({"errors": ["validation errors"]}, 400)
-        
-    '''{
+
+    """{
         "IsAdmin": false,
         "email": "email@email.com",
         "first_name": "CARL",
@@ -828,10 +826,7 @@ class UsersById(Resource):
         "password": "2111111",
         "phone": "111-111-1111",
         "username": "111"
-    }'''
-        
-        
-        
+    }"""
 
     def delete(self, id):
         user = User.query.filter_by(id=id).first()
@@ -847,10 +842,10 @@ class UsersById(Resource):
         except Exception as e:
             print(f"Error deleting user: {str(e)}")
             return ({"errors": ["validation errors"]}, 400)
-        
-    '''
+
+    """
     Empty response 204, tested and persists
-    '''
+    """
 
 
 api.add_resource(UsersById, "/users/<int:id>")

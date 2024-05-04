@@ -36,13 +36,13 @@ function RestaurantTable() {
       sx={{
         position: "absolute",
         top: "100px",
-        right: "-720px",
+        right: { xs: "0px", sm: "-720px" }, // responsive right positioning
         marginLeft: 0,
         marginRight: 100,
-        width: "80%",
+        width: { xs: "100%", sm: "80%" },
       }}
     >
-      <Grid item>
+      <Grid item xs={12} sm={10}>
         <Typography variant="h4" component="h2" gutterBottom>
           <strong>Restaurant Lists</strong>
           <Button
@@ -53,7 +53,7 @@ function RestaurantTable() {
             Add New Restaurant
           </Button>
         </Typography>
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} style={{ maxWidth: "100%" }}>
           <Table sx={{ minWidth: 1090 }} aria-label="simple table">
             <TableHead>
               <TableRow>
