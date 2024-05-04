@@ -6,6 +6,8 @@
     "@material-ui/icons": "^4.11.3",
     "@mui/material": "^5.15.16",
     "@mui/styles": "^5.15.16",
-    "react-router-dom": "^6.23.0"
+    "formik": "^2.4.6",
+    "react-router-dom": "^6.23.0",
+    "yup": "^1.4.0"
   }
 }
