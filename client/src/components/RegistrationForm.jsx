@@ -1,47 +1,48 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom'; // Import useHistory for redirection
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup'; // For form validation
+import { useNavigate } from "react-router-dom"; // Import useHistory for redirection
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup"; // For form validation
 
 const RegistrationForm = () => {
-  const history = useHistory(); // Initialize useHistory
+  const navigate = useNavigate(); // Initialize useNavigate
 
   // Define validation schema using Yup
   const validationSchema = Yup.object().shape({
-    first_name: Yup.string().required('First Name is required'),
-    last_name: Yup.string().required('Last Name is required'),
-    username: Yup.string().required('Username is required'),
+    first_name: Yup.string().required("First Name is required"),
+    last_name: Yup.string().required("Last Name is required"),
+    username: Yup.string().required("Username is required"),
     password: Yup.string()
-      .min(8, 'Password must be at least 8 characters')
-      .required('Password is required'),
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Confirm Password is required'),
-    phone: Yup.string().required('Phone number is required'),
-    email: Yup.string().email('Invalid email address').required('Email is required'),
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .required("Confirm Password is required"),
+    phone: Yup.string().required("Phone number is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
     isAdmin: Yup.boolean(),
   });
 
   // Initial form values
   const initialValues = {
-    first_name: '',
-    last_name: '',
-    username: '',
-    password: '',
-    confirmPassword: '',
-    phone: '',
-    email: '',
+    first_name: "",
+    last_name: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+    email: "",
     isAdmin: false,
   };
 
   // Function to handle form submission
   const handleSubmit = (values, { setSubmitting }) => {
     // You can perform registration logic here, e.g., send data to backend
-    console.log('Form submitted with values:', values);
+    console.log("Form submitted with values:", values);
     setSubmitting(false);
-    
+
     // Redirect to home page
-    history.push('/');
+    navigate("/");
   };
 
   return (
@@ -57,13 +58,21 @@ const RegistrationForm = () => {
             <div>
               <label htmlFor="first_name">First Name</label>
               <Field type="text" id="first_name" name="first_name" />
-              <ErrorMessage name="first_name" component="div" className="error" />
+              <ErrorMessage
+                name="first_name"
+                component="div"
+                className="error"
+              />
             </div>
 
             <div>
               <label htmlFor="last_name">Last Name</label>
               <Field type="text" id="last_name" name="last_name" />
-              <ErrorMessage name="last_name" component="div" className="error" />
+              <ErrorMessage
+                name="last_name"
+                component="div"
+                className="error"
+              />
             </div>
 
             <div>
@@ -80,8 +89,16 @@ const RegistrationForm = () => {
 
             <div>
               <label htmlFor="confirmPassword">Confirm Password</label>
-              <Field type="password" id="confirmPassword" name="confirmPassword" />
-              <ErrorMessage name="confirmPassword" component="div" className="error" />
+              <Field
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+              />
+              <ErrorMessage
+                name="confirmPassword"
+                component="div"
+                className="error"
+              />
             </div>
 
             <div>
@@ -104,7 +121,7 @@ const RegistrationForm = () => {
             </div>
 
             <button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Registering...' : 'Register'}
+              {isSubmitting ? "Registering..." : "Register"}
             </button>
           </Form>
         )}

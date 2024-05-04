@@ -11,9 +11,13 @@ import {
   Grid,
 } from "@material-ui/core";
 
+/*
+useStyles is a function that will be used to style the components.
+It uses the makeStyles hook from Material-UI to define the styles.
+*/
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    backgroundColor: "#3f51b5",
+    backgroundColor: "#f5f5f5",
   },
   drawer: {
     width: 240,
@@ -23,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
     height: "100vh",
     marginTop: "64px",
-    backgroundColor: "#3f51b5",
+    backgroundColor: "#f5f5f5",
   },
 }));
 
