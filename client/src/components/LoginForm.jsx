@@ -36,6 +36,7 @@ const LoginForm = () => {
         console.log("Success:", data);
         setSubmitting(false);
         navigate("/reservations");
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Error:", error);
