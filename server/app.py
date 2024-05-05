@@ -40,15 +40,23 @@ class Signup(Resource):
 
         request_json = request.get_json()
 
+        first_name = request_json.get("first_name")
+        last_name = request_json.get("last_name")
         username = request_json.get("username")
         password = request_json.get("password")
-        image_url = request_json.get("image_url")
-        bio = request_json.get("bio")
+        phone = request_json.get("phone")
+        email = request_json.get("email")
+        IsAdmin = request_json.get("IsAdmin")
 
-        user = User(username=username, image_url=image_url, bio=bio)
-
-        # the setter will encrypt this
-        user.password_hash = password
+        user = User(
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            password=password,
+            phone=phone,
+            email=email,
+            IsAdmin=IsAdmin,
+        )
 
         try:
 
@@ -81,24 +89,6 @@ class CheckSession(Resource):
 
 
 api.add_resource(CheckSession, "/check_session", endpoint="check_session")
-
-
-class CheckSessionForAdmin(Resource):
-
-    def get(self):
-
-        user_id = session["user_id"]
-
-        if user_id and User.query.filter(User.id == user_id).first().IsAdmin == 1:
-            user = User.query.filter(User.id == user_id).first()
-            return user.to_dict(), 200
-
-        return {}, 401
-
-
-api.add_resource(
-    CheckSessionForAdmin, "/check_session_for_admin", endpoint="check_session_for_admin"
-)
 
 
 # Login Routes

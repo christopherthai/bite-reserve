@@ -12,27 +12,36 @@ import AdminDashboardPage from "./pages/AdminDashboardPage";
 import ManageRestaurants from "./components/Admin/ManageRestaurants";
 import ManageReservations from "./components/Admin/ManageReservations";
 import NotFoundPage from "./pages/NotFoundPage";
+import UserContext from "./UserContext";
+import { useState } from "react";
 
 function App() {
+  const [isLogin, setIsLogin] = useState(false);
+
   return (
     <>
-      <div className="app">
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegistrationForm />} />
-          <Route path="/restaurant/:id" element={<RestaurantDetail />} />
-          <Route path="/reservations" element={<ReservationsPage />} />
-          <Route path="/reservation/:id" element={<ReservationDetail />} />
-          <Route path="/reservationsform/:id" element={<ReservationForm />} />
-          <Route path="/admindashboard" element={<AdminDashboardPage />} />
-          <Route path="/manage-restaurants" element={<ManageRestaurants />} />
-          <Route path="/manage-reservations" element={<ManageReservations />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </div>
+      <UserContext.Provider value={{ isLogin, setIsLogin }}>
+        <div className="app">
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/register" element={<RegistrationForm />} />
+            <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+            <Route path="/reservations" element={<ReservationsPage />} />
+            <Route path="/reservation/:id" element={<ReservationDetail />} />
+            <Route path="/reservationsform/:id" element={<ReservationForm />} />
+            <Route path="/admindashboard" element={<AdminDashboardPage />} />
+            <Route path="/manage-restaurants" element={<ManageRestaurants />} />
+            <Route
+              path="/manage-reservations"
+              element={<ManageReservations />}
+            />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </div>
+      </UserContext.Provider>
     </>
   );
 }

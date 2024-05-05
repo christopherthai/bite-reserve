@@ -4,9 +4,25 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import "./LoginForm.css"; // Import the CSS file
+import { Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
+import { useContext, useState } from "react";
+import UserContext from "../UserContext";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { setIsLogin } = useContext(UserContext); // Use the UserContext to access the user's login status
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
@@ -28,24 +44,30 @@ const LoginForm = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Invalid username or password");
         }
         return response.json();
       })
-      .then((data) => {
-        console.log("Success:", data);
+      .then(() => {
         setSubmitting(false);
-        navigate("/reservations");
-        window.location.reload();
+        setIsLogin(true);
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error:", error);
+        setErrorMessage(error.message);
+        setOpen(true);
         setSubmitting(false);
       });
   };
 
   return (
     <div className="login-form-container">
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <MuiAlert onClose={handleClose} severity="error">
+          {errorMessage}
+        </MuiAlert>
+      </Snackbar>
       <h2 className="login-form-title">Login</h2>
       <Formik
         initialValues={initialValues}
