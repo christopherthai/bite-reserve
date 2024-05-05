@@ -16,6 +16,7 @@ DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db'
 
 
 app = Flask(__name__)
+app.secret_key = b"Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K"
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
@@ -32,6 +33,7 @@ def index():
     return "<h1>Project Server</h1>"
 
 
+# Signup Routes
 class Signup(Resource):
 
     def post(self):
@@ -65,6 +67,7 @@ class Signup(Resource):
 api.add_resource(Signup, "/signup", endpoint="signup")
 
 
+# CheckSession Routes
 class CheckSession(Resource):
 
     def get(self):
@@ -80,6 +83,7 @@ class CheckSession(Resource):
 api.add_resource(CheckSession, "/check_session", endpoint="check_session")
 
 
+# Login Routes
 class Login(Resource):
 
     def post(self):
@@ -103,6 +107,7 @@ class Login(Resource):
 api.add_resource(Login, "/login", endpoint="login")
 
 
+# Logout Routes
 class Logout(Resource):
 
     def delete(self):
@@ -604,7 +609,7 @@ class Reservations(Resource):
 
     def post(self, restaurant_id):
         data = request.get_json()
-        
+
         session = db.session
 
         restaurant = session.get(Restaurant, restaurant_id)
