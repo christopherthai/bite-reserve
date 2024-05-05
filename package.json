@@ -9,9 +9,10 @@
     "axios": "^1.6.8",
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "sqlite3": "^5.1.7",
     "formik": "^2.4.6",
+    "react-datepicker": "^6.9.0",
     "react-router-dom": "^6.23.0",
+    "sqlite3": "^5.1.7",
     "yup": "^1.4.0"
   }
 }
