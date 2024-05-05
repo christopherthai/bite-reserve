@@ -1,10 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import './HomePage.css'; // Import the CSS file
-
+import React from 'react';
+import RestaurantList from '../components/Restaurants/RestaurantList';
 
 function HomePage() {
+<<<<<<< HEAD
+  return (
+    <div>
+      <section>
+        <h1>Find your table for any occasion</h1>
+        <RestaurantList className='card-container'/>
+      </section>
+    </div>
+  );
+}
+
+export default HomePage;
+=======
   const [restaurants, setRestaurants] = useState([]);
 
       useEffect(() => {
@@ -16,8 +26,10 @@ function HomePage() {
 
       return (
         <div className="page-container">
+          <div className="home-header">
+            <h1>Our Restaurants</h1>
+          </div>
           <section>
-            <h2 className="home-header">Restaurants</h2>
             <div className="card-container">
               {restaurants.map(restaurant => (
                 <Link to={`/restaurant/${restaurant.id}`} key={restaurant.id} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -34,9 +46,8 @@ function HomePage() {
           </section>
         </div>
       );
-}
 
-
+    }
 export default HomePage;
 
 
@@ -63,3 +74,4 @@ export default HomePage;
       </div>
     </>
    */}
+>>>>>>> development
