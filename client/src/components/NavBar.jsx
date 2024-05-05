@@ -39,10 +39,10 @@ function NavBar() {
         return response.json();
       })
       .then(() => {
-        setIsLogin(false);
+        setIsLogin(false); // Update the user's login status
       });
-    setIsLogin(false);
-    window.location.reload();
+    setIsLogin(false); // Update the user's login status
+    window.location.reload(); // Reload the page
   };
 
   return (
