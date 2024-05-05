@@ -2,9 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
 import * as Yup from "yup";
-import { Link } from 'react-router-dom';
-import './LoginForm.css'; // Import the CSS file
-
+import { Link } from "react-router-dom";
+import "./LoginForm.css"; // Import the CSS file
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -20,9 +19,28 @@ const LoginForm = () => {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    console.log("Form submitted with values:", values);
-    setSubmitting(false);
-    navigate("/");
+    fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+        setSubmitting(false);
+        navigate("/reservations");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setSubmitting(false);
+      });
   };
 
   return (
@@ -36,18 +54,36 @@ const LoginForm = () => {
         {({ isSubmitting }) => (
           <Form>
             <div className="login-form-field">
-              <label htmlFor="username" className="login-form-label">Username</label>
-              <Field type="text" id="username" name="username" className="login-form-input" />
+              <label htmlFor="username" className="login-form-label">
+                Username
+              </label>
+              <Field
+                type="text"
+                id="username"
+                name="username"
+                className="login-form-input"
+              />
               <ErrorMessage name="username" component="div" className="error" />
             </div>
 
             <div className="login-form-field">
-              <label htmlFor="password" className="login-form-label">Password</label>
-              <Field type="password" id="password" name="password" className="login-form-input" />
+              <label htmlFor="password" className="login-form-label">
+                Password
+              </label>
+              <Field
+                type="password"
+                id="password"
+                name="password"
+                className="login-form-input"
+              />
               <ErrorMessage name="password" component="div" className="error" />
             </div>
 
-            <button type="submit" disabled={isSubmitting} className="login-form-button">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="login-form-button"
+            >
               {isSubmitting ? "Logging in..." : "Login"}
             </button>
           </Form>
