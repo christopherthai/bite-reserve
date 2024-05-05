@@ -311,7 +311,7 @@ const RestaurantForm = ({ onRestaurantChange }) => {
                     style={{ marginLeft: "30px", color: "red" }}
                   />
 
-                  <ListItem>
+                  <ListItem style={{ justifyContent: "flex-end" }}>
                     <Button
                       type="submit"
                       variant="contained"
