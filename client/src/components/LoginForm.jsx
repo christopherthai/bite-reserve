@@ -6,13 +6,15 @@ import { Link } from "react-router-dom";
 import "./LoginForm.css"; // Import the CSS file
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import UserContext from "../UserContext";
 
 const LoginForm = () => {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { setIsLogin } = useContext(UserContext); // Use the UserContext to access the user's login status
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -46,9 +48,9 @@ const LoginForm = () => {
         }
         return response.json();
       })
-      .then((data) => {
-        console.log("Success:", data);
+      .then(() => {
         setSubmitting(false);
+        setIsLogin(true);
         navigate("/");
       })
       .catch((error) => {

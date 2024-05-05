@@ -9,26 +9,41 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { ThemeProvider } from "@mui/material/styles";
+import UserContext from "../UserContext";
+import { useContext } from "react";
 
-/*
-This is a NavBar component that will be displayed at the top of the page.
-It will contain links to the Home, About, Reservations, Admin, and Login pages.
-Using Material-UI components, it will be styled with a light blue background.
-*/
 const useStyles = makeStyles({
   appBar: {
     backgroundColor: "LightBlue",
   },
 });
 
-/*
-This is the NavBar component that will display the navigation links.
-It will be styled with the Material-UI AppBar component.
-*/
 function NavBar() {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { isLogin, setIsLogin } = useContext(UserContext); // Use the UserContext to access the user's login status
+
+  // Handle the logout event
+  const handleLogout = () => {
+    fetch("/api/logout", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Logout failed");
+        }
+        return response.json();
+      })
+      .then(() => {
+        setIsLogin(false);
+      });
+    setIsLogin(false);
+    window.location.reload();
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -38,7 +53,7 @@ function NavBar() {
             BiteReserve
           </Typography>
           {isMobile ? (
-            <Button color="inherit">Menu</Button> // This could be a MenuIcon inside a IconButton for a dropdown menu
+            <Button color="inherit">Menu</Button>
           ) : (
             <>
               <Button color="inherit" component={NavLink} to="/" exact>
@@ -53,9 +68,15 @@ function NavBar() {
               <Button color="inherit" component={NavLink} to="/admindashboard/">
                 Admin
               </Button>
-              <Button color="inherit" component={NavLink} to="/login">
-                Login
-              </Button>
+              {isLogin ? (
+                <Button color="inherit" onClick={handleLogout}>
+                  Logout
+                </Button>
+              ) : (
+                <Button color="inherit" component={NavLink} to="/login">
+                  Login
+                </Button>
+              )}
             </>
           )}
         </Toolbar>
