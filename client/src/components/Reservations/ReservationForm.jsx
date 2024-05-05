@@ -66,9 +66,9 @@ const ReservationForm = () => {
     return (
         <div style={{ padding: '20px' }}>
             <img src={restaurant.image} alt={restaurant.name} style={{ width: '100%', height: '300px', objectFit: 'cover' }} />
-            <h2>{restaurant.name}</h2>
-            <h3>{restaurant.category}</h3>
-            <h3>{restaurant.phone}</h3>
+            <h1>{restaurant.name}</h1>
+            <h3>Style: {restaurant.category}</h3>
+            <h3>Phone: {restaurant.phone}</h3>
             <p>{restaurant.description}</p> {/* Make sure description exists in your data */}
             <form onSubmit={handleSubmit}>
                 <input
