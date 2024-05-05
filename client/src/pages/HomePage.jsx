@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import "./HomePage.css"; // Import the CSS file
 
 function HomePage() {
-<<<<<<< HEAD
-=======
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
@@ -13,7 +11,6 @@ function HomePage() {
       .then((res) => res.json())
       .then((data) => setRestaurants(data));
   }, []);
->>>>>>> development
 
   return (
     <div className="page-container">
@@ -21,10 +18,6 @@ function HomePage() {
         <h1>Our Restaurants</h1>
       </div>
       <section>
-<<<<<<< HEAD
-        <h1>Find your table for any occasion</h1>
-        <RestaurantList/>
-=======
         <div className="card-container">
           {restaurants.map((restaurant) => (
             <Link
@@ -42,15 +35,10 @@ function HomePage() {
             </Link>
           ))}
         </div>
->>>>>>> development
       </section>
     </div>
   );
 }
-<<<<<<< HEAD
-
-export default HomePage;
-=======
 export default HomePage;
 
 // import { Link } from 'react-router-dom';
@@ -74,4 +62,3 @@ export default HomePage;
     </>
    */
 }
->>>>>>> development
