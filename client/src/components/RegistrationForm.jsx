@@ -1,12 +1,8 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-<<<<<<< HEAD
 import * as Yup from "yup";
 import { Link, useNavigate } from 'react-router-dom';
 import './RegistrationForm.css'; // Import the CSS file
-=======
-import * as Yup from "yup"; // For form validation
-import { Link } from "react-router-dom";
->>>>>>> development
+
 
 const RegistrationForm = () => {
   const navigate = useNavigate(); // Initialize useNavigate

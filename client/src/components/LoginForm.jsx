@@ -1,13 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-<<<<<<< HEAD
+
 import * as Yup from "yup";
 import { Link } from 'react-router-dom';
 import './LoginForm.css'; // Import the CSS file
-=======
-import * as Yup from "yup"; // For form validation
-import { Link } from "react-router-dom";
->>>>>>> development
+
 
 const LoginForm = () => {
   const navigate = useNavigate();
