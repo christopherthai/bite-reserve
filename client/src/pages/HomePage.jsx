@@ -42,28 +42,3 @@ function HomePage() {
 
 
 export default HomePage;
-
-
-
-
-
-// import { Link } from 'react-router-dom';
-// import './HomePage.css'; // CSS 파일 import
-// import RestaurantList from '../components/Restaurants/RestaurantList.jsx';
-
-// function HomePage() {
-//   const restaurants = RestaurantList(); // RestaurantList를 함수로부터 데이터 받아오기
-// }
-
-
-{/* <>
-      <p className="home-header">Find your table for any occasion</p>
-      <div className="page-container">
-        <div className="card-container">
-          {restaurants.map((card, index) => (
-            <Card key={index} title={card.title} content={card.content} />
-          ))}
-        </div>
-      </div>
-    </>
-   */}

@@ -1,83 +1,78 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
-const ReservationsForm = () => {
-    const { restaurantId } = useParams(); // URL에서 레스토랑 ID 추출
+const ReservationForm = () => {
+    const { id } = useParams();
     const [restaurant, setRestaurant] = useState(null);
-    const navigate = useNavigate();
+    const [reservation, setReservation] = useState({
+        name: '',
+        phone: '',
+        date: '',
+        time: ''
+    });
 
     useEffect(() => {
-        // 레스토랑 정보를 서버에서 불러오기
-        fetch(`/api/restaurants/${restaurantId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch');
-                }
-                return response.json();
-            })
+        fetch(`/api/restaurants/${id}`)
+            .then(response => response.json())
             .then(data => setRestaurant(data))
-            .catch(error => {
-                console.error('Error fetching restaurant details:', error);
-                // 오류 처리 로직 (예: 오류 메시지 표시)
-            });
-    }, [restaurantId]);
+            .catch(error => console.error('Error loading the restaurant', error));
+    }, [id]);
 
-    if (!restaurant) return <div>Loading...</div>;
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const reservationData = {
-            date: event.target.date.value,
-            time: event.target.time.value,
-            partySize: event.target.partySize.value,
-            restaurantId: restaurantId,
-        };
-
-        fetch('/api/reservations', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(reservationData),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to create reservation');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Reservation created:', data);
-            navigate('/reservations');
-        })
-        .catch(error => {
-            console.error('Error creating reservation:', error);
-            // 추가적인 오류 처리
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setReservation({
+            ...reservation,
+            [name]: value
         });
     };
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log('Reservation Details:', reservation);
+        // Here you might send the reservation data to the server
+    };
+
+    if (!restaurant) return <div>Loading...</div>;
+
     return (
-        <form onSubmit={handleSubmit} style={{ padding: '20px' }}>
-            <img src={restaurant.image} alt={restaurant.name} style={{ width: '200px', height: '200px' }} />
+        <div style={{ padding: '20px' }}>
+            <img src={restaurant.image} alt={restaurant.name} style={{ width: '100%', height: '300px', objectFit: 'cover' }} />
             <h2>{restaurant.name}</h2>
-            <p>{restaurant.phone}</p>
-            <div>
-                <label>Date:</label>
-                <input type="date" name="date" required />
-            </div>
-            <div>
-                <label>Time:</label>
-                <input type="time" name="time" required />
-            </div>
-            <div>
-                <label>Party Size:</label>
-                <input type="number" name="partySize" min="1" required />
-            </div>
-            <button type="submit" style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>
-                Complete Reservation
-            </button>
-        </form>
+            <h3>{restaurant.phone}</h3>
+            <p>{restaurant.description}</p> {/* Make sure description exists in your data */}
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    value={reservation.name}
+                    onChange={handleInputChange}
+                />
+                <input
+                    type="text"
+                    name="phone"
+                    placeholder="Your Phone Number"
+                    value={reservation.phone}
+                    onChange={handleInputChange}
+                />
+                <select name="date" value={reservation.date} onChange={handleInputChange}>
+                    {/* Generate dates dynamically or hardcode values */}
+                    <option value="">Select a date</option>
+                    <option value="2024-05-01">May 1, 2024</option>
+                    <option value="2024-05-02">May 2, 2024</option>
+                </select>
+                <div>
+                    {/* Generate buttons for times */}
+                    {[9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].map(hour => (
+                        <button key={hour} type="button" onClick={() => setReservation({...reservation, time: `${hour}:00`})}>
+                            {hour % 12 === 0 ? 12 : hour % 12} {hour < 12 ? 'AM' : 'PM'}
+                        </button>
+                    ))}
+                </div>
+                <button type="submit">Submit Reservation</button>
+            </form>
+        </div>
     );
 };
 
-export default ReservationsForm;
+export default ReservationForm;
