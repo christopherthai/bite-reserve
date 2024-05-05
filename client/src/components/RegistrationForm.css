@@ -1,0 +1,59 @@
+html {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensure the page covers the full height of the viewport */
+    background-image: url("/src/test-backgroundpic.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Ensure the background image remains fixed */
+  }
+  
+  .registration-form-container {
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+    background-color: rgba(255, 255, 255, 0.9); /* White with some transparency */
+  }
+  
+  .registration-form {
+    display: grid;
+    grid-gap: 10px;
+  }
+  
+  .registration-form-field {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .registration-form-field label {
+    margin-bottom: 5px;
+  }
+  
+  .error {
+    color: red;
+  }
+  
+  .registration-form-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .registration-form-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .registration-form-link {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .registration-form-title {
+    text-align: center;
+  }

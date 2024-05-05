@@ -1,12 +1,12 @@
-import { useNavigate } from "react-router-dom"; // Import useHistory for redirection
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup"; // For form validation
-import { Link } from "react-router-dom";
+import * as Yup from "yup";
+import { Link, useNavigate } from 'react-router-dom';
+import './RegistrationForm.css'; // Import the CSS file
+
 
 const RegistrationForm = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
-  // Define validation schema using Yup
   const validationSchema = Yup.object().shape({
     first_name: Yup.string().required("First Name is required"),
     last_name: Yup.string().required("Last Name is required"),
@@ -24,7 +24,6 @@ const RegistrationForm = () => {
     isAdmin: Yup.boolean(),
   });
 
-  // Initial form values
   const initialValues = {
     first_name: "",
     last_name: "",
@@ -36,91 +35,90 @@ const RegistrationForm = () => {
     isAdmin: false,
   };
 
-  // Function to handle form submission
   const handleSubmit = (values, { setSubmitting }) => {
-    // You can perform registration logic here, e.g., send data to backend
     console.log("Form submitted with values:", values);
     setSubmitting(false);
-
-    // Redirect to home page
-    navigate("/");
+    navigate("/"); // Redirect to home page after successful registration
   };
 
+  
+
   return (
-    <div>
-      <h2>Registration</h2>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <div>
-              <label htmlFor="first_name">First Name</label>
-              <Field type="text" id="first_name" name="first_name" />
-              <ErrorMessage
-                name="first_name"
-                component="div"
-                className="error"
-              />
-            </div>
+      <div className="registration-form-container">
+        <h2 className="registration-form-title">New Guest Registration</h2>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting }) => (
+            <Form className="registration-form">
+              <div className="registration-form-field">
+                <label htmlFor="first_name">First Name</label>
+                <Field type="text" id="first_name" name="first_name" />
+                <ErrorMessage name="first_name" component="div" className="error" />
+              </div>
 
-            <div>
-              <label htmlFor="last_name">Last Name</label>
-              <Field type="text" id="last_name" name="last_name" />
-              <ErrorMessage
-                name="last_name"
-                component="div"
-                className="error"
-              />
-            </div>
+              <div className="registration-form-field">
+                <label htmlFor="last_name">Last Name</label>
+                <Field type="text" id="last_name" name="last_name" />
+                <ErrorMessage name="last_name" component="div" className="error" />
+              </div>
 
-            <div>
-              <label htmlFor="username">Username</label>
-              <Field type="text" id="username" name="username" />
-              <ErrorMessage name="username" component="div" className="error" />
-            </div>
+              <div className="registration-form-field">
+                <label htmlFor="username">Username</label>
+                <Field type="text" id="username" name="username" />
+                <ErrorMessage name="username" component="div" className="error" />
+              </div>
 
-            <div>
-              <label htmlFor="password">Password</label>
-              <Field type="password" id="password" name="password" />
-              <ErrorMessage name="password" component="div" className="error" />
-            </div>
+              <div className="registration-form-field">
+                <label htmlFor="password">Password</label>
+                <Field type="password" id="password" name="password" />
+                <ErrorMessage name="password" component="div" className="error" />
+              </div>
 
-            <div>
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <Field
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-              />
-              <ErrorMessage
-                name="confirmPassword"
-                component="div"
-                className="error"
-              />
-            </div>
+              <div className="registration-form-field">
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <Field
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                />
+                <ErrorMessage name="confirmPassword" component="div" className="error" />
+              </div>
 
-            <div>
-              <label htmlFor="phone">Phone</label>
-              <Field type="text" id="phone" name="phone" />
-              <ErrorMessage name="phone" component="div" className="error" />
-            </div>
+              <div className="registration-form-field">
+                <label htmlFor="phone">Phone</label>
+                <Field type="text" id="phone" name="phone" />
+                <ErrorMessage name="phone" component="div" className="error" />
+              </div>
 
-            <div>
-              <label htmlFor="email">Email</label>
-              <Field type="email" id="email" name="email" />
-              <ErrorMessage name="email" component="div" className="error" />
-            </div>
+              <div className="registration-form-field">
+                <label htmlFor="email">Email</label>
+                <Field type="email" id="email" name="email" />
+                <ErrorMessage name="email" component="div" className="error" />
+              </div>
 
-            <div>
-              <label>
-                <Field type="checkbox" name="isAdmin" />
-                Register as Admin
-              </label>
-            </div>
+              <div className="registration-form-field">
+                <label>
+                  <Field type="checkbox" name="isAdmin" />
+                  Register as Admin
+                </label>
+              </div>
 
+              <button type="submit" disabled={isSubmitting} className="registration-form-button">
+                {isSubmitting ? "Registering..." : "Register"}
+              </button>
+            </Form>
+          )}
+        </Formik>
+        <p className="registration-form-link">
+          Already have an account? <Link to="/login">Login Here</Link>
+        </p>
+      </div>
+
+<<<<<<< HEAD
+=======
             <button type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Registering..." : "Register"}
             </button>
@@ -128,6 +126,7 @@ const RegistrationForm = () => {
         )}
       </Formik>
     </div>
+>>>>>>> development
   );
 };
 
