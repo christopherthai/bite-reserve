@@ -1,43 +1,53 @@
 .page-container {
-    display: flex;
-    justify-content: center; /* 페이지를 수평으로 가운데 정렬 */
-    align-items: center; /* 페이지를 수직으로 가운데 정렬 */
-    height: 100vh; /* 뷰포트 높이만큼 페이지의 높이 설정 */
-    margin-left: 60px;
-    margin-top: 300px;
-  }
-  .card-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Show three cards across */
-    gap: 20px; /* Spacing between cards */
-    justify-content: center; /* Center the cards horizontally */
-    max-width: 900px; /* Limit the width of the card container */
-    margin: 50px auto; /* Center the card container horizontally */
-  }
-  
-  .card {
-    width: 300px;
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 1, 1.4); 
-    background-color: rgba(255, 255, 255, 1.0); /* White with some transparency */
+  display: flex;
+  flex-direction: column; /* Arrange children in a column */
+  align-items: center; /* Center children horizontally */
+  margin-left: 60px;
+  margin-top: 300px;
+  padding-bottom: 50px; /* Add some padding at the bottom */
+}
 
-  }
-  
-  .card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .card-content {
-    padding: 10px;
-  }
-  
-  .home-header {
-    font-size: 50px;
-    text-align: center;
-    margin-top: 100px;
-    color: black;
-  }
+.home-header {
+  font-size: 30px;
+  text-align: center;
+  margin-top: 300px;
+  color: rgb(240, 236, 236);
+  margin-bottom: 0px;
+
+  /* Additional font styles */
+  font-family: 'Boogaloo'; /* Use a custom fancy font or a web-safe fallback */
+  font-weight: bold; /* Adjust font weight */
+  letter-spacing: 2px; /* Add letter spacing for a decorative effect */
+  /* Add any other desired font properties */
+  text-shadow: 2px 4px 6px rgba(0, 0, 0, 2); /* Adding a text shadow */
+}
+
+
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  justify-content: center;
+  max-width: 900px;
+  margin-top: 20px; /* Adjust the top margin */
+}
+
+.card {
+  width: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 1, 1.4);
+  background-color: rgba(255, 255, 255, 1.0);
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 10px;
+}
+
