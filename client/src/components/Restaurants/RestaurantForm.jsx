@@ -300,7 +300,7 @@ const RestaurantForm = ({ onRestaurantChange }) => {
                     <Field
                       as={TextField}
                       name="res_duration"
-                      type="text"
+                      type="number"
                       label="Reservation Duration (in minutes)"
                       style={{ width: "100%" }}
                     />
@@ -325,7 +325,6 @@ const RestaurantForm = ({ onRestaurantChange }) => {
               </Form>
             )}
           </Formik>
-          {isSubmitted && <p>Form submitted successfully!</p>}
         </DialogContent>
       </Dialog>
     </div>

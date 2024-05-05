@@ -56,40 +56,40 @@ class Restaurant(db.Model, SerializerMixin):
     # serialization rules
     serialize_rules = ("-reviews.restaurant", "-reservations.restaurant")
 
-    # validations for Restaurants.  Validates name, phone and address.
-    @validates("name", "address", "category")
-    def validate_not_empty(self, key, value):
-        if not value:
-            raise ValueError(f"{key} cannot be empty")
-        return value
+    # # validations for Restaurants.  Validates name, phone and address.
+    # @validates("name", "address", "category")
+    # def validate_not_empty(self, key, value):
+    #     if not value:
+    #         raise ValueError(f"{key} cannot be empty")
+    #     return value
 
     # validates restaurant capacity upon entry.
-    @validates("capacity")
-    def validate_capacity(self, key, value):
-        if not isinstance(value, int) or value <= 0:
-            raise ValueError("Capacity must be a positive integer")
-        return value
+    # @validates("capacity")
+    # def validate_capacity(self, key, value):
+    #     if not isinstance(value, int) or value <= 0:
+    #         raise ValueError("Capacity must be a positive integer")
+    #     return value
 
     # validates phone number upon entry
-    @validates("phone")
-    def validate_phone(self, key, value):
-        phone_regex = r"^\+?1?\d{9,15}$"
-        if not re.match(phone_regex, value):
-            raise ValueError("Invalid phone number format")
-        return value
+    # @validates("phone")
+    # def validate_phone(self, key, value):
+    #     phone_regex = r"^\+?1?\d{9,15}$"
+    #     if not re.match(phone_regex, value):
+    #         raise ValueError("Invalid phone number format")
+    #     return value
 
-    def validate_not_empty(self, key, value):
-        if not value:
-            raise ValueError(f"{key} cannot be empty")
-        return value
+    # def validate_not_empty(self, key, value):
+    #     if not value:
+    #         raise ValueError(f"{key} cannot be empty")
+    #     return value
 
     # validates that the website and menu link are in the proper html format
-    @validates("website", "menu_link")
-    def validate_url(self, key, value):
-        url_regex = r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
-        if not re.match(url_regex, value):
-            raise ValueError(f"Invalid {key} URL format")
-        return value
+    # @validates("website", "menu_link")
+    # def validate_url(self, key, value):
+    #     url_regex = r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+    #     if not re.match(url_regex, value):
+    #         raise ValueError(f"Invalid {key} URL format")
+    #     return value
 
     # Establish User Class
 
@@ -116,7 +116,7 @@ class User(db.Model, SerializerMixin):
 
     # serialization rules
     serialize_rules = ("-reviews", "-reservations")
-    
+
     # validates that the password isn't empty
     @validates("password")
     def validate_password_not_empty(self, key, value):
@@ -130,42 +130,39 @@ class User(db.Model, SerializerMixin):
         if not isinstance(value, bool):
             raise ValueError("IsAdmin must be a boolean value")
         return value
-    
-    # # # validates that the users email is valid upon entry    
+
+    # # # validates that the users email is valid upon entry
     @validates("email")
     def validate_email(self, key, value):
         email_regex = r"^[\w\.-]+@[\w\.-]+\.\w+$"
         if not re.match(email_regex, value):
             raise ValueError("Invalid email format")
-        
-        existing_user = User.query.filter(User.email==value).first()
+
+        existing_user = User.query.filter(User.email == value).first()
         if existing_user:
             raise ValueError(f"{key.capitalize()} must be unique")
-        
+
         return value
-    
 
     # # validates that the user's phone number is in the correct format upon entry
     @validates("phone")
     def validate_phone(self, key, value):
-        phone_regex = r'^(\+\d{1,3}[- ]?)?\d{3}-\d{3}-\d{4}$'
+        phone_regex = r"^(\+\d{1,3}[- ]?)?\d{3}-\d{3}-\d{4}$"
         if not re.match(phone_regex, value):
             raise ValueError("Invalid phone number format")
         return value
-    
-    
+
     # # validates that the user's username and email are both unique
     @validates("username")
     def validate_username_unique(self, key, value):
-        existing_user = User.query.filter(User.username==value).first()
+        existing_user = User.query.filter(User.username == value).first()
         if existing_user:
             raise ValueError(f"{key.capitalize()} must be unique")
-        
+
         if not value:
             raise ValueError(f"{key} cannot be empty")
-        
-        return value
 
+        return value
 
     # Establish Reservation class
 
@@ -194,21 +191,20 @@ class Reservation(db.Model, SerializerMixin):
     def validate_table_size(self, key, value):
         if not isinstance(value, int) or value <= 0:
             raise ValueError("Table size must be a positive integer")
-        
+
         if self.restaurant and value > self.restaurant.capacity:
             raise ValueError("Party size exceeds restaurant's capacity")
-        
+
         return value
 
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # I don't think we can validate like this.  In the case where we use Patch and don't want to change
+    # the restaurant_id and/or the reservation_time, it will compare what's already in the database and error.
+    # Also I'm assuming we could have multiple reservations times as long as the cumulative table_size doesn't
+    # exceed capacity.
+    # -Keenan
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    #I don't think we can validate like this.  In the case where we use Patch and don't want to change
-    #the restaurant_id and/or the reservation_time, it will compare what's already in the database and error.
-    #Also I'm assuming we could have multiple reservations times as long as the cumulative table_size doesn't
-    #exceed capacity.
-    #-Keenan
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
     # # validates that the reservation is unique and not a duplicate
     # @validates("restaurant_id", "reservation_time")
     # def validate_unique_reservation(self, key, value):
@@ -222,9 +218,7 @@ class Reservation(db.Model, SerializerMixin):
     #             "You have already made a reservation at this restaurant for that time"
     #         )
     #     return value
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Calculates a window of time based on the reservation duration.  15 minutes before
     # and 15 miutes after the reservation time.
