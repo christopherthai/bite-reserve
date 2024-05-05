@@ -517,8 +517,10 @@ class Reservations(Resource):
 
     def post(self, restaurant_id):
         data = request.get_json()
+        
+        session = db.session
 
-        restaurant = Restaurant.query.get(restaurant_id)
+        restaurant = session.get(Restaurant, restaurant_id)
 
         if not restaurant:
             return make_response({"error": "Restaurant not found"}, 404)
@@ -530,7 +532,7 @@ class Reservations(Resource):
                 status=data.get("status"),
                 notes=data.get("notes"),
                 user_id=data.get("user_id"),
-                restaurant_id=restaurant_id,
+                restaurant=restaurant,
             )
 
             db.session.add(reservation)

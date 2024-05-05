@@ -74,7 +74,7 @@ class Restaurant(db.Model, SerializerMixin):
     # validates phone number upon entry
     @validates("phone")
     def validate_phone(self, key, value):
-        phone_regex = r"^\+?1?\d{9,15}$"
+        phone_regex = r"^\+?1?[-\s(]?\d{3}[-\s)]?\s?\d{3}[-\s]?\d{4}$"
         if not re.match(phone_regex, value):
             raise ValueError("Invalid phone number format")
         return value
@@ -186,65 +186,78 @@ class Reservation(db.Model, SerializerMixin):
     status = db.Column(db.String, nullable=False)
     notes = db.Column(db.String)
     
-    
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
 
-    
-    # relationships with user and restaurant
+    # Relationships with user and restaurant
     user = db.relationship("User", back_populates="reservations")
     restaurant = db.relationship("Restaurant", back_populates="reservations")
 
-    # serialization rules
+    # Serialization rules
     serialize_rules = ("-user.reservations", "-restaurant.reservations")
 
-    # # validates the table size as a positive integer
+    # Validates the table size as a positive integer
     @validates("table_size")
     def validate_table_size(self, key, value):
         if not isinstance(value, int) or value <= 0:
             raise ValueError("Table size must be a positive integer")
         return value
 
-    # validates the table size as less than the restaurant's total capacity
-    
-    def validate_table_size_capacity(self, key, value):
-        if value > self.restaurant.capacity:
-            raise ValueError("Party size exceeds restaurant's capacity")
+    # Validates that the reservation is unique and not a duplicate
+    @validates("restaurant_id", "user_id")
+    def validate_unique_reservation(self, key, value):
+        if key == "restaurant_id" and value is not None:
+            existing_reservation = Reservation.query.filter_by(
+                restaurant_id=self.restaurant_id,
+                reservation_time=self.reservation_time,
+                user_id=self.user_id,
+            ).first()
+            if existing_reservation:
+                raise ValueError(
+                    "You have already made a reservation at this restaurant for that time"
+                )
         return value
 
-    # # validates that the reservation is unique and not a duplicate
-    # @validates("restaurant_id", "reservation_time")
-    # def validate_unique_reservation(self, key, value):
-    #     existing_reservation = Reservation.query.filter_by(
-    #         restaurant_id=self.restaurant_id,
-    #         reservation_time=value,
-    #         user_id=self.user_id,
-    #     ).first()
-    #     if existing_reservation:
-    #         raise ValueError(
-    #             "You have already made a reservation at this restaurant for that time"
-    #         )
-    #     return value
+    # Validates that the reservation is in the future and the restaurant is not at capacity
+    @validates("reservation_time")
+    def validate_reservation_time(self, key, value):
+        reservation_datetime = datetime.fromtimestamp(value)
+        if reservation_datetime <= datetime.now():
+            raise ValueError("Reservation time must be in the future")
 
-    # Calculates a window of time based on the reservation duration.  15 minutes before
-    # and 15 miutes after the reservation time.  
+        if self.restaurant is None:
+            raise ValueError("Restaurant is not assigned to the reservation")
+
+        start_time, end_time = self.get_reservation_time_window(
+            reservation_datetime, self.restaurant.res_duration
+        )
+        total_table_sizes = self.get_total_table_sizes(
+            self.restaurant_id, start_time, end_time
+        )
+
+        if total_table_sizes + self.table_size > self.restaurant.capacity:
+            raise ValueError("Restaurant capacity exceeded for the selected time")
+
+        return value
+
+    # Validates the notes length to keep it under 500 characters
+    @validates("notes")
+    def validate_notes(self, key, value):
+        if len(value) > 500:  # Maximum of 500 characters for the comment
+            raise ValueError("Notes exceed maximum character limit (500 characters)")
+        return value
+
+    # Calculates a window of time based on the reservation duration
     @staticmethod
     def get_reservation_time_window(reservation_time, res_duration):
-        """
-        Calculate the time window around the reservation time based on res_duration.
-        """
         return (
             reservation_time - timedelta(minutes=res_duration - 15),
             reservation_time + timedelta(minutes=res_duration),
         )
 
-    # Uses the time window to query the sum of table sizes of all reservations in 
-    # the specified window. 
+    # Uses the time window to query the sum of table sizes of all reservations
     @staticmethod
     def get_total_table_sizes(restaurant_id, start_time, end_time):
-        """
-        Calculate the total table sizes for reservations within the specified time window.
-        """
         total_table_sizes = (
             Reservation.query.filter(
                 Reservation.restaurant_id == restaurant_id,
@@ -254,34 +267,7 @@ class Reservation(db.Model, SerializerMixin):
             .with_entities(func.sum(Reservation.table_size))
             .scalar()
         )
-
         return total_table_sizes or 0
-    
-    # Validates that the reservation is in the future
-    # Validates that the restaurant is not at capacity when the reservation is made
-    # @validates("reservation_time")
-    # def validate_reservation_time(self, key, value):
-    #     if value <= datetime.now():
-    #         raise ValueError("Reservation time must be in the future")
-
-    #     start_time, end_time = self.get_reservation_time_window(
-    #         value, self.restaurant.res_duration
-    #     )
-    #     total_table_sizes = self.get_total_table_sizes(
-    #         self.restaurant_id, start_time, end_time
-    #     )
-
-    #     if total_table_sizes + self.table_size > self.restaurant.capacity:
-    #         raise ValueError("Restaurant capacity exceeded for the selected time")
-
-    #     return value
-    
-    # # validates the notes length to keep it under 500 characters
-    @validates("notes")
-    def validate_notes(self, key, value):
-        if len(value) > 500:  # maximum of 500 characters for the comment
-            raise ValueError("Notes exceeds maximum character limit (500 characters)")
-        return value
 
     # Establish Review class
 class Review(db.Model, SerializerMixin):
@@ -324,20 +310,20 @@ class Review(db.Model, SerializerMixin):
 
     # # validates that the user is not submitting multiple reviews for 
     # # the same restaurant in a specified period of time
-    # @validates("restaurant_id", "user_id", "timestamp")
-    # def validate_unique_review(self, key, value):
-    #     existing_review = (
-    #         Review.query.filter_by(
-    #             restaurant_id=self.restaurant_id, user_id=self.user_id
-    #         )
-    #         .order_by(Review.timestamp.desc())
-    #         .first()
-    #     )
-    #     if existing_review and (datetime.now() - existing_review.timestamp).days < 7:
-    #         raise ValueError(
-    #             "You have already submitted a review for this restaurant within the last week"
-    #         )
-    #     return value
+    @validates("restaurant_id", "user_id", "timestamp")
+    def validate_unique_review(self, key, value):
+        existing_review = (
+            Review.query.filter_by(
+                restaurant_id=self.restaurant_id, user_id=self.user_id
+            )
+            .order_by(Review.timestamp.desc())
+            .first()
+        )
+        if existing_review and (datetime.now() - existing_review.timestamp).days < 7:
+            raise ValueError(
+                "You have already submitted a review for this restaurant within the last week"
+            )
+        return value
     
     
 
