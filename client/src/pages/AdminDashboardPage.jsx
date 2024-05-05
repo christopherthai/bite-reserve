@@ -11,6 +11,8 @@ import {
   Grid,
 } from "@material-ui/core";
 import RestaurantTable from "../components/Admin/RestaurantTable";
+import { useEffect, useState } from "react";
+import LoginForm from "../components/LoginForm";
 
 /*
 useStyles is a function that will be used to style the components.
@@ -46,6 +48,28 @@ function AdminDashboardPage() {
       path: "/manage-reservations",
     },
   ];
+
+  // user state to store the logged in user
+  const [user, setUser] = useState(null);
+
+  // check if the user is logged in
+  useEffect(() => {
+    // auto-login
+    fetch("/api/check_session_for_admin").then((r) => {
+      if (r.ok) {
+        r.json().then((user) => setUser(user));
+      }
+    });
+  }, []);
+
+  // if the user is not logged in, display the login form
+  if (!user) {
+    return <LoginForm onLogin={setUser} />;
+  } else if (user.IsAdmin !== true) {
+    // if the user is not an admin, display an error message
+    console.log(user);
+    return <div>You are not authorized to view this page.</div>;
+  }
 
   return (
     <>

@@ -83,6 +83,24 @@ class CheckSession(Resource):
 api.add_resource(CheckSession, "/check_session", endpoint="check_session")
 
 
+class CheckSessionForAdmin(Resource):
+
+    def get(self):
+
+        user_id = session["user_id"]
+
+        if user_id and User.query.filter(User.id == user_id).first().IsAdmin == 1:
+            user = User.query.filter(User.id == user_id).first()
+            return user.to_dict(), 200
+
+        return {}, 401
+
+
+api.add_resource(
+    CheckSessionForAdmin, "/check_session_for_admin", endpoint="check_session_for_admin"
+)
+
+
 # Login Routes
 class Login(Resource):
 
