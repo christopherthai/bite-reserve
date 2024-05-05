@@ -22,7 +22,8 @@ metadata = MetaData(
 
 db = SQLAlchemy(metadata=metadata)
 
-#Establish Restaurant class
+
+# Establish Restaurant class
 class Restaurant(db.Model, SerializerMixin):
     __tablename__ = "restaurants"
 
@@ -53,24 +54,22 @@ class Restaurant(db.Model, SerializerMixin):
     review_users = association_proxy("reviews", "user")
 
     # serialization rules
-    serialize_rules = ("-reviews.restaurant", "-reservations.restaurant" )
+    serialize_rules = ("-reviews.restaurant", "-reservations.restaurant")
 
-    
-    
     # validations for Restaurants.  Validates name, phone and address.
     @validates("name", "address", "category")
     def validate_not_empty(self, key, value):
         if not value:
             raise ValueError(f"{key} cannot be empty")
         return value
-    
+
     # validates restaurant capacity upon entry.
     @validates("capacity")
     def validate_capacity(self, key, value):
         if not isinstance(value, int) or value <= 0:
             raise ValueError("Capacity must be a positive integer")
         return value
-    
+
     # validates phone number upon entry
     @validates("phone")
     def validate_phone(self, key, value):
@@ -78,13 +77,13 @@ class Restaurant(db.Model, SerializerMixin):
         if not re.match(phone_regex, value):
             raise ValueError("Invalid phone number format")
         return value
-    
+
     def validate_not_empty(self, key, value):
         if not value:
             raise ValueError(f"{key} cannot be empty")
         return value
-    
-    #validates that the website and menu link are in the proper html format
+
+    # validates that the website and menu link are in the proper html format
     @validates("website", "menu_link")
     def validate_url(self, key, value):
         url_regex = r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
@@ -92,7 +91,9 @@ class Restaurant(db.Model, SerializerMixin):
             raise ValueError(f"Invalid {key} URL format")
         return value
 
-    #Establish User Class
+    # Establish User Class
+
+
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
@@ -167,6 +168,8 @@ class User(db.Model, SerializerMixin):
 
 
     # Establish Reservation class
+
+
 class Reservation(db.Model, SerializerMixin):
     __tablename__ = "reservations"
 
@@ -175,12 +178,10 @@ class Reservation(db.Model, SerializerMixin):
     table_size = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String, nullable=False)
     notes = db.Column(db.String)
-    
-    
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
 
-    
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    restaurant_id = db.Column(db.Integer, db.ForeignKey("restaurants.id"))
+
     # relationships with user and restaurant
     user = db.relationship("User", back_populates="reservations")
     restaurant = db.relationship("Restaurant", back_populates="reservations")
@@ -226,7 +227,7 @@ class Reservation(db.Model, SerializerMixin):
 
 
     # Calculates a window of time based on the reservation duration.  15 minutes before
-    # and 15 miutes after the reservation time.  
+    # and 15 miutes after the reservation time.
     @staticmethod
     def get_reservation_time_window(reservation_time, res_duration):
         """
@@ -237,8 +238,8 @@ class Reservation(db.Model, SerializerMixin):
             reservation_time + timedelta(minutes=res_duration),
         )
 
-    # Uses the time window to query the sum of table sizes of all reservations in 
-    # the specified window. 
+    # Uses the time window to query the sum of table sizes of all reservations in
+    # the specified window.
     @staticmethod
     def get_total_table_sizes(restaurant_id, start_time, end_time):
         """
@@ -255,7 +256,7 @@ class Reservation(db.Model, SerializerMixin):
         )
 
         return total_table_sizes or 0
-    
+
     # Validates that the reservation is in the future
     # Validates that the restaurant is not at capacity when the reservation is made
     # @validates("reservation_time")
@@ -274,7 +275,7 @@ class Reservation(db.Model, SerializerMixin):
     #         raise ValueError("Restaurant capacity exceeded for the selected time")
 
     #     return value
-    
+
     # # validates the notes length to keep it under 500 characters
     @validates("notes")
     def validate_notes(self, key, value):
@@ -283,6 +284,8 @@ class Reservation(db.Model, SerializerMixin):
         return value
 
     # Establish Review class
+
+
 class Review(db.Model, SerializerMixin):
     __tablename__ = "reviews"
 
@@ -307,21 +310,21 @@ class Review(db.Model, SerializerMixin):
         if not isinstance(value, int) or value < 1 or value > 5:
             raise ValueError("Rating must be an integer between 1 and 5")
         return value
-    
+
     # validates that the rating comment is not empty
     @validates("comment")
     def validate_comment(self, key, value):
         if not value:
             raise ValueError("Comment cannot be empty")
         return value
-    
+
     # validates the comment length to keep it under 500 characters
     def validate_comment_length(self, key, value):
         if len(value) > 500:  # maximum of 500 characters for the comment
             raise ValueError("Comment exceeds maximum character limit (500 characters)")
         return value
 
-    # # validates that the user is not submitting multiple reviews for 
+    # # validates that the user is not submitting multiple reviews for
     # # the same restaurant in a specified period of time
     # @validates("restaurant_id", "user_id", "timestamp")
     # def validate_unique_review(self, key, value):
@@ -337,8 +340,3 @@ class Review(db.Model, SerializerMixin):
     #             "You have already submitted a review for this restaurant within the last week"
     #         )
     #     return value
-    
-    
-
-
-
