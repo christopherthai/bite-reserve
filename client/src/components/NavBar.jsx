@@ -48,11 +48,7 @@ function NavBar() {
             <Button color="inherit" component={NavLink} to="/reservations">
               Reservations
             </Button>
-            <Button
-              color="inherit"
-              component={NavLink}
-              to="/admindashboard/manage-restaurants"
-            >
+            <Button color="inherit" component={NavLink} to="/admindashboard/">
               Admin
             </Button>
             <Button color="inherit" component={NavLink} to="/login">

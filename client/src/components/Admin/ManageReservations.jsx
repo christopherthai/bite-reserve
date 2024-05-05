@@ -34,10 +34,10 @@ const useStyles = makeStyles((theme) => ({
 function ManageReservations() {
   const classes = useStyles();
   const drawerItems = [
-    { name: "Manage Restaurants", path: "/admindashboard/manage-restaurants" },
+    { name: "Manage Restaurants", path: "/admindashboard/" },
     {
       name: "Manage Reservations",
-      path: "/admindashboard/manage-reservations",
+      path: "/manage-reservations",
     },
   ];
 
