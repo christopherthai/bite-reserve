@@ -1,10 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import './HomePage.css'; // Import the CSS file
-
+import React from 'react';
+import RestaurantList from '../components/Restaurants/RestaurantList';
 
 function HomePage() {
+<<<<<<< HEAD
+  return (
+    <div>
+      <section>
+        <h1>Find your table for any occasion</h1>
+        <RestaurantList className='card-container'/>
+      </section>
+    </div>
+  );
+}
+
+export default HomePage;
+=======
   const [restaurants, setRestaurants] = useState([]);
 
       useEffect(() => {
@@ -64,3 +74,4 @@ export default HomePage;
       </div>
     </>
    */}
+>>>>>>> development

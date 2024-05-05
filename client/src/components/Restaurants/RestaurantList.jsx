@@ -1,34 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const [restaurants, setRestaurants] = ([]);
-
-useEffect(() => {
-    fetch('/restaurants')
-    .then(res => {
-        if(res.ok){
-            return res.json()
-        } else {
-            console.log('restaurants not found')
-        }
-    })
-    .then(data => setRestaurants(data))
-}, [])
 function RestaurantList() {
-  return restaurants;
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/restaurants')
+      .then(res => res.json())
+      .then(data => setRestaurants(data))
+  }, []);
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+      {restaurants.map(restaurant => (
+        <Link to={`/restaurant/${restaurant.id}`} key={restaurant.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <div style={{
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+              width: '300px',
+              borderRadius: '10px',
+              overflow: 'hidden',
+              cursor: 'pointer'
+          }}>
+            <img src={restaurant.image} alt={restaurant.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+            <div style={{ padding: '10px' }}>
+              <h3>{restaurant.name}</h3>
+              <h4>{restaurant.category}</h4>
+            </div>
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
 }
 
 export default RestaurantList;
-
-
-
-// { title: 'Mcdonald ', content: 'Content for Card 1' },
-// { title: 'papa johns', content: 'Content for Card 2' },
-// { title: 'PF chang', content: 'Content for Card 3' },
-// { title: 'Card 4', content: 'Content for Card 4' },
-// { title: 'Card 5', content: 'Content for Card 5' },
-// { title: 'Card 6', content: 'Content for Card 6' },
-// { title: 'Card 7', content: 'Content for Card 7' },
-// { title: 'Card 8', content: 'Content for Card 8' },
-// { title: 'Card 9', content: 'Content for Card 9' },
