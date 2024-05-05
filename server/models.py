@@ -57,18 +57,18 @@ class Restaurant(db.Model, SerializerMixin):
     serialize_rules = ("-reviews.restaurant", "-reservations.restaurant")
 
     # # validations for Restaurants.  Validates name, phone and address.
-    # @validates("name", "address", "category")
-    # def validate_not_empty(self, key, value):
-    #     if not value:
-    #         raise ValueError(f"{key} cannot be empty")
-    #     return value
+    @validates("name", "address", "category")
+    def validate_not_empty(self, key, value):
+        if not value:
+            raise ValueError(f"{key} cannot be empty")
+        return value
 
     # validates restaurant capacity upon entry.
-    # @validates("capacity")
-    # def validate_capacity(self, key, value):
-    #     if not isinstance(value, int) or value <= 0:
-    #         raise ValueError("Capacity must be a positive integer")
-    #     return value
+    @validates("capacity")
+    def validate_capacity(self, key, value):
+        if not isinstance(value, int) or value <= 0:
+            raise ValueError("Capacity must be a positive integer")
+        return value
 
     # validates phone number upon entry
     @validates("phone")
@@ -147,7 +147,7 @@ class User(db.Model, SerializerMixin):
     # # validates that the user's phone number is in the correct format upon entry
     @validates("phone")
     def validate_phone(self, key, value):
-        phone_regex = r"^(\+\d{1,3}[- ]?)?\d{3}-\d{3}-\d{4}$"
+        phone_regex = r"^\+?1?[-\s(]?\d{3}[-\s)]?\s?\d{3}[-\s]?\d{4}$"
         if not re.match(phone_regex, value):
             raise ValueError("Invalid phone number format")
         return value
