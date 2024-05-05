@@ -103,7 +103,7 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
     phone = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, nullable=False, unique=True)
     IsAdmin = db.Column(db.Boolean, nullable=False)
 
     # relationships with reservations and reviews
@@ -116,65 +116,56 @@ class User(db.Model, SerializerMixin):
 
     # serialization rules
     serialize_rules = ("-reviews", "-reservations")
-
-    # validates the user's username, password, email and phone # upon entry
-    # @validates("password")
-    # def validate_password_not_empty(self, key, value):
-    #     if not value:
-    #         raise ValueError(f"{key} cannot be empty")
-    #     return value
+    
+    # validates that the password isn't empty
+    @validates("password")
+    def validate_password_not_empty(self, key, value):
+        if not value or value == "":
+            raise ValueError(f"{key} cannot be empty")
+        return value
 
     # # # validates that the isAdmin is a boolean value
-    # @validates("IsAdmin")
-    # def validate_is_admin(self, key, value):
-    #     if not isinstance(value, bool):
-    #         raise ValueError("IsAdmin must be a boolean value")
-    #     return value
-
-    # # # validatse that the users email is valid upon entry
-    # @validates("email")
-    # def validate_email(self, key, value):
-    #     email_regex = r"^[\w\.-]+@[\w\.-]+\.\w+$"
-    #     if not re.match(email_regex, value):
-    #         raise ValueError("Invalid email format")
-    #     return value
-
-    # def validate_unique_email(self, key, value):
-    #     existing_user = User.query.filter(getattr(User, key) == value).first()
-    #     if existing_user:
-    #         raise ValueError(f"{key.capitalize()} must be unique")
-    #     return value
-
-    # def validate_email_not_empty(self, key, value):
-    #     if not value:
-    #         raise ValueError(f"{key} cannot be empty")
-    #     return value
+    @validates("IsAdmin")
+    def validate_is_admin(self, key, value):
+        if not isinstance(value, bool):
+            raise ValueError("IsAdmin must be a boolean value")
+        return value
+    
+    # # # validates that the users email is valid upon entry    
+    @validates("email")
+    def validate_email(self, key, value):
+        email_regex = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+        if not re.match(email_regex, value):
+            raise ValueError("Invalid email format")
+        
+        existing_user = User.query.filter(User.email==value).first()
+        if existing_user:
+            raise ValueError(f"{key.capitalize()} must be unique")
+        
+        return value
+    
 
     # # validates that the user's phone number is in the correct format upon entry
-    # # @validates("phone")
-    # # def validate_phone(self, key, value):
-    # #     phone_regex = r"^\+?1?\d{9,15}$"
-    # #     if not re.match(phone_regex, value):
-    # #         raise ValueError("Invalid phone number format")
-    # #     return value
-
-    # def validate_phone_not_empty(self, key, value):
-    #     if not value:
-    #         raise ValueError(f"{key} cannot be empty")
-    #     return value
-
+    @validates("phone")
+    def validate_phone(self, key, value):
+        phone_regex = r'^(\+\d{1,3}[- ]?)?\d{3}-\d{3}-\d{4}$'
+        if not re.match(phone_regex, value):
+            raise ValueError("Invalid phone number format")
+        return value
+    
+    
     # # validates that the user's username and email are both unique
-    # @validates("username")
-    # def validate_username_unique(self, key, value):
-    #     existing_user = User.query.filter(getattr(User, key) == value).first()
-    #     if existing_user:
-    #         raise ValueError(f"{key.capitalize()} must be unique")
-    #     return value
+    @validates("username")
+    def validate_username_unique(self, key, value):
+        existing_user = User.query.filter(User.username==value).first()
+        if existing_user:
+            raise ValueError(f"{key.capitalize()} must be unique")
+        
+        if not value:
+            raise ValueError(f"{key} cannot be empty")
+        
+        return value
 
-    # def validate_username_not_empty(self, key, value):
-    #     if not value:
-    #         raise ValueError(f"{key} cannot be empty")
-    #     return value
 
     # Establish Reservation class
 
@@ -182,7 +173,7 @@ class User(db.Model, SerializerMixin):
 class Reservation(db.Model, SerializerMixin):
     __tablename__ = "reservations"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     reservation_time = db.Column(db.Integer, nullable=False)
     table_size = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String, nullable=False)
@@ -203,15 +194,21 @@ class Reservation(db.Model, SerializerMixin):
     def validate_table_size(self, key, value):
         if not isinstance(value, int) or value <= 0:
             raise ValueError("Table size must be a positive integer")
-        return value
-
-    # validates the table size as less than the restaurant's total capacity
-
-    def validate_table_size_capacity(self, key, value):
-        if value > self.restaurant.capacity:
+        
+        if self.restaurant and value > self.restaurant.capacity:
             raise ValueError("Party size exceeds restaurant's capacity")
+        
         return value
 
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #I don't think we can validate like this.  In the case where we use Patch and don't want to change
+    #the restaurant_id and/or the reservation_time, it will compare what's already in the database and error.
+    #Also I'm assuming we could have multiple reservations times as long as the cumulative table_size doesn't
+    #exceed capacity.
+    #-Keenan
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
     # # validates that the reservation is unique and not a duplicate
     # @validates("restaurant_id", "reservation_time")
     # def validate_unique_reservation(self, key, value):
@@ -225,6 +222,9 @@ class Reservation(db.Model, SerializerMixin):
     #             "You have already made a reservation at this restaurant for that time"
     #         )
     #     return value
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 
     # Calculates a window of time based on the reservation duration.  15 minutes before
     # and 15 miutes after the reservation time.
