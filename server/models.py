@@ -71,25 +71,25 @@ class Restaurant(db.Model, SerializerMixin):
     #     return value
 
     # validates phone number upon entry
-    # @validates("phone")
-    # def validate_phone(self, key, value):
-    #     phone_regex = r"^\+?1?\d{9,15}$"
-    #     if not re.match(phone_regex, value):
-    #         raise ValueError("Invalid phone number format")
-    #     return value
-
-    # def validate_not_empty(self, key, value):
-    #     if not value:
-    #         raise ValueError(f"{key} cannot be empty")
-    #     return value
-
-    # validates that the website and menu link are in the proper html format
-    # @validates("website", "menu_link")
-    # def validate_url(self, key, value):
-    #     url_regex = r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
-    #     if not re.match(url_regex, value):
-    #         raise ValueError(f"Invalid {key} URL format")
-    #     return value
+    @validates("phone")
+    def validate_phone(self, key, value):
+        phone_regex = r"^\+?1?[-\s(]?\d{3}[-\s)]?\s?\d{3}[-\s]?\d{4}$"
+        if not re.match(phone_regex, value):
+            raise ValueError("Invalid phone number format")
+        return value
+    
+    def validate_not_empty(self, key, value):
+        if not value:
+            raise ValueError(f"{key} cannot be empty")
+        return value
+    
+    #validates that the website and menu link are in the proper html format
+    @validates("website", "menu_link")
+    def validate_url(self, key, value):
+        url_regex = r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+        if not re.match(url_regex, value):
+            raise ValueError(f"Invalid {key} URL format")
+        return value
 
     # Establish User Class
 
@@ -183,10 +183,10 @@ class Reservation(db.Model, SerializerMixin):
     user = db.relationship("User", back_populates="reservations")
     restaurant = db.relationship("Restaurant", back_populates="reservations")
 
-    # serialization rules
+    # Serialization rules
     serialize_rules = ("-user.reservations", "-restaurant.reservations")
 
-    # # validates the table size as a positive integer
+    # Validates the table size as a positive integer
     @validates("table_size")
     def validate_table_size(self, key, value):
         if not isinstance(value, int) or value <= 0:
@@ -224,9 +224,6 @@ class Reservation(db.Model, SerializerMixin):
     # and 15 miutes after the reservation time.
     @staticmethod
     def get_reservation_time_window(reservation_time, res_duration):
-        """
-        Calculate the time window around the reservation time based on res_duration.
-        """
         return (
             reservation_time - timedelta(minutes=res_duration - 15),
             reservation_time + timedelta(minutes=res_duration),
@@ -236,9 +233,6 @@ class Reservation(db.Model, SerializerMixin):
     # the specified window.
     @staticmethod
     def get_total_table_sizes(restaurant_id, start_time, end_time):
-        """
-        Calculate the total table sizes for reservations within the specified time window.
-        """
         total_table_sizes = (
             Reservation.query.filter(
                 Reservation.restaurant_id == restaurant_id,
@@ -248,7 +242,6 @@ class Reservation(db.Model, SerializerMixin):
             .with_entities(func.sum(Reservation.table_size))
             .scalar()
         )
-
         return total_table_sizes or 0
 
     # Validates that the reservation is in the future
@@ -320,17 +313,22 @@ class Review(db.Model, SerializerMixin):
 
     # # validates that the user is not submitting multiple reviews for
     # # the same restaurant in a specified period of time
-    # @validates("restaurant_id", "user_id", "timestamp")
-    # def validate_unique_review(self, key, value):
-    #     existing_review = (
-    #         Review.query.filter_by(
-    #             restaurant_id=self.restaurant_id, user_id=self.user_id
-    #         )
-    #         .order_by(Review.timestamp.desc())
-    #         .first()
-    #     )
-    #     if existing_review and (datetime.now() - existing_review.timestamp).days < 7:
-    #         raise ValueError(
-    #             "You have already submitted a review for this restaurant within the last week"
-    #         )
-    #     return value
+    @validates("restaurant_id", "user_id", "timestamp")
+    def validate_unique_review(self, key, value):
+        existing_review = (
+            Review.query.filter_by(
+                restaurant_id=self.restaurant_id, user_id=self.user_id
+            )
+            .order_by(Review.timestamp.desc())
+            .first()
+        )
+        if existing_review and (datetime.now() - existing_review.timestamp).days < 7:
+            raise ValueError(
+                "You have already submitted a review for this restaurant within the last week"
+            )
+        return value
+    
+    
+
+
+

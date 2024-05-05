@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-from flask import request, jsonify, make_response, Flask
+from flask import request, jsonify, make_response, Flask, session
 from flask_restful import Resource, Api
 from flask_migrate import Migrate
+from sqlalchemy.exc import IntegrityError
 import os
 
 # Local imports
@@ -29,6 +30,92 @@ api = Api(app)
 @app.route("/")
 def index():
     return "<h1>Project Server</h1>"
+
+
+class Signup(Resource):
+
+    def post(self):
+
+        request_json = request.get_json()
+
+        username = request_json.get("username")
+        password = request_json.get("password")
+        image_url = request_json.get("image_url")
+        bio = request_json.get("bio")
+
+        user = User(username=username, image_url=image_url, bio=bio)
+
+        # the setter will encrypt this
+        user.password_hash = password
+
+        try:
+
+            db.session.add(user)
+            db.session.commit()
+
+            session["user_id"] = user.id
+
+            return user.to_dict(), 201
+
+        except IntegrityError:
+
+            return {"error": "422 Unprocessable Entity"}, 422
+
+
+api.add_resource(Signup, "/signup", endpoint="signup")
+
+
+class CheckSession(Resource):
+
+    def get(self):
+
+        user_id = session["user_id"]
+        if user_id:
+            user = User.query.filter(User.id == user_id).first()
+            return user.to_dict(), 200
+
+        return {}, 401
+
+
+api.add_resource(CheckSession, "/check_session", endpoint="check_session")
+
+
+class Login(Resource):
+
+    def post(self):
+
+        request_json = request.get_json()
+
+        username = request_json.get("username")
+        password = request_json.get("password")
+
+        user = User.query.filter(User.username == username).first()
+
+        if user:
+            if user.password == password:
+
+                session["user_id"] = user.id
+                return user.to_dict(), 200
+
+        return {"error": "401 Unauthorized"}, 401
+
+
+api.add_resource(Login, "/login", endpoint="login")
+
+
+class Logout(Resource):
+
+    def delete(self):
+
+        if session.get("user_id"):
+
+            session["user_id"] = None
+            return {}, 204
+
+        return {}, 401
+
+
+api.add_resource(Logout, "/logout", endpoint="logout")
 
 
 # Restaurants Routes
@@ -517,8 +604,10 @@ class Reservations(Resource):
 
     def post(self, restaurant_id):
         data = request.get_json()
+        
+        session = db.session
 
-        restaurant = Restaurant.query.get(restaurant_id)
+        restaurant = session.get(Restaurant, restaurant_id)
 
         if not restaurant:
             return make_response({"error": "Restaurant not found"}, 404)
@@ -530,7 +619,7 @@ class Reservations(Resource):
                 status=data.get("status"),
                 notes=data.get("notes"),
                 user_id=data.get("user_id"),
-                restaurant_id=restaurant_id,
+                restaurant=restaurant,
             )
 
             db.session.add(reservation)
