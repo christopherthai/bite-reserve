@@ -28,14 +28,8 @@ function App() {
           <Route path="/reservation/:id" element={<ReservationDetail />} />
           <Route path="/reservationsform/:id" element={<ReservationForm />} />
           <Route path="/admindashboard" element={<AdminDashboardPage />} />
-          <Route
-            path="/admindashboard/manage-restaurants"
-            element={<ManageRestaurants />}
-          />
-          <Route
-            path="/admindashboard/manage-reservations"
-            element={<ManageReservations />}
-          />
+          <Route path="/manage-restaurants" element={<ManageRestaurants />} />
+          <Route path="/manage-reservations" element={<ManageReservations />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
