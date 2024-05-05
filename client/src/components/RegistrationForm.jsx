@@ -116,17 +116,8 @@ const RegistrationForm = () => {
           Already have an account? <Link to="/login">Login Here</Link>
         </p>
       </div>
+            
 
-<<<<<<< HEAD
-=======
-            <button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Registering..." : "Register"}
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </div>
->>>>>>> development
   );
 };
 

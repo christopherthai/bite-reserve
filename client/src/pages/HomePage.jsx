@@ -16,8 +16,10 @@ function HomePage() {
 
       return (
         <div className="page-container">
+          <div className="home-header">
+            <h1>Our Restaurants</h1>
+          </div>
           <section>
-            <h2 className="home-header">Restaurants</h2>
             <div className="card-container">
               {restaurants.map(restaurant => (
                 <Link to={`/restaurant/${restaurant.id}`} key={restaurant.id} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -34,9 +36,8 @@ function HomePage() {
           </section>
         </div>
       );
-}
 
-
+    }
 export default HomePage;
 
 
