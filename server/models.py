@@ -313,17 +313,17 @@ class Review(db.Model, SerializerMixin):
 
     # # validates that the user is not submitting multiple reviews for
     # # the same restaurant in a specified period of time
-    @validates("restaurant_id", "user_id", "timestamp")
-    def validate_unique_review(self, key, value):
-        existing_review = (
-            Review.query.filter_by(
-                restaurant_id=self.restaurant_id, user_id=self.user_id
-            )
-            .order_by(Review.timestamp.desc())
-            .first()
-        )
-        if existing_review and (datetime.now() - existing_review.timestamp).days < 7:
-            raise ValueError(
-                "You have already submitted a review for this restaurant within the last week"
-            )
-        return value
+    # @validates("restaurant_id", "user_id", "timestamp")
+    # def validate_unique_review(self, key, value):
+    #     existing_review = (
+    #         Review.query.filter_by(
+    #             restaurant_id=self.restaurant_id, user_id=self.user_id
+    #         )
+    #         .order_by(Review.timestamp.desc())
+    #         .first()
+    #     )
+    #     if existing_review and (datetime.now() - existing_review.timestamp).days < 7:
+    #         raise ValueError(
+    #             "You have already submitted a review for this restaurant within the last week"
+    #         )
+    #     return value
