@@ -45,7 +45,7 @@ function RestaurantTable() {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         } else {
-          return response.json();
+          return response.text().then((text) => (text ? JSON.parse(text) : {})); // parse the response to JSON object if it is not empty
         }
       })
       .then(() => {

@@ -9,8 +9,18 @@ import {
   DialogContent,
   List,
   ListItem,
+  IconButton,
+  Snackbar,
 } from "@mui/material";
 import PropTypes from "prop-types";
+import CloseIcon from "@mui/icons-material/Close";
+import MuiAlert from "@mui/material/Alert";
+import React from "react";
+
+// Alert component to display success message in snackbar after submitting restaurant data successfully
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
+});
 
 const RestaurantForm = ({ onRestaurantChange }) => {
   // prop types validation for onRestaurantChange function
@@ -20,6 +30,7 @@ const RestaurantForm = ({ onRestaurantChange }) => {
 
   const [open, setOpen] = useState(false); // state to control dialog
   const [isSubmitted, setIsSubmitted] = useState(false); // state to control success message
+  const [openSnackbar, setOpenSnackbar] = useState(false); // state to control snackbar
 
   // open dialog
   const handleClickOpen = () => {
@@ -30,6 +41,15 @@ const RestaurantForm = ({ onRestaurantChange }) => {
   // close dialog
   const handleClose = () => {
     setOpen(false);
+  };
+
+  // close snackbar message after 6 seconds or on click of close button
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
   };
 
   // form validation schema
@@ -72,6 +92,18 @@ const RestaurantForm = ({ onRestaurantChange }) => {
         <DialogTitle style={{ textAlign: "center" }}>
           Add New Restaurant
         </DialogTitle>
+        <IconButton
+          color="inherit"
+          onClick={handleClose}
+          aria-label="close"
+          style={{
+            marginLeft: "auto",
+            marginRight: "10px",
+            marginTop: "-55px",
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
 
         <DialogContent>
           <Formik
@@ -103,6 +135,7 @@ const RestaurantForm = ({ onRestaurantChange }) => {
                 .then((response) => response.json())
                 .then((restaurant_data) => {
                   onRestaurantChange(restaurant_data); // pass restaurant data to parent component
+                  setOpenSnackbar(true);
                   setSubmitting(false);
                   resetForm();
                 })
@@ -324,6 +357,26 @@ const RestaurantForm = ({ onRestaurantChange }) => {
                     </Button>
                   </ListItem>
                 </List>
+                <Snackbar
+                  open={openSnackbar} // open snackbar message
+                  autoHideDuration={6000} // close snackbar after 6 seconds
+                  onClose={handleCloseSnackbar} // close snackbar on click of close button
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }} // position of snackbar
+                  action={
+                    <IconButton
+                      size="small"
+                      aria-label="close"
+                      color="inherit"
+                      onClick={handleCloseSnackbar} // close snackbar on click of close button
+                    >
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  }
+                >
+                  <Alert onClose={handleCloseSnackbar} severity="success">
+                    Restaurant submitted successfully
+                  </Alert>
+                </Snackbar>
               </Form>
             )}
           </Formik>
