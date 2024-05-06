@@ -63,7 +63,7 @@ class Signup(Resource):
             db.session.add(user)
             db.session.commit()
 
-            session["user_id"] = user.id
+            session["user_id"] = user.id  # session is a dictionary that stores user_id
 
             return user.to_dict(), 201
 
@@ -106,7 +106,9 @@ class Login(Resource):
         if user:
             if user.password == password:
 
-                session["user_id"] = user.id
+                session["user_id"] = (
+                    user.id
+                )  # session is a dictionary that stores user_id
                 return user.to_dict(), 200
 
         return {"error": "401 Unauthorized"}, 401

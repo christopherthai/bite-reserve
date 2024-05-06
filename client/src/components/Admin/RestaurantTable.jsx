@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import RestaurantForm from "../Restaurants/RestaurantForm";
+import UpdateRestaurant from "./UpdateRestaurant";
 
 function RestaurantTable() {
   const [restaurants, setRestaurants] = useState([]); // state to store restaurants
@@ -35,6 +36,35 @@ function RestaurantTable() {
     setRestaurants([...restaurants, restaurant]);
   };
 
+  // Handle delete restaurant
+  const handleDeleteRestaurant = (id) => {
+    fetch(`/api/restaurants/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        } else {
+          return response.json();
+        }
+      })
+      .then(() => {
+        // Remove the deleted restaurant from the state
+        const updatedRestaurants = restaurants.filter(
+          (restaurant) => restaurant.id !== id
+        );
+        setRestaurants(updatedRestaurants);
+      })
+      .catch((error) => console.error("Error:", error));
+  };
+
+  const handleUpdateRestaurant = (restaurant) => {
+    const updatedRestaurants = restaurants.map((r) =>
+      r.id === restaurant.id ? restaurant : r
+    );
+    setRestaurants(updatedRestaurants);
+  };
+
   return (
     <Grid
       container
@@ -56,26 +86,39 @@ function RestaurantTable() {
           <RestaurantForm onRestaurantChange={handleRestaurant} />
         </Typography>
         <TableContainer component={Paper} style={{ maxWidth: "100%" }}>
-          <Table sx={{ minWidth: 1090 }} aria-label="simple table">
+          <Table sx={{ minWidth: 800 }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>
                   <strong>Restaurants</strong>
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="right" style={{ width: "700px" }}>
                   <strong>View</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Delete</strong>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {restaurants.map((restaurant) => (
-                <TableRow key={restaurant.name}>
+                <TableRow key={restaurant.id}>
                   <TableCell component="th" scope="row">
                     {restaurant.name}
                   </TableCell>
                   <TableCell align="right">
-                    <Button variant="contained" color="primary">
-                      View
+                    <UpdateRestaurant
+                      restaurant={restaurant}
+                      onRestaurantChange={handleUpdateRestaurant}
+                    />
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleDeleteRestaurant(restaurant.id)}
+                    >
+                      Delete
                     </Button>
                   </TableCell>
                 </TableRow>

@@ -10,30 +10,33 @@ import { useContext, useState } from "react";
 import UserContext from "../UserContext";
 
 const LoginForm = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Use the navigate function to navigate to different pages
 
-  const [open, setOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [open, setOpen] = useState(false); // State to store the open status of the Snackbar
+  const [errorMessage, setErrorMessage] = useState(""); // State to store the error message
   const { setIsLogin } = useContext(UserContext); // Use the UserContext to access the user's login status
 
+  // Function to handle the close event of the Snackbar
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
+  // Validation schema for the form
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
   });
 
+  // Initial values for the form
   const initialValues = {
     username: "",
     password: "",
   };
 
+  // Function to handle the form submission
   const handleSubmit = (values, { setSubmitting }) => {
     fetch("/api/login", {
       method: "POST",
@@ -44,20 +47,20 @@ const LoginForm = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Invalid username or password");
+          throw new Error("Invalid username or password"); // Throw an error if the response is not ok
         }
-        return response.json();
+        return response.json(); // Return the response as JSON
       })
       .then(() => {
-        setSubmitting(false);
-        setIsLogin(true);
-        navigate("/");
+        setSubmitting(false); // Set the submitting state to false
+        setIsLogin(true); // Set the login status to true
+        navigate("/"); // Navigate to the home page
       })
       .catch((error) => {
         console.error("Error:", error);
-        setErrorMessage(error.message);
-        setOpen(true);
-        setSubmitting(false);
+        setErrorMessage(error.message); // Set the error message
+        setOpen(true); // Open the Snackbar
+        setSubmitting(false); // Set the submitting state to false
       });
   };
 
