@@ -144,8 +144,7 @@ const ReservationForm = () => {
                     fontSize: '16px', 
                     background: 'blue', 
                     color: 'white', 
-                    border: 'none', 
-                    borderRadius: '5px' }}>
+                    border: 'none', borderRadius: '5px' }}>
                     Submit Reservation
                 </button>
             </form>
