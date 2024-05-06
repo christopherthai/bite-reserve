@@ -1,39 +1,46 @@
-.page-container {
-  display: flex;
-  flex-direction: column; /* Arrange children in a column */
-  align-items: center; /* Center children horizontally */
-  margin-left: 60px;
-  margin-top: 300px;
-  padding-bottom: 50px; /* Add some padding at the bottom */
-  background-color: rgba(255, 255, 255, 1.0);
+.restaurant-page-container {
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 2);
+  margin: 20px; /* Adjust margin as needed */
+  padding: 20px; /* Adjust padding as needed */
+  border-radius: 8px; /* Add border radius for rounded corners */
+  margin-top: 100px;
+}
+
+.reviews-list-container {
+  background-color: white;
+  margin: 20px; /* Adjust margin as needed */
+  padding: 20px; /* Adjust padding as needed */
+  border-radius: 8px; /* Add border radius for rounded corners */
 }
 
 .restaurant-detail {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center items horizontally and vertically */
+  margin-top: 20px; /* Adjust the margin-top as needed */
+}
 
-  }
-  
-  .restaurant-image img {
-    width: 100%;
-    max-height: 300px;
-  }
-  
-  .restaurant-info {
-    text-align: center;
-  }
-  
-  button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
+.restaurant-image img {
+  width: 100%;
+  max-height: 300px;
+}
+
+.restaurant-info {
+  text-align: center;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

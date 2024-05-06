@@ -1,0 +1,36 @@
+.review-card {
+    width: 90%; /* Set the width to 100% */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .review-form-card {
+    width: 90%; /* Set the width to 100% */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .centered-heading {
+    text-align: center;
+  }
+
+  
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+}
+
+input[type="number"] {
+    width: 100%;
+}
+
+textarea {
+    width: 100%;
+    height: 100px; /* Set the height of the textarea as needed */
+}

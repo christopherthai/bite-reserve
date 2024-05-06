@@ -1,131 +1,108 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+import ReviewsList from '../Reviews/ReviewsList';
+import "./RestaurantDetail.css";
 
 const RestaurantDetail = () => {
-  const { id } = useParams();
-  const [restaurant, setRestaurant] = useState(null);
+    const { id } = useParams();
+    const [restaurant, setRestaurant] = useState(null);
+    const [user, setUser] = useState(null);
+    const [mapExpanded, setMapExpanded] = useState(true); // Change initial state to true
+    const [showReviews, setShowReviews] = useState(false); // State to manage visibility of ReviewsList
+    const navigate = useNavigate();
+    const [averageRating, setAverageRating] = useState(0);
 
-  const [mapExpanded, setMapExpanded] = useState(true); // Change initial state to true
-  const navigate = useNavigate();
+    useEffect(() => {
+        fetch(`/api/restaurants/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                setRestaurant(data);
+                calculateAverageRating(data.reviews); // Calculate average rating when restaurant data is fetched
+            })
+            .catch(error => console.error('Error loading the restaurant', error));
 
-  const handleMapExpand = (expanded) => {
-    setMapExpanded(expanded);
-  };
+        // Check user session
+        fetch("/api/check_session")
+            .then((r) => {
+                if (r.ok) {
+                    r.json().then((user) => setUser(user));
+                }
+            });
+    }, [id]);
 
-  const [user, setUser] = useState(null);
+    // Function to calculate average rating
+    const calculateAverageRating = (reviews) => {
+        const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+        const average = reviews.length > 0 ? totalRating / reviews.length : 0;
+        setAverageRating(average);
+    };
 
-  useEffect(() => {
-    fetch(`/api/restaurants/${id}`)
-      .then((response) => response.json())
-      .then((data) => setRestaurant(data))
-      .catch((error) => console.error("Error loading the restaurant", error));
-
-    // 자동 로그인 체크
-    fetch("/api/check_session").then((r) => {
-      if (r.ok) {
-        r.json().then((user) => setUser(user));
-        console.log('id:', user); // 콘솔에 사용자 정보 출력
-      }
-    });
-  }, [id]);
-
-  const handleReservationClick = () => {
-    // 로그인 상태가 아니라면 로그인 페이지로 이동 여부를 확인
-    if (!user) {
-      if (
-        window.confirm("You are not logged in. Would you like to go to the login page?")) 
-        {navigate("/login");}
-    } else {
-      navigate(`/reservationsform/${restaurant.id}`);
-    }
-    if (user) {
-      if (user.IsAdmin === true){
-        alert("Admin accounts cannot make reservations.")
-        navigate('/');
-      } 
-    }
-  };
+    const handleReservationClick = () => {
+        // Check user login status
+        if (!user) {
+            if (window.confirm("You are not logged in. Would you like to go to the login page?")) {
+                navigate("/login");
+            }
+        } else {
+            navigate(`/reservationsform/${restaurant.id}`);
+        }
+    };
 
   if (!restaurant) return <div>Loading...</div>;
 
-  const ratingStars = Array.from({ length: 5 }).map((_, index) => (
-    <FontAwesomeIcon key={index} icon={faStar} color="orange" />
-  ));
-  
+    // Function to render star rating based on average rating
+    const renderStarRating = () => {
+        const stars = [];
+        for (let i = 0; i < 5; i++) {
+            if (i < averageRating) {
+                stars.push(<FontAwesomeIcon key={i} icon={faStar} color="orange" />);
+            } else {
+                stars.push(<FontAwesomeIcon key={i} icon={faStar} color="gray" />);
+            }
+        }
+        return stars;
+    };
 
-  return (
-    <div
-      className="page-container"
-      style={{
-        backgroundColor: "white",
-        boxShadow: "0 4px 8px rgba(0, 0, 1, 1.4)",
-        textAlign: "center",
-      }}
-    >
-      <div style={{ padding: "20px" }}>
-        <img
-          src={restaurant.image}
-          alt={restaurant.name}
-          style={{
-            width: "100%",
-            height: "300px",
-            objectFit: "cover",
-            boxShadow: "0 4px 8px rgba(0, 0, 1, 1.4)",
-          }}
-        />
-        <h1 style={{ marginBottom: "10px" }}>{restaurant.name}</h1>
-        <div>
-          {ratingStars}{" "}
-          <Link to={`/restaurants/${restaurant.id}/reviews`}>
-            {" "}
-            (see all reviews)
-          </Link>
+    return (
+        <div className="restaurant-detail-container">
+            <div className="restaurant-page-container" style={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }}>
+                <div style={{ padding: '20px', textAlign: 'center' }}>
+                    <img src={restaurant.image} alt={restaurant.name} style={{ width: '100%', height: '300px', objectFit: 'cover', boxShadow: '0 4px 8px rgba(0, 0, 1, 1.4)' }} />
+                    <h1 style={{ marginBottom: '10px' }}>{restaurant.name}</h1>
+                    <div>
+                        {renderStarRating()} {/* Render dynamic star rating */}
+                    </div>
+                    <h3>{restaurant.category} Style Restaurant</h3>
+                    <h3>
+                        <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(restaurant.address)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {restaurant.address}, {restaurant.city}, {restaurant.state} {restaurant.zip}
+                        </a>
+                    </h3>
+                    <h3>Phone: {restaurant.phone}</h3>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                    <button onClick={handleReservationClick} style={{ margin: '0 5px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>Make a Reservation</button>
+                    <a href={restaurant.menu_link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                        <button style={{ margin: '0 5px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>View Menu</button>
+                    </a>
+                    <a href={restaurant.website} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                        <button style={{ margin: '0 5px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>View Website</button>
+                    </a>
+                    <button onClick={() => setShowReviews(!showReviews)} style={{ margin: '0 5px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>{showReviews ? 'Close Reviews' : 'Reviews'}</button>
+                </div>
+            </div>
         </div>
-        <h3>{restaurant.category} Style Restaurant</h3>
-        <h3>
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-              restaurant.address
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            onMouseEnter={() => handleMapExpand(true)}
-            onMouseLeave={() => handleMapExpand(false)}
-          >
-            {restaurant.address}, {restaurant.city}, {restaurant.state}{" "}
-            {restaurant.zip}
-          </a>
-        </h3>
-        <h3>Phone: {restaurant.phone}</h3>
-        <h3>
-          <a
-            href={restaurant.website}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View Website
-          </a>
-        </h3>
-        <h3>
-          <a
-            href={restaurant.menu_link}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View Menu
-          </a>
-        </h3>
-        <button
-          onClick={handleReservationClick}
-          style={{ padding: "10px 20px", fontSize: "16px", cursor: "pointer" }}
-        >
-          Make a Reservation
-        </button>
-      </div>
+        <div className="reviews-list-container" style={{ maxHeight: showReviews ? 'calc(100vh - 200px)' : 0, overflowY: 'auto', padding: showReviews ? '20px' : '0' }}>
+            {showReviews && <ReviewsList restaurantId={id} />}
+        </div>
     </div>
-  );
-};
+);
+}
 
 export default RestaurantDetail;
