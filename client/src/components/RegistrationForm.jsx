@@ -35,10 +35,32 @@ const RegistrationForm = () => {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    console.log("Form submitted with values:", values);
-    setSubmitting(false);
-    navigate("/"); // Redirect to home page after successful registration
+
+    const url = "api/users";
+
+    fetch(url,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values)
+    })
+    .then (res=>{
+      if(res.ok){
+        return res.json();
+      }
+      throw new Error('Network response was not ok')
+    })
+    .then(data=>{
+        console.log('Registration was successful', data);
+        setSubmitting(false);
+        navigate('/');
+    })
+    .catch(error=> {
+        console.error('Registration failed:', error);
+    });
   };
+
 
   return (
     <div className="registration-form-container">
