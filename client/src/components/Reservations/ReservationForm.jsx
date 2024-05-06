@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 const ReservationForm = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [user, setUser] = useState(null);
     const [restaurant, setRestaurant] = useState(null);
     const [reservation, setReservation] = useState({
         name: '',
@@ -16,12 +17,18 @@ const ReservationForm = () => {
     });
 
     const [startDate, setStartDate] = useState(new Date());
-    const isWeekday = (date) => {
-        const day = date.getDay();
-        return day !== 0 && day !== 6;
-    };
 
     useEffect(() => {
+        // 사용자 세션 확인
+        fetch("/api/check_session").then((r) => {
+            if (r.ok) {
+                r.json().then((user) => {
+                    setUser(user);
+                    console.log('id:', user); // 콘솔에 사용자 정보 출력
+                });
+            }
+        });
+
         fetch(`/api/restaurants/${id}`)
             .then(response => response.json())
             .then(data => {
@@ -46,6 +53,13 @@ const ReservationForm = () => {
         event.preventDefault();
         console.log('Reservation Details:', reservation);
 
+        if (!user) {
+            if (window.confirm("You are not logged in. Would you like to go to the login page?")) {
+                navigate("/login");
+                return;
+            }
+        }
+
         fetch(`/api/reservations`, {
             method: 'POST',
             headers: {
@@ -69,35 +83,22 @@ const ReservationForm = () => {
             <h1>{restaurant.name}</h1>
             <h3>Style: {restaurant.category}</h3>
             <h3>Phone: {restaurant.phone}</h3>
-            <p>{restaurant.description}</p> {/* Make sure description exists in your data */}
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Your Name"
-                    value={reservation.name}
-                    onChange={handleInputChange}
-                />
-                <input
-                    type="text"
-                    name="phone"
-                    placeholder="Your Phone Number"
-                    value={reservation.phone}
-                    onChange={handleInputChange}
-                />
-                <select
-                    name="partySize"
-                    value={reservation.partySize}
-                    onChange={handleInputChange}
-                >
-                    <option value="">Select Party Size</option>
-                    {Array.from({ length: 12 }, (_, i) => (
-                        <option key={i + 1} value={i + 1}>
-                            {i + 1}
-                        </option>
-                    ))}
-                </select>
-                <div>
+            <p>{restaurant.description}</p>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', width: '100%', maxWidth: '600px' }}>
+                    <select
+                        name="partySize"
+                        value={reservation.partySize}
+                        onChange={handleInputChange}
+                        style={{ padding: '10px' }}
+                    >
+                        <option value="">Select Party Size</option>
+                        {Array.from({ length: 12 }, (_, i) => (
+                            <option key={i + 1} value={i + 1}>
+                                {i + 1}
+                            </option>
+                        ))}
+                    </select>
                     <DatePicker
                         selected={startDate}
                         onChange={date => setStartDate(date)}
@@ -106,19 +107,46 @@ const ReservationForm = () => {
                         showMonthDropdown
                         showYearDropdown
                         dropdownMode="select"
-                        filterDate={isWeekday}
+                        filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
+                        style={{ width: '100%', maxWidth: '250px', margin: '20px 0' }}
                     />
+                    
                 </div>
-                <div>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexWrap: 'wrap',
+                    gap: '10px',
+                    margin: '10px 0',
+                    maxWidth: '540px' // 계산된 최대 너비
+                }}>
                     {[9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].flatMap(hour => (
                         [`${hour}:00`, `${hour}:30`].map(time => (
-                            <button key={time} type="button" onClick={() => setReservation({...reservation, time: time})}>
+                            <button key={time} type="button" onClick={() => setReservation({...reservation, time: time})}
+                            style={{ 
+                                padding: '10px 20px',
+                                minWidth: '100px',
+                                width: '100px',
+                                background: '#A3CEF1', // 파스텔 파란색
+                                color: '#4a4a4a', // 어두운 회색 텍스트
+                                border: 'none',
+                                borderRadius: '5px'
+                            }}>
                                 {hour % 12 === 0 ? 12 : hour % 12}:{time.slice(-2)} {hour < 12 || hour === 24 ? 'AM' : 'PM'}
                             </button>
-                        ))
-                    ))}
-                </div>
-                <button type="submit">Submit Reservation</button>
+                            ))
+                        ))}
+                    </div>
+                <button type="submit" style={{ 
+                    alignSelf: 'center', 
+                    padding: '10px 20px', 
+                    marginTop: '20px', 
+                    fontSize: '16px', 
+                    background: 'blue', 
+                    color: 'white', 
+                    border: 'none', borderRadius: '5px' }}>
+                    Submit Reservation
+                </button>
             </form>
         </div>
     );

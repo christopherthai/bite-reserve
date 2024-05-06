@@ -50,7 +50,7 @@ const RestaurantDetail = () => {
         }
     };
 
-    if (!restaurant) return <div>Loading...</div>;
+  if (!restaurant) return <div>Loading...</div>;
 
     // Function to render star rating based on average rating
     const renderStarRating = () => {

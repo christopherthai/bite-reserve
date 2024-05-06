@@ -819,6 +819,20 @@ class ReservationsById(Resource):
 api.add_resource(ReservationsById, "/reservation/<int:id>")
 
 
+# AllReservations Routes
+# get
+class AllReservations(Resource):
+
+    def get(self):
+        reservations = Reservation.query.all()
+        reservations_list = [reservation.to_dict() for reservation in reservations]
+
+        return make_response(reservations_list, 200)
+
+
+api.add_resource(AllReservations, "/reservations")
+
+
 # Users Routes
 # get
 # post

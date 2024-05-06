@@ -18,23 +18,49 @@ const ReservationsTable = () => {
   const { id } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch(`/api/restaurants/1/reservations`)
-      .then(res => res.json())
-      .then(data => {
-        const sortedData = data.sort((a, b) => b.reservation_time - a.reservation_time);
-        const formattedData = sortedData.map(reservation => ({
-          ...reservation,
-          reservation_time: new Date(reservation.reservation_time * 1000).toLocaleString(),
-        }));
-        setReservations(formattedData);
-        setTotalPages(Math.ceil(formattedData.length / itemsPerPage));
-      })
-      .catch(error => console.error('Failed to fetch reservations:', error));
-  }, [id]);
+    // 사용자 세션 확인
+    fetch("/api/check_session")
+        .then((r) => {
+            if (r.ok) {
+                r.json().then((user) => {
+                    setUser(user);
+                    console.log('id:', user); // 콘솔에 사용자 정보 출력
+    
+                    // 현재 로그인한 사용자의 아이디를 가져왔으므로 이를 이용하여 예약 목록을 가져오는 함수 호출
+                    fetchReservations(user.id);
+                });
+            }
+        })
+        .catch(error => console.error('Failed to check session:', error));
 
-  const handlePageChange = (pageNumber) => {
+    // 의존성 배열을 빈 배열로 설정하여 이 효과가 한 번만 실행되도록 함
+}, []);
+    
+    // 예약 목록을 가져오는 함수 정의
+    function fetchReservations(userId) {
+        fetch('/api/reservations')
+          .then(res => res.json())
+          .then(data => {
+            // 현재 로그인한 사용자의 아이디와 일치하는 예약 목록 필터링
+            const userReservations = data.filter(reservation => reservation.user_id === userId);
+      
+            const sortedData = userReservations.sort((a, b) => b.reservation_time - a.reservation_time);
+      
+            const formattedData = sortedData.map(reservation => ({
+              ...reservation,
+              reservation_time: new Date(reservation.reservation_time * 1000).toLocaleString(),
+            }));
+      
+            setReservations(formattedData);
+            setTotalPages(Math.ceil(formattedData.length / itemsPerPage));
+          })
+          .catch(error => console.error('Failed to fetch reservations:', error));
+      }
+
+const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
@@ -51,6 +77,7 @@ const ReservationsTable = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentReservations = reservations.slice(startIndex, endIndex);
+  
 
   return (
     <TableContainer component={Paper}>
@@ -134,5 +161,6 @@ const ReservationsTable = () => {
     </TableContainer>
   );
 };
+
 
 export default ReservationsTable;

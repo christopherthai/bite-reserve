@@ -42,14 +42,9 @@ function ReservationTable() {
       .catch((error) => console.error("Error:", error));
   }, []);
 
-  //  Handle restaurant data from RestaurantForm component
-  const handleRestaurant = (restaurant) => {
-    setRestaurants([...restaurants, restaurant]);
-  };
-
-  // Handle delete restaurant
-  const handleDeleteRestaurant = (id) => {
-    fetch(`/api/restaurants/${id}`, {
+  // Handle delete reservation
+  const handleDeleteReservation = (id) => {
+    fetch(`/api/reservation/${id}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -60,10 +55,15 @@ function ReservationTable() {
         }
       })
       .then(() => {
-        // Remove the deleted restaurant from the state
-        const updatedRestaurants = restaurants.filter(
-          (restaurant) => restaurant.id !== id
-        );
+        // Remove the deleted reservation from the state of restaurants
+        const updatedRestaurants = restaurants.map((restaurant) => {
+          return {
+            ...restaurant,
+            reservations: restaurant.reservations.filter(
+              (reservation) => reservation.id !== id
+            ),
+          };
+        });
         setRestaurants(updatedRestaurants);
       })
       .catch((error) => console.error("Error:", error));
@@ -94,7 +94,6 @@ function ReservationTable() {
       <Grid item xs={12} sm={10}>
         <Typography variant="h4" component="h2" gutterBottom>
           <strong>Reservations List by Restaurants</strong>
-          {/* <RestaurantForm onRestaurantChange={handleRestaurant} /> */}
         </Typography>
         <TableContainer component={Paper} style={{ maxWidth: "100%" }}>
           <Table sx={{ minWidth: 800 }} aria-label="simple table">
@@ -157,6 +156,8 @@ function ReservationTable() {
                                 <TableCell>Table Size</TableCell>
                                 <TableCell>Status</TableCell>
                                 <TableCell>Notes</TableCell>
+                                <TableCell>View</TableCell>
+                                <TableCell>Delete</TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -168,11 +169,35 @@ function ReservationTable() {
                                         reservation.reservation_time
                                       ).toLocaleString()}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell style={{ width: "100px" }}>
                                       {reservation.table_size}
                                     </TableCell>
                                     <TableCell>{reservation.status}</TableCell>
                                     <TableCell>{reservation.notes}</TableCell>
+                                    <TableCell style={{ width: "100px" }}>
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() =>
+                                          handleDeleteRestaurant(restaurant.id)
+                                        }
+                                      >
+                                        View
+                                      </Button>
+                                    </TableCell>
+                                    <TableCell style={{ width: "100px" }}>
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() =>
+                                          handleDeleteReservation(
+                                            reservation.id
+                                          )
+                                        }
+                                      >
+                                        Delete
+                                      </Button>
+                                    </TableCell>
                                   </TableRow>
                                 )
                               )}
