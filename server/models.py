@@ -77,13 +77,13 @@ class Restaurant(db.Model, SerializerMixin):
         if not re.match(phone_regex, value):
             raise ValueError("Invalid phone number format")
         return value
-    
+
     def validate_not_empty(self, key, value):
         if not value:
             raise ValueError(f"{key} cannot be empty")
         return value
-    
-    #validates that the website and menu link are in the proper html format
+
+    # validates that the website and menu link are in the proper html format
     @validates("website", "menu_link")
     def validate_url(self, key, value):
         url_regex = r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
@@ -327,8 +327,3 @@ class Review(db.Model, SerializerMixin):
                 "You have already submitted a review for this restaurant within the last week"
             )
         return value
-    
-    
-
-
-

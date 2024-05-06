@@ -82,7 +82,7 @@ function RestaurantTable() {
     >
       <Grid item xs={12} sm={10}>
         <Typography variant="h4" component="h2" gutterBottom>
-          <strong>Restaurant Lists</strong>
+          <strong>Restaurants List</strong>
           <RestaurantForm onRestaurantChange={handleRestaurant} />
         </Typography>
         <TableContainer component={Paper} style={{ maxWidth: "100%" }}>
