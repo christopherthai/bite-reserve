@@ -26,6 +26,7 @@ const RestaurantDetail = () => {
     fetch("/api/check_session").then((r) => {
       if (r.ok) {
         r.json().then((user) => setUser(user));
+        console.log('id:', user); // 콘솔에 사용자 정보 출력
       }
     });
   }, [id]);
@@ -34,14 +35,16 @@ const RestaurantDetail = () => {
     // 로그인 상태가 아니라면 로그인 페이지로 이동 여부를 확인
     if (!user) {
       if (
-        window.confirm(
-          "You are not logged in. Would you like to go to the login page?"
-        )
-      ) {
-        navigate("/login");
-      }
+        window.confirm("You are not logged in. Would you like to go to the login page?")) 
+        {navigate("/login");}
     } else {
       navigate(`/reservationsform/${restaurant.id}`);
+    }
+    if (user) {
+      if (user.IsAdmin === true){
+        alert("Admin accounts cannot make reservations.")
+        navigate('/');
+      } 
     }
   };
 
@@ -50,6 +53,7 @@ const RestaurantDetail = () => {
   const ratingStars = Array.from({ length: 5 }).map((_, index) => (
     <FontAwesomeIcon key={index} icon={faStar} color="orange" />
   ));
+  
 
   return (
     <div

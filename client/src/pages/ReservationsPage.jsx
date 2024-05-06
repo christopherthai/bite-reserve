@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const itemsPerPage = 10;
 
@@ -20,24 +20,21 @@ const ReservationsTable = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    fetch("/api/restaurants/3/reservations")
-      .then((res) => res.json())
-      .then((data) => {
-        const sortedData = data.sort(
-          (a, b) => b.reservation_time - a.reservation_time
-        );
-
-        const formattedData = sortedData.map((reservation) => ({
+    fetch('/api/reservations')
+      .then(res => res.json())
+      .then(data => {
+        
+        const sortedData = data.sort((a, b) => b.reservation_time - a.reservation_time);
+        
+        const formattedData = sortedData.map(reservation => ({
           ...reservation,
-          reservation_time: new Date(
-            reservation.reservation_time * 1000
-          ).toLocaleString(),
+          reservation_time: new Date(reservation.reservation_time * 1000).toLocaleString(),
         }));
 
         setReservations(formattedData);
         setTotalPages(Math.ceil(formattedData.length / itemsPerPage));
       })
-      .catch((error) => console.error("Failed to fetch reservations:", error));
+      .catch(error => console.error('Failed to fetch reservations:', error));
   }, [id]);
 
   const handlePageChange = (pageNumber) => {
@@ -77,12 +74,8 @@ const ReservationsTable = () => {
           {currentReservations.length > 0 ? (
             currentReservations.map((reservation) => (
               <TableRow key={reservation.id}>
-                <TableCell component="th" scope="row">
-                  {reservation.id}
-                </TableCell>
-                <TableCell align="right">
-                  {reservation.reservation_time}
-                </TableCell>
+                <TableCell component="th" scope="row">{reservation.id}</TableCell>
+                <TableCell align="right">{reservation.reservation_time}</TableCell>
                 <TableCell align="right">{reservation.table_size}</TableCell>
                 <TableCell align="right">{reservation.status}</TableCell>
                 <TableCell align="right">{reservation.note}</TableCell>
@@ -100,7 +93,7 @@ const ReservationsTable = () => {
                     variant="contained"
                     color="secondary"
                     onClick={() => handleCancel(reservation.id)}
-                    style={{ marginLeft: "8px" }}
+                    style={{ marginLeft: '8px' }}
                   >
                     Cancel
                   </Button>
@@ -109,32 +102,26 @@ const ReservationsTable = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={8} align="center">
-                No reservations found.
-              </TableCell>
+              <TableCell colSpan={8} align="center">No reservations found.</TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "16px" }}
-      >
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
         <ArrowBackIosIcon
-          style={{ cursor: "pointer" }}
-          onClick={() =>
-            handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
-          }
+          style={{ cursor: 'pointer' }}
+          onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
           disabled={currentPage === 1}
         />
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <div
             key={page}
             style={{
-              cursor: "pointer",
-              backgroundColor: currentPage === page ? "#ccc" : "#fff",
-              padding: "8px 16px",
-              marginLeft: "8px",
-              marginRight: "8px",
+              cursor: 'pointer',
+              backgroundColor: currentPage === page ? '#ccc' : '#fff',
+              padding: '8px 16px',
+              marginLeft: '8px',
+              marginRight: '8px',
             }}
             onClick={() => handlePageChange(page)}
           >
@@ -142,12 +129,8 @@ const ReservationsTable = () => {
           </div>
         ))}
         <ArrowForwardIosIcon
-          style={{ cursor: "pointer" }}
-          onClick={() =>
-            handlePageChange(
-              currentPage < totalPages ? currentPage + 1 : totalPages
-            )
-          }
+          style={{ cursor: 'pointer' }}
+          onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
           disabled={currentPage === totalPages}
         />
       </div>
