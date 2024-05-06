@@ -125,7 +125,7 @@ function ReservationTable() {
                           )
                         }
                       >
-                        {expandedRowId ? (
+                        {expandedRowId === restaurant.id ? (
                           <KeyboardArrowUpIcon />
                         ) : (
                           <KeyboardArrowDownIcon />
@@ -153,7 +153,7 @@ function ReservationTable() {
                           <Table size="small" aria-label="reservations">
                             <TableHead>
                               <TableRow>
-                                <TableCell>Date</TableCell>
+                                <TableCell>Date & Time</TableCell>
                                 <TableCell>Table Size</TableCell>
                                 <TableCell>Status</TableCell>
                                 <TableCell>Notes</TableCell>
