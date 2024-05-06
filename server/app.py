@@ -829,12 +829,6 @@ class AllReservations(Resource):
 
         return make_response(reservations_list, 200)
 
-        """_summary_
-
-        Returns:
-            _type_: _description_
-        """
-
 
 api.add_resource(AllReservations, "/reservations")
 
