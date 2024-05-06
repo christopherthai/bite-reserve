@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const ReservationForm = () => {
-    const { id } = useParams();
+    const { id } = useParams(); // 레스토랑 ID를 URL 파라미터에서 추출
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [restaurant, setRestaurant] = useState(null);
@@ -15,7 +15,6 @@ const ReservationForm = () => {
         time: '',
         partySize: ''
     });
-
     const [startDate, setStartDate] = useState(new Date());
 
     useEffect(() => {
@@ -24,11 +23,11 @@ const ReservationForm = () => {
             if (r.ok) {
                 r.json().then((user) => {
                     setUser(user);
-                    console.log('id:', user); // 콘솔에 사용자 정보 출력
                 });
             }
         });
 
+        // 레스토랑 정보 로드
         fetch(`/api/restaurants/${id}`)
             .then(response => response.json())
             .then(data => {
@@ -49,10 +48,8 @@ const ReservationForm = () => {
         }));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('Reservation Details:', reservation);
-
         if (!user) {
             if (window.confirm("You are not logged in. Would you like to go to the login page?")) {
                 navigate("/login");
@@ -60,19 +57,24 @@ const ReservationForm = () => {
             }
         }
 
-        fetch(`/api/reservations`, {
+        // 요청 URL 수정
+        const response = await fetch(`/api/restaurants/${id}/reservations`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ...reservation, restaurantId: id })
-        }).then(response => {
-            if (response.ok) {
-                navigate('/reservations', { state: { ...reservation, restaurant } });
-            } else {
-                console.error('Failed to create reservation');
-            }
-        }).catch(error => console.error('Error submitting reservation', error));
+            body: JSON.stringify({
+                ...reservation,
+                restaurantId: id,
+                date: Math.floor(startDate.getTime() / 1000)  // 날짜를 Unix 타임스탬프(초 단위)로 변환
+            })
+        });
+
+        if (response.ok) {
+            navigate('/reservations', { state: { ...reservation, restaurant } });
+        } else {
+            console.error('Failed to create reservation');
+        }
     };
 
     if (!restaurant) return <div>Loading...</div>;
@@ -108,9 +110,8 @@ const ReservationForm = () => {
                         showYearDropdown
                         dropdownMode="select"
                         filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
-                        style={{ width: '100%', maxWidth: '250px', margin: '20px 0' }}
+                        style={{ width: '100%', maxWidth: '250px', padding: '10px' }}
                     />
-                    
                 </div>
                 <div style={{
                     display: 'flex',
@@ -118,7 +119,7 @@ const ReservationForm = () => {
                     flexWrap: 'wrap',
                     gap: '10px',
                     margin: '10px 0',
-                    maxWidth: '540px' // 계산된 최대 너비
+                    maxWidth: '540px'
                 }}>
                     {[9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].flatMap(hour => (
                         [`${hour}:00`, `${hour}:30`].map(time => (
@@ -127,16 +128,17 @@ const ReservationForm = () => {
                                 padding: '10px 20px',
                                 minWidth: '100px',
                                 width: '100px',
-                                background: '#A3CEF1', // 파스텔 파란색
-                                color: '#4a4a4a', // 어두운 회색 텍스트
+                                background: '#A3CEF1',
+                                color: '#4a4a4a',
                                 border: 'none',
                                 borderRadius: '5px'
                             }}>
                                 {hour % 12 === 0 ? 12 : hour % 12}:{time.slice(-2)} {hour < 12 || hour === 24 ? 'AM' : 'PM'}
+
                             </button>
-                            ))
-                        ))}
-                    </div>
+                        ))
+                    ))}
+                </div>
                 <button type="submit" style={{ 
                     alignSelf: 'center', 
                     padding: '10px 20px', 
