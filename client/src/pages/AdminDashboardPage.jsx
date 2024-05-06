@@ -67,7 +67,11 @@ function AdminDashboardPage() {
     return <LoginForm />;
   } else if (user.IsAdmin !== true) {
     // if the user is not an admin, display an error message
-    return <div>You are not authorized to view this page.</div>;
+    return (
+      <div>
+        <strong>You are not authorized to view this page.</strong>
+      </div>
+    );
   }
 
   return (

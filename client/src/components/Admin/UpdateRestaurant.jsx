@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
@@ -15,16 +16,50 @@ import {
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import MuiAlert from "@mui/material/Alert";
-import React from "react";
 
-// Alert component to display success message in snackbar after submitting restaurant data successfully
+// Alert component to display success message in snackbar after updating restaurant data
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
 });
 
-const RestaurantForm = ({ onRestaurantChange }) => {
-  // prop types validation for onRestaurantChange function
-  RestaurantForm.propTypes = {
+function UpdateRestaurant({ restaurant, onRestaurantChange }) {
+  const {
+    id,
+    name,
+    phone,
+    address,
+    city,
+    state,
+    zip,
+    image,
+    website,
+    menu_link,
+    category,
+    capacity,
+    open_time,
+    close_time,
+    res_duration,
+  } = restaurant;
+
+  // Validate the props passed to the component
+  UpdateRestaurant.propTypes = {
+    restaurant: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      phone: PropTypes.string.isRequired,
+      address: PropTypes.string.isRequired,
+      city: PropTypes.string.isRequired,
+      state: PropTypes.string.isRequired,
+      zip: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      website: PropTypes.string.isRequired,
+      menu_link: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired,
+      capacity: PropTypes.number.isRequired,
+      open_time: PropTypes.number.isRequired,
+      close_time: PropTypes.number.isRequired,
+      res_duration: PropTypes.number.isRequired,
+    }).isRequired,
     onRestaurantChange: PropTypes.func.isRequired,
   };
 
@@ -55,16 +90,14 @@ const RestaurantForm = ({ onRestaurantChange }) => {
   // form validation schema
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required"),
-    phone: Yup.string()
-      .required("Required")
-      .matches(/^\d{10}$/, "Invalid phone number"),
+    phone: Yup.string().required("Required"),
     address: Yup.string().required("Required"),
     city: Yup.string().required("Required"),
     state: Yup.string().required("Required"),
     zip: Yup.string().required("Required"),
     image: Yup.string().required("Required"),
-    website: Yup.string().required("Required").url("Invalid website URL"),
-    menu_link: Yup.string().required("Required").url("Invalid menu link URL"),
+    website: Yup.string().required("Required"),
+    menu_link: Yup.string().required("Required"),
     category: Yup.string().required("Required"),
     capacity: Yup.number().required("Required"),
     open_time: Yup.number().required("Required"),
@@ -74,13 +107,8 @@ const RestaurantForm = ({ onRestaurantChange }) => {
 
   return (
     <div>
-      <Button
-        variant="contained"
-        color="primary"
-        style={{ float: "right", marginTop: "-41px" }}
-        onClick={handleClickOpen}
-      >
-        Add New Restaurant
+      <Button variant="contained" color="primary" onClick={handleClickOpen}>
+        View
       </Button>
       <Dialog
         open={open}
@@ -90,7 +118,7 @@ const RestaurantForm = ({ onRestaurantChange }) => {
         fullWidth={true}
       >
         <DialogTitle style={{ textAlign: "center" }}>
-          Add New Restaurant
+          <strong>{name}</strong>
         </DialogTitle>
         <IconButton
           color="inherit"
@@ -106,27 +134,33 @@ const RestaurantForm = ({ onRestaurantChange }) => {
         </IconButton>
 
         <DialogContent>
+          <img
+            src={image}
+            alt={name}
+            style={{ width: "100%", marginBottom: "20px" }}
+          />
           <Formik
             initialValues={{
-              name: "",
-              phone: "",
-              address: "",
-              city: "",
-              state: "",
-              zip: "",
-              image: "",
-              website: "",
-              menu_link: "",
-              category: "",
-              capacity: 0,
-              open_time: 0,
-              close_time: 0,
-              res_duration: 0,
+              id: id,
+              name: name,
+              phone: phone,
+              address: address,
+              city: city,
+              state: state,
+              zip: zip,
+              image: image,
+              website: website,
+              menu_link: menu_link,
+              category: category,
+              capacity: capacity,
+              open_time: open_time,
+              close_time: close_time,
+              res_duration: res_duration,
             }}
             validationSchema={validationSchema}
-            onSubmit={(values, { setSubmitting, resetForm }) => {
-              fetch("/api/restaurants", {
-                method: "POST",
+            onSubmit={(values, { setSubmitting }) => {
+              fetch(`/api/restaurants/${id}`, {
+                method: "PATCH",
                 headers: {
                   "Content-Type": "application/json",
                 },
@@ -137,7 +171,6 @@ const RestaurantForm = ({ onRestaurantChange }) => {
                   onRestaurantChange(restaurant_data); // pass restaurant data to parent component
                   setOpenSnackbar(true);
                   setSubmitting(false);
-                  resetForm();
                 })
                 .catch((error) => {
                   console.error("Error:", error);
@@ -308,7 +341,7 @@ const RestaurantForm = ({ onRestaurantChange }) => {
                       as={TextField}
                       name="open_time"
                       type="number"
-                      label="Opening Time (24-hour format)"
+                      label="Opening Time (in 24-hour format)"
                       style={{ width: "100%" }}
                     />
                   </ListItem>
@@ -322,7 +355,7 @@ const RestaurantForm = ({ onRestaurantChange }) => {
                       as={TextField}
                       name="close_time"
                       type="number"
-                      label="Closing Time (24-hour format)"
+                      label="Closing Time (in 24-hour format)"
                       style={{ width: "100%" }}
                     />
                   </ListItem>
@@ -353,28 +386,28 @@ const RestaurantForm = ({ onRestaurantChange }) => {
                       color="primary"
                       disabled={isSubmitting}
                     >
-                      Submit
+                      Update
                     </Button>
                   </ListItem>
                 </List>
                 <Snackbar
                   open={openSnackbar} // open snackbar message
-                  autoHideDuration={6000} // close snackbar after 6 seconds
-                  onClose={handleCloseSnackbar} // close snackbar on click of close button
+                  autoHideDuration={6000} // close snackbar message after 6 seconds
+                  onClose={handleCloseSnackbar} // close snackbar message
                   anchorOrigin={{ vertical: "top", horizontal: "center" }} // position of snackbar
                   action={
                     <IconButton
                       size="small"
                       aria-label="close"
                       color="inherit"
-                      onClick={handleCloseSnackbar} // close snackbar on click of close button
+                      onClick={handleCloseSnackbar} // close snackbar message on click of close button
                     >
                       <CloseIcon fontSize="small" />
                     </IconButton>
                   }
                 >
                   <Alert onClose={handleCloseSnackbar} severity="success">
-                    Restaurant submitted successfully
+                    Restaurant updated successfully
                   </Alert>
                 </Snackbar>
               </Form>
@@ -384,6 +417,6 @@ const RestaurantForm = ({ onRestaurantChange }) => {
       </Dialog>
     </div>
   );
-};
+}
 
-export default RestaurantForm;
+export default UpdateRestaurant;
