@@ -9,8 +9,6 @@ import * as Yup from "yup";
 
 function ReviewsList() {
   const [reviews, setReviews] = useState([]);
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
