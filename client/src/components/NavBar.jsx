@@ -31,7 +31,7 @@ function NavBar() {
     // auto-login
     fetch("/api/check_session").then((r) => {
       if (r.ok) {
-        r.json().then(() => setIsLogin(true)); // Update the user's login status
+        r.json().then(() => setIsLogin(true)); // Update the user's login status if the user is logged in
       }
     });
   }, [setIsLogin]);
