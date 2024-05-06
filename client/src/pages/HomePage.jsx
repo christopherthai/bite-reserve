@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import './HomePage.css'; // Import the CSS file
 
 
+
+
 function HomePage() {
   const [restaurants, setRestaurants] = useState([]);
 
@@ -39,6 +41,7 @@ function HomePage() {
 
     }
 export default HomePage;
+
 
 
 
