@@ -17,6 +17,12 @@ import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import MuiAlert from "@mui/material/Alert";
 
+// Convert Unix timestamp to Date time
+function convertUnixToDateTime(unixTimestamp) {
+  const date = new Date(unixTimestamp * 1000);
+  return date;
+}
+
 // Alert component to display success message in snackbar after updating restaurant data
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
@@ -63,7 +69,6 @@ function AdminUpdateReservationForm({ reservation, onReservationChange }) {
 
   // form validation schema
   const validationSchema = Yup.object().shape({
-    reservation_time: Yup.string().required("Required"),
     table_size: Yup.number().required("Required"),
     status: Yup.string().required("Required"),
     notes: Yup.string().required("Required"),
@@ -138,6 +143,9 @@ function AdminUpdateReservationForm({ reservation, onReservationChange }) {
                       type="text"
                       label="Reservation Time"
                       style={{ width: "100%" }}
+                      value={convertUnixToDateTime(
+                        reservation_time
+                      ).toLocaleString()}
                     />
                   </ListItem>
                   <ErrorMessage

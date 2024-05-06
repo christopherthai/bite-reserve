@@ -164,7 +164,7 @@ function ReservationTable() {
                                 <TableCell>Status</TableCell>
                                 <TableCell>Notes</TableCell>
                                 <TableCell>View</TableCell>
-                                <TableCell>Delete</TableCell>
+                                <TableCell>Cancel</TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -199,7 +199,7 @@ function ReservationTable() {
                                           )
                                         }
                                       >
-                                        Delete
+                                        Cancel
                                       </Button>
                                     </TableCell>
                                   </TableRow>
