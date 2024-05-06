@@ -20,7 +20,7 @@ const ReservationsTable = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    fetch('/api/restaurants/3/reservations')
+    fetch('/api/reservations')
       .then(res => res.json())
       .then(data => {
         
