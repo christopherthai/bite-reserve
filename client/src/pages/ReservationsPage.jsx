@@ -20,14 +20,17 @@ const ReservationsTable = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    fetch(`/api/restaurants/1/reservations`)
+    fetch('/api/restaurants/3/reservations')
       .then(res => res.json())
       .then(data => {
+        
         const sortedData = data.sort((a, b) => b.reservation_time - a.reservation_time);
+        
         const formattedData = sortedData.map(reservation => ({
           ...reservation,
           reservation_time: new Date(reservation.reservation_time * 1000).toLocaleString(),
         }));
+
         setReservations(formattedData);
         setTotalPages(Math.ceil(formattedData.length / itemsPerPage));
       })

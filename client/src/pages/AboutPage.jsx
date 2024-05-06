@@ -24,17 +24,8 @@ function AboutPage() {
   alignItems: 'center' // This centers the content horizontally
 }}>
   <h1>BiteReserve</h1>
-  <h2 style={{
-    textAlign: 'center', // Centers the text
-    maxWidth: '600px', // Sets a max width for the text block
-    lineHeight: '1.4', // Adjusts the line height for better readability
-    margin: 'auto', // Centers the block horizontally and vertically
-    whiteSpace: 'pre-wrap' // Ensures the text wraps properly
-  }}>
-    Welcome to BiteReserve,{"\n"} 
-    the premier destination for securing a table {"\n"}
-    at the world's most exquisite dining establishments.
-  </h2>
+  <h2>"The Start of Flavor, Perfect Reservations with biteReserve"</h2>
+  
   <ImageList sx={{
     width: 750, // Fixed width of the ImageList
     height: 450, // Optional: you can set a fixed height
@@ -54,9 +45,23 @@ function AboutPage() {
           loading="lazy"
           style={{ width: '100%', height: '100%', objectFit: 'cover' }} // Makes the image cover the item area
         />
+        
       </ImageListItem>
     ))}
+    
   </ImageList>
+  <h2 style={{
+    textAlign: 'center', // Centers the text
+    maxWidth: '600px', // Sets a max width for the text block
+    lineHeight: '1.4', // Adjusts the line height for better readability
+    margin: 'auto', // Centers the block horizontally and vertically
+    whiteSpace: 'pre-wrap' // Ensures the text wraps properly
+  }}>
+    Welcome to BiteReserve,{"\n"} 
+    the premier destination for securing a table {"\n"}
+    at the world's most exquisite dining establishments.
+  </h2>
+  
 </Box>
   );
 }
