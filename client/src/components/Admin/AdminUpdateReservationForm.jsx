@@ -12,6 +12,7 @@ import {
   ListItem,
   IconButton,
   Snackbar,
+  MenuItem,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
@@ -170,11 +171,14 @@ function AdminUpdateReservationForm({ reservation, onReservationChange }) {
                   <ListItem>
                     <Field
                       as={TextField}
+                      select
                       name="status"
-                      type="text"
                       label="Status"
                       style={{ width: "100%" }}
-                    />
+                    >
+                      <MenuItem value="confirmed">confirmed</MenuItem>
+                      <MenuItem value="pending">pending</MenuItem>
+                    </Field>
                   </ListItem>
                   <ErrorMessage
                     name="status"
