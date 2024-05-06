@@ -1,20 +1,10 @@
-import React from 'react';
-import RestaurantList from '../components/Restaurants/RestaurantList';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import './HomePage.css'; // Import the CSS file
+
 
 function HomePage() {
-<<<<<<< HEAD
-  return (
-    <div>
-      <section>
-        <h1>Find your table for any occasion</h1>
-        <RestaurantList className='card-container'/>
-      </section>
-    </div>
-  );
-}
-
-export default HomePage;
-=======
   const [restaurants, setRestaurants] = useState([]);
 
       useEffect(() => {
@@ -54,6 +44,7 @@ export default HomePage;
 
 
 
+
 // import { Link } from 'react-router-dom';
 // import './HomePage.css'; // CSS 파일 import
 // import RestaurantList from '../components/Restaurants/RestaurantList.jsx';
@@ -74,4 +65,3 @@ export default HomePage;
       </div>
     </>
    */}
->>>>>>> development
