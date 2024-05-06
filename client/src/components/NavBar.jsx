@@ -10,7 +10,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import UserContext from "../UserContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 const useStyles = makeStyles({
   appBar: {
@@ -23,6 +23,16 @@ function NavBar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { isLogin, setIsLogin } = useContext(UserContext); // Use the UserContext to access the user's login status
+
+  // check if the user is logged in
+  useEffect(() => {
+    // auto-login
+    fetch("/api/check_session").then((r) => {
+      if (r.ok) {
+        r.json().then(() => setIsLogin(true)); // Update the user's login status
+      }
+    });
+  }, [setIsLogin]);
 
   // Handle the logout event
   const handleLogout = () => {
