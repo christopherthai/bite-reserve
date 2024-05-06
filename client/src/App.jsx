@@ -14,6 +14,7 @@ import ManageReservations from "./components/Admin/ManageReservations";
 import NotFoundPage from "./pages/NotFoundPage";
 import UserContext from "./UserContext";
 import { useState } from "react";
+import ReviewsList from "./components/Reviews/ReviewsList";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false); // State to store the login status
@@ -34,10 +35,12 @@ function App() {
             <Route path="/reservationsform/:id" element={<ReservationForm />} />
             <Route path="/admindashboard" element={<AdminDashboardPage />} />
             <Route path="/manage-restaurants" element={<ManageRestaurants />} />
-            <Route path="/manage-reservations"element={<ManageReservations />}/>
+            <Route
+              path="/manage-reservations"
+              element={<ManageReservations />}
+            />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="/restaurants/:id/reviews" element={<ReviewsList />} />
-
           </Routes>
         </div>
       </UserContext.Provider>
