@@ -3,10 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './HomePage.css'; // Import the CSS file
 
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import './HomePage.css'; // Import the CSS file
+
 
 
 function HomePage() {
