@@ -11,6 +11,7 @@ import { makeStyles } from "@mui/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import UserContext from "../UserContext";
 import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   appBar: {
@@ -23,6 +24,7 @@ function NavBar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { isLogin, setIsLogin } = useContext(UserContext); // Use the UserContext to access the user's login status
+  const navigate = useNavigate(); // Use the navigate function to navigate to different pages
 
   // check if the user is logged in
   useEffect(() => {
@@ -52,7 +54,7 @@ function NavBar() {
         setIsLogin(false); // Update the user's login status
       });
     setIsLogin(false); // Update the user's login status
-    window.location.reload(); // Reload the page
+    navigate("/login");
   };
 
   return (
