@@ -2,16 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
 
-const MapComponent = withScriptjs(withGoogleMap(({ latitude, longitude }) => (
-    <GoogleMap
-        defaultZoom={15}
-        defaultCenter={{ lat: latitude, lng: longitude }}
-    >
-        <Marker position={{ lat: latitude, lng: longitude }} />
-    </GoogleMap>
-)));
+
+
 
 const RestaurantDetail = () => {
     const { id } = useParams();
@@ -35,15 +28,9 @@ const RestaurantDetail = () => {
             .then(data => setRestaurant(data))
             .catch(error => console.error('Error loading the restaurant', error));
 
-        // Load Google Maps API script here
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCOCVpAeEkgmV-AoTk8URko2mCc_3xRxmw&v=3.exp&libraries=geometry,drawing,places`;
-        script.async = true;
-        document.body.appendChild(script);
+        
 
-        return () => {
-            document.body.removeChild(script);
-        };
+      
         // 자동 로그인 체크
         fetch("/api/check_session")
             .then((r) => {
@@ -96,17 +83,7 @@ const RestaurantDetail = () => {
                 <button onClick={handleReservationClick} style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>
                     Make a Reservation
                 </button>
-                {/* Show the map component when mapExpanded is true */}
-                {mapExpanded && (
-                    <MapComponent
-                        latitude={restaurant.latitude}
-                        longitude={restaurant.longitude}
-                        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyCOCVpAeEkgmV-AoTk8URko2mCc_3xRxmw&v=3.exp&libraries=geometry,drawing,places`}
-                        loadingElement={<div style={{ height: '100%' }} />}
-                        containerElement={<div style={{ height: '200px', marginTop: '20px' }} />}
-                        mapElement={<div style={{ height: '100%' }} />}
-                    />
-                )}
+                
             </div>
         
         </div>
