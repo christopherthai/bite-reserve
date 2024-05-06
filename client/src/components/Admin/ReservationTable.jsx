@@ -107,7 +107,7 @@ function ReservationTable() {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <strong>Drop Down</strong>
+                  <strong>Drop Down to View Reservations</strong>
                 </TableCell>
                 <TableCell align="right" style={{ width: "700px" }}>
                   <strong>Restaurants</strong>
@@ -164,7 +164,7 @@ function ReservationTable() {
                                 <TableCell>Status</TableCell>
                                 <TableCell>Notes</TableCell>
                                 <TableCell>View</TableCell>
-                                <TableCell>Delete</TableCell>
+                                <TableCell>Cancel</TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -199,7 +199,7 @@ function ReservationTable() {
                                           )
                                         }
                                       >
-                                        Delete
+                                        Cancel
                                       </Button>
                                     </TableCell>
                                   </TableRow>
