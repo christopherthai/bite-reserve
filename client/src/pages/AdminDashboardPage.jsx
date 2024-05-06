@@ -55,7 +55,7 @@ function AdminDashboardPage() {
   // check if the user is logged in
   useEffect(() => {
     // auto-login
-    fetch("/api/check_session_for_admin").then((r) => {
+    fetch("/api/check_session").then((r) => {
       if (r.ok) {
         r.json().then((user) => setUser(user));
       }
@@ -64,11 +64,14 @@ function AdminDashboardPage() {
 
   // if the user is not logged in, display the login form
   if (!user) {
-    return <LoginForm onLogin={setUser} />;
+    return <LoginForm />;
   } else if (user.IsAdmin !== true) {
     // if the user is not an admin, display an error message
-    console.log(user);
-    return <div>You are not authorized to view this page.</div>;
+    return (
+      <div>
+        <strong>You are not authorized to view this page.</strong>
+      </div>
+    );
   }
 
   return (

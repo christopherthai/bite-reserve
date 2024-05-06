@@ -16,6 +16,7 @@ const MapComponent = withScriptjs(withGoogleMap(({ latitude, longitude }) => (
 const RestaurantDetail = () => {
     const { id } = useParams();
     const [restaurant, setRestaurant] = useState(null);
+<<<<<<< HEAD
     const [mapExpanded, setMapExpanded] = useState(true); // Change initial state to true
     const navigate = useNavigate();
 
@@ -27,12 +28,18 @@ const RestaurantDetail = () => {
         setMapExpanded(expanded);
     };
 
+=======
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
+
+>>>>>>> development
     useEffect(() => {
         fetch(`/api/restaurants/${id}`)
             .then(response => response.json())
             .then(data => setRestaurant(data))
             .catch(error => console.error('Error loading the restaurant', error));
 
+<<<<<<< HEAD
         // Load Google Maps API script here
         const script = document.createElement('script');
         script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&v=3.exp&libraries=geometry,drawing,places`;
@@ -42,16 +49,36 @@ const RestaurantDetail = () => {
         return () => {
             document.body.removeChild(script);
         };
+=======
+        // 자동 로그인 체크
+        fetch("/api/check_session")
+            .then((r) => {
+                if (r.ok) {
+                    r.json().then((user) => setUser(user));
+                }
+            });
+>>>>>>> development
     }, [id]);
+
+    const handleReservationClick = () => {
+        // 로그인 상태가 아니라면 로그인 페이지로 이동 여부를 확인
+        if (!user) {
+            if (window.confirm("You are not logged in. Would you like to go to the login page?")) {
+                navigate("/login");
+            }
+        } else {
+            navigate(`/reservationsform/${restaurant.id}`);
+        }
+    };
 
     if (!restaurant) return <div>Loading...</div>;
 
-    // 별 레이팅 표시 (현재는 정적)
     const ratingStars = Array.from({ length: 5 }).map((_, index) => (
         <FontAwesomeIcon key={index} icon={faStar} color="orange" />
     ));
 
     return (
+<<<<<<< HEAD
         <div className="page-container" style={{ backgroundColor: 'white', boxShadow: '0 4px 8px rgba(0, 0, 1, 1.4)', textAlign: 'center' }}>
             <div style={{ padding: '20px' }}>
                 <img src={restaurant.image} alt={restaurant.name} style={{ width: '100%', height: '300px', objectFit: 'cover', boxShadow: '0 4px 8px rgba(0, 0, 1, 1.4)' }} />
@@ -89,6 +116,23 @@ const RestaurantDetail = () => {
                     />
                 )}
             </div>
+=======
+        <div style={{ padding: '20px' }}>
+            <img src={restaurant.image} alt={restaurant.name} style={{ width: '100%', height: '300px', objectFit: 'cover' }} />
+            <h2>{restaurant.name}</h2>
+            <div>{ratingStars}</div>
+            <h3>{restaurant.category}</h3>
+            <h3>{restaurant.phone}</h3>
+            <h3>{restaurant.address}</h3>
+            <h3>{restaurant.city}</h3>
+            <h3>{restaurant.state}</h3>
+            <h3>{restaurant.zip}</h3>
+            <h3>{restaurant.website}</h3>
+            <h3>{restaurant.menu}</h3>
+            <button onClick={handleReservationClick} style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>
+                Reservation
+            </button>
+>>>>>>> development
         </div>
     );
 };

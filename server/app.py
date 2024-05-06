@@ -40,22 +40,30 @@ class Signup(Resource):
 
         request_json = request.get_json()
 
+        first_name = request_json.get("first_name")
+        last_name = request_json.get("last_name")
         username = request_json.get("username")
         password = request_json.get("password")
-        image_url = request_json.get("image_url")
-        bio = request_json.get("bio")
+        phone = request_json.get("phone")
+        email = request_json.get("email")
+        IsAdmin = request_json.get("IsAdmin")
 
-        user = User(username=username, image_url=image_url, bio=bio)
-
-        # the setter will encrypt this
-        user.password_hash = password
+        user = User(
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            password=password,
+            phone=phone,
+            email=email,
+            IsAdmin=IsAdmin,
+        )
 
         try:
 
             db.session.add(user)
             db.session.commit()
 
-            session["user_id"] = user.id
+            session["user_id"] = user.id  # session is a dictionary that stores user_id
 
             return user.to_dict(), 201
 
@@ -83,24 +91,6 @@ class CheckSession(Resource):
 api.add_resource(CheckSession, "/check_session", endpoint="check_session")
 
 
-class CheckSessionForAdmin(Resource):
-
-    def get(self):
-
-        user_id = session["user_id"]
-
-        if user_id and User.query.filter(User.id == user_id).first().IsAdmin == 1:
-            user = User.query.filter(User.id == user_id).first()
-            return user.to_dict(), 200
-
-        return {}, 401
-
-
-api.add_resource(
-    CheckSessionForAdmin, "/check_session_for_admin", endpoint="check_session_for_admin"
-)
-
-
 # Login Routes
 class Login(Resource):
 
@@ -116,7 +106,9 @@ class Login(Resource):
         if user:
             if user.password == password:
 
-                session["user_id"] = user.id
+                session["user_id"] = (
+                    user.id
+                )  # session is a dictionary that stores user_id
                 return user.to_dict(), 200
 
         return {"error": "401 Unauthorized"}, 401
@@ -148,9 +140,7 @@ class Restaurants(Resource):
 
     def get(self):
         restaurants = Restaurant.query.all()
-        restaurants_list = [
-            restaurant.to_dict(rules=("-reservations",)) for restaurant in restaurants
-        ]
+        restaurants_list = [restaurant.to_dict() for restaurant in restaurants]
 
         return make_response(restaurants_list, 200)
 

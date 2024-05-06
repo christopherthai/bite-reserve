@@ -1,33 +1,63 @@
 import React from "react";
-import "./AboutPage.css";
+import Box from '@mui/material/Box';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+
+const aboutData = [
+  { img: 'https://www.wildrose-district.com/wp-content/uploads/2018/09/iStock-868935172.jpg'},
+  { img: 'https://www.buffalocabinsandlodges.com/wp-content/uploads/2021/09/Fancy-Restaurants-in-Ohio.jpg'},
+  { img: 'https://www.ktchnrebel.com/wp-content/uploads/2023/01/Served_dinner_table_AdobeStock_243652575.tif_748105_image-office-2.jpg'},
+  { img: 'https://assets2.devourtours.com/wp-content/uploads/pexels-mister-mister-food-rotated.jpg'},
+  { img: 'https://www.tastingtable.com/img/gallery/regional-chinese-food-explained/l-intro-1669836324.jpg'},
+  { img: 'https://luluwild.co.uk/wp-content/uploads/2023/07/pan-asian-vs-chinese-cousine-1024x771.jpeg'}
+];
 
 function AboutPage() {
   return (
-    <div className="about-page">
-      <header className="site-header">
-        <h1>Bite Reserve</h1>
-        <nav>
-          <ul>
-            <li><a href="/home">Home</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/contact">Contact</a></li>
-          </ul>
-        </nav>
-      </header>
-      <div className="about-content">
+    <Box sx={{
+  width: '100%',
+  overflowY: 'hidden',
+  padding: '20px',
+  fontFamily: '"Arial", sans-serif',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center' // This centers the content horizontally
+}}>
+  <h1>BiteReserve</h1>
+  <h2 style={{
+    textAlign: 'center', // Centers the text
+    maxWidth: '600px', // Sets a max width for the text block
+    lineHeight: '1.4', // Adjusts the line height for better readability
+    margin: 'auto', // Centers the block horizontally and vertically
+    whiteSpace: 'pre-wrap' // Ensures the text wraps properly
+  }}>
+    Welcome to BiteReserve,{"\n"} 
+    the premier destination for securing a table {"\n"}
+    at the world's most exquisite dining establishments.
+  </h2>
+  <ImageList sx={{
+    width: 750, // Fixed width of the ImageList
+    height: 450, // Optional: you can set a fixed height
+    overflowY: 'hidden'
+  }} variant="masonry" cols={3} gap={8}>
+    {aboutData.map((item) => (
+      <ImageListItem key={item.img} sx={{
+        width: 'auto', // Ensures the items do not stretch
+        height: 248, // Fixed height for each item
+        display: 'flex',
+        justifyContent: 'center' // Centers the image within the item
+      }}>
         <img
-          src="/src/test pic 001.webp"
-          alt="bite reserve"
-          className="about-image"
+          srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+          src={`${item.img}?w=248&fit=crop&auto=format`}
+          alt="Decorative image"
+          loading="lazy"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }} // Makes the image cover the item area
         />
-        <p className="about-description">
-          Welcome to Bite Reserve, your go-to app for making restaurant reservations hassle-free. Discover new dining experiences, browse menus, and book tables with ease. Join our community of food enthusiasts and explore the culinary world like never before.
-        </p>
-      </div>
-      <footer className="site-footer">
-        <p>© 2024 Bite Reserve. All rights reserved.</p>
-      </footer>
-    </div>
+      </ImageListItem>
+    ))}
+  </ImageList>
+</Box>
   );
 }
 

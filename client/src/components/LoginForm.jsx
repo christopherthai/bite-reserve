@@ -4,20 +4,39 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import "./LoginForm.css"; // Import the CSS file
+import { Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
+import { useContext, useState } from "react";
+import UserContext from "../UserContext";
 
 const LoginForm = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Use the navigate function to navigate to different pages
 
+  const [open, setOpen] = useState(false); // State to store the open status of the Snackbar
+  const [errorMessage, setErrorMessage] = useState(""); // State to store the error message
+  const { setIsLogin } = useContext(UserContext); // Use the UserContext to access the user's login status
+
+  // Function to handle the close event of the Snackbar
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  // Validation schema for the form
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
   });
 
+  // Initial values for the form
   const initialValues = {
     username: "",
     password: "",
   };
 
+  // Function to handle the form submission
   const handleSubmit = (values, { setSubmitting }) => {
     fetch("/api/login", {
       method: "POST",
@@ -28,24 +47,30 @@ const LoginForm = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Invalid username or password"); // Throw an error if the response is not ok
         }
-        return response.json();
+        return response.json(); // Return the response as JSON
       })
-      .then((data) => {
-        console.log("Success:", data);
-        setSubmitting(false);
-        navigate("/reservations");
-        window.location.reload();
+      .then(() => {
+        setSubmitting(false); // Set the submitting state to false
+        setIsLogin(true); // Set the login status to true
+        navigate("/"); // Navigate to the home page
       })
       .catch((error) => {
         console.error("Error:", error);
-        setSubmitting(false);
+        setErrorMessage(error.message); // Set the error message
+        setOpen(true); // Open the Snackbar
+        setSubmitting(false); // Set the submitting state to false
       });
   };
 
   return (
     <div className="login-form-container">
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <MuiAlert onClose={handleClose} severity="error">
+          {errorMessage}
+        </MuiAlert>
+      </Snackbar>
       <h2 className="login-form-title">Login</h2>
       <Formik
         initialValues={initialValues}
