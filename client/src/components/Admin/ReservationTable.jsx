@@ -107,7 +107,7 @@ function ReservationTable() {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <strong>Drop Down</strong>
+                  <strong>Drop Down to View Reservations</strong>
                 </TableCell>
                 <TableCell align="right" style={{ width: "700px" }}>
                   <strong>Restaurants</strong>
