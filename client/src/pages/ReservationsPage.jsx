@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,6 +11,8 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
+import LoginForm from "../components/LoginForm";
 
 const itemsPerPage = 10;
 
@@ -38,6 +41,10 @@ const ReservationsTable = () => {
 
     // 의존성 배열을 빈 배열로 설정하여 이 효과가 한 번만 실행되도록 함
 }, []);
+
+if (!user) {
+  return <LoginForm />;
+}
     
     // 예약 목록을 가져오는 함수 정의
     function fetchReservations(userId) {
