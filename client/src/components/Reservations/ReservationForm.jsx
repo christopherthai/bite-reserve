@@ -33,7 +33,7 @@ const ReservationForm = () => {
     return (
         <Formik
             initialValues={{
-                partySize: '1',
+                partySize: selectedPartySize,
                 date: new Date(),
                 time: '12:00',
                 notes: ''
@@ -94,14 +94,27 @@ const ReservationForm = () => {
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '5px' }}>
                           {Array.from({ length: 20 }, (_, i) => (
                             <button
-                              key={i}
-                              type="button"
-                              className={`btn btn-${values.partySize === i + 1 ? 'primary' : 'outline-primary'}`}
-                              style={{ fontSize: '1rem', padding: '5px' }}
-                              onClick={() => setFieldValue('partySize', i + 1)}
-                            >
-                              {i + 1}
-                            </button>
+                            key={i}
+                            type="button"
+                            className={`btn btn-${values.partySize === i + 1 ? 'primary' : 'outline-primary'}`}
+                            style={{ fontSize: '1rem', padding: '5px' }}
+                            onClick={() => {
+                              setFieldValue('partySize', i + 1);
+                              // Add logic to change button color upon click
+                              const buttons = document.querySelectorAll('.btn');
+                              buttons.forEach((button, index) => {
+                                if (index === i) {
+                                  button.classList.remove('btn-outline-primary');
+                                  button.classList.add('btn-primary');
+                                } else {
+                                  button.classList.remove('btn-primary');
+                                  button.classList.add('btn-outline-primary');
+                                }
+                              });
+                            }}
+                          >
+                            {i + 1}
+                          </button>
                           ))}
                         </div>
                       </div>

@@ -17,6 +17,12 @@ import UpdateReservationForm from "../components/Reservations/UpdateReservation"
 
 const itemsPerPage = 10;
 
+// Function to convert Unix timestamp to local datetime string
+const convertUnixToLocalDateTime = (unixTime) => {
+  return new Date(unixTime * 1000).toLocaleString();
+};
+
+
 
 const ReservationsTable = () => {
   const [reservations, setReservations] = useState([]);
@@ -77,17 +83,26 @@ const handlePageChange = (pageNumber) => {
 
   // Handle update reservation data from AdminUpdateReservationForm component and update the state
 const handleUpdateReservation = (reservation) => {
-    const updatedRestaurants = restaurants.map((restaurant) => {
-      return {
-        ...restaurant,
-        reservations: restaurant.reservations.map((r) =>
-          r.id === reservation.id ? reservation : r
-        ),
-      };
-    });
-    setRestaurants(updatedRestaurants);
-  };
+  const updatedReservations = reservations.map((r) => {
+    // If the ID matches, update the reservation
+    if (r.id === reservation.id) {
+        // Convert the reservation_time from Unix timestamp to local time
+        const reservation_time = convertUnixToLocalDateTime(reservation.reservation_time);
+        // Return the updated reservation object
+        return {
+            ...reservation,
+            reservation_time: reservation_time,
+            // Include other properties if needed
+        };
+    } else {
+        // Otherwise, return the original reservation object
+        return r;
+    }
+});
+// Update the state with the updated reservations array
+setReservations(updatedReservations);
 
+}
 
 
 
