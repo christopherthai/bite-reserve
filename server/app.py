@@ -46,7 +46,11 @@ class Signup(Resource):
         password = request_json.get("password")
         phone = request_json.get("phone")
         email = request_json.get("email")
-        IsAdmin = request_json.get("IsAdmin")
+        IsAdmin_from_request = request_json.get("isAdmin")
+
+        IsAdmin = (
+            False if IsAdmin_from_request == 0 else True
+        )  # If IsAdmin is 0, then False, else True
 
         user = User(
             first_name=first_name,

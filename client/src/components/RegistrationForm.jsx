@@ -8,6 +8,7 @@ import UserContext from "../UserContext";
 const RegistrationForm = () => {
   const navigate = useNavigate(); // Initialize useNavigate
   const { setIsLogin } = useContext(UserContext); // Use the UserContext to access the user's login status
+  const { setIsAdmin } = useContext(UserContext); // Use the UserContext to access the user's admin status
 
   const validationSchema = Yup.object().shape({
     first_name: Yup.string().required("First Name is required"),
@@ -38,14 +39,17 @@ const RegistrationForm = () => {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    const url = "api/users";
+    const url = "api/signup";
 
     fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(values),
+      body: JSON.stringify({
+        ...values,
+        isAdmin: values.isAdmin ? 1 : 0,
+      }),
     })
       .then((res) => {
         if (res.ok) {
@@ -57,6 +61,9 @@ const RegistrationForm = () => {
         console.log("Registration was successful", data);
         setSubmitting(false);
         setIsLogin(true); // Set the login status to true
+        if (values.isAdmin) {
+          setIsAdmin(true); // Set the admin status to true
+        }
         navigate("/");
       })
       .catch((error) => {
