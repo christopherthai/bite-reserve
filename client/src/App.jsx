@@ -15,7 +15,6 @@ import NotFoundPage from "./pages/NotFoundPage";
 import UserContext from "./UserContext";
 import ReviewsList from "./components/Reviews/ReviewsList";
 import { useState } from "react";
-import ReviewsList from "./components/Reviews/ReviewsList";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false); // State to store the login status
