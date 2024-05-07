@@ -18,23 +18,26 @@ function AboutPage() {
   width: '100%',
   overflowY: 'hidden',
   padding: '20px',
-  fontFamily: '"Arial", sans-serif',
+  fontFamily: "Boogaloo",
+  color: 'rgb(240, 236, 236)',
+  textShadow: '2px 4px 4px rgba(0, 0, 0, 1)',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center' // This centers the content horizontally
 }}>
-  <h1>BiteReserve</h1>
-  <h2>"The Start of Flavor, Perfect Reservations with biteReserve"</h2>
+  <h1 style={{ marginBottom: '10px' }}>BiteReserve</h1>
+  <h2 style={{ marginTop: '0', marginBottom: '20px' }}>"The Start of Flavor, Perfect Reservations with BiteReserve"</h2>
   
   <ImageList sx={{
-    width: 750, // Fixed width of the ImageList
-    height: 450, // Optional: you can set a fixed height
+    width: 1200, // Fixed width of the ImageList
+    height: 550, // Optional: you can set a fixed height
     overflowY: 'hidden'
   }} variant="masonry" cols={3} gap={8}>
     {aboutData.map((item) => (
       <ImageListItem key={item.img} sx={{
         width: 'auto', // Ensures the items do not stretch
-        height: 248, // Fixed height for each item
+        height: 350
+        , // Fixed height for each item
         display: 'flex',
         justifyContent: 'center' // Centers the image within the item
       }}>
@@ -52,7 +55,7 @@ function AboutPage() {
   </ImageList>
   <h2 style={{
     textAlign: 'center', // Centers the text
-    maxWidth: '600px', // Sets a max width for the text block
+    maxWidth: '800px', // Sets a max width for the text block
     lineHeight: '1.4', // Adjusts the line height for better readability
     margin: 'auto', // Centers the block horizontally and vertically
     whiteSpace: 'pre-wrap' // Ensures the text wraps properly
