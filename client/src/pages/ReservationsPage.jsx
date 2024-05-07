@@ -68,11 +68,29 @@ const handlePageChange = (pageNumber) => {
     // 수정 버튼 클릭 시 실행될 코드
     console.log(`Editing reservation ${reservationId}`);
   };
-
-  const handleCancel = (reservationId) => {
-    // 취소 버튼 클릭 시 실행될 코드
-    console.log(`Canceling reservation ${reservationId}`);
-  };
+  //Cancels user reservation and updates the db
+  const handleCancel = (id) => {
+      fetch(`/api/reservation/${id}`, {
+        method: "DELETE",
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          } else {
+            return response.text().then((text) => (text ? JSON.parse(text) : {})); // parse the response to JSON object if it is not empty
+          }
+        })
+        .then(() => {
+          // Remove the deleted reservation from the state
+          const updatedReservations = reservations.filter(
+            (reservation) => reservation.id !== id
+          );
+          setReservations(updatedReservations);
+        })
+        .catch((error) => console.error("Error:", error));
+    };// 취소 버튼 클릭 시 실행될 코드
+    
+  
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
