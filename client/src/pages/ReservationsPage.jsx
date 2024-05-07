@@ -65,14 +65,14 @@ const handlePageChange = (pageNumber) => {
   };
 
   const handleEdit = (reservationId) => {
-    // 수정 버튼 클릭 시 실행될 코드
+    // Edit button
     console.log(`Editing reservation ${reservationId}`);
   };
 
-  const handleCancel = (reservationId) => {
-    // 취소 버튼 클릭 시 실행될 코드
+ const handleCancel = (reservationId) => {
+    // cancel button
     console.log(`Canceling reservation ${reservationId}`);
-  };
+  }; 
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -88,7 +88,7 @@ const handlePageChange = (pageNumber) => {
             <TableCell align="right">Time</TableCell>
             <TableCell align="right">Table Size</TableCell>
             <TableCell align="right">Status</TableCell>
-            <TableCell align="right">Note</TableCell>
+            <TableCell align="right">Notes</TableCell>
             <TableCell align="right">User ID</TableCell>
             <TableCell align="right">Restaurant ID</TableCell>
             <TableCell align="right">Actions</TableCell>
@@ -102,7 +102,7 @@ const handlePageChange = (pageNumber) => {
                 <TableCell align="right">{reservation.reservation_time}</TableCell>
                 <TableCell align="right">{reservation.table_size}</TableCell>
                 <TableCell align="right">{reservation.status}</TableCell>
-                <TableCell align="right">{reservation.note}</TableCell>
+                <TableCell align="right">{reservation.notes}</TableCell>
                 <TableCell align="right">{reservation.user_id}</TableCell>
                 <TableCell align="right">{reservation.restaurant_id}</TableCell>
                 <TableCell align="right">

@@ -2,155 +2,124 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Formik, Form, Field } from 'formik';
+
+const convertToUnixTimestamp = (date, time) => {
+    const [hours, minutes] = time.split(':').map(Number);
+    const dateTime = new Date(date);
+    dateTime.setHours(hours, minutes, 0, 0);
+    return Math.floor(dateTime.getTime() / 1000);
+};
 
 const ReservationForm = () => {
-    const { id } = useParams(); // 레스토랑 ID를 URL 파라미터에서 추출
+    const { id } = useParams();
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [restaurant, setRestaurant] = useState(null);
-    const [reservation, setReservation] = useState({
-        name: '',
-        phone: '',
-        date: '',
-        time: '',
-        partySize: ''
-    });
-    const [startDate, setStartDate] = useState(new Date());
 
     useEffect(() => {
-        // 사용자 세션 확인
-        fetch("/api/check_session").then((r) => {
-            if (r.ok) {
-                r.json().then((user) => {
-                    setUser(user);
-                });
-            }
-        });
+        fetch("/api/check_session")
+            .then(response => response.ok ? response.json() : null)
+            .then(userData => setUser(userData));
 
-        // 레스토랑 정보 로드
         fetch(`/api/restaurants/${id}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data) {
-                    setRestaurant(data);
-                } else {
-                    console.error('No restaurant found');
-                }
-            })
-            .catch(error => console.error('Error loading the restaurant', error));
+            .then(response => response.ok ? response.json() : null)
+            .then(data => setRestaurant(data))
+            .catch(error => console.error('No restaurant found', error));
     }, [id]);
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setReservation(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        if (!user) {
-            if (window.confirm("You are not logged in. Would you like to go to the login page?")) {
-                navigate("/login");
-                return;
-            }
-        }
-
-        // 요청 URL 수정
-        const response = await fetch(`/api/restaurants/${id}/reservations`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                ...reservation,
-                restaurantId: id,
-                date: Math.floor(startDate.getTime() / 1000)  // 날짜를 Unix 타임스탬프(초 단위)로 변환
-            })
-        });
-
-        if (response.ok) {
-            navigate('/reservations', { state: { ...reservation, restaurant } });
-        } else {
-            console.error('Failed to create reservation');
-        }
-    };
 
     if (!restaurant) return <div>Loading...</div>;
 
     return (
-        <div style={{ padding: '20px' }}>
-            <img src={restaurant.image} alt={restaurant.name} style={{ width: '100%', height: '300px', objectFit: 'cover' }} />
-            <h1>{restaurant.name}</h1>
-            <h3>Style: {restaurant.category}</h3>
-            <h3>Phone: {restaurant.phone}</h3>
-            <p>{restaurant.description}</p>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', width: '100%', maxWidth: '600px' }}>
-                    <select
-                        name="partySize"
-                        value={reservation.partySize}
-                        onChange={handleInputChange}
-                        style={{ padding: '10px' }}
-                    >
-                        <option value="">Select Party Size</option>
+        <Formik
+            initialValues={{
+                partySize: '1',
+                date: new Date(),
+                time: '12:00',
+                notes: ''
+            }}
+            onSubmit={async (values) => {
+                if (!user) {
+                    if (window.confirm("You are not logged in. Would you like to go to the login page?")) {
+                        navigate("/login");
+                    } else {
+                        navigate("/");
+                    }
+                    return;
+                }
+
+                const reservationTime = convertToUnixTimestamp(values.date, values.time);
+
+                const response = await fetch(`/api/restaurants/${id}/reservations`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        reservation_time: reservationTime,
+                        table_size: parseInt(values.partySize),
+                        status: 'confirmed',
+                        user_id: user.id,
+                        notes:values.notes.toString(),
+                        restaurant_id: id
+                    })
+                },);
+
+                if (response.ok) {
+                    const reservationData = await response.json();
+                    navigate('/reservations', { state: { reservationId: reservationData.id } });
+                } else {
+                    console.error('Failed to create reservation');
+                }
+            }}
+        >
+            {({ setFieldValue, values }) => (
+                <Form>
+                    {restaurant && (
+                        <div>
+                            <img src={restaurant.image} alt={restaurant.name} className="restaurant-image" />
+                            <h2>{restaurant.name}</h2>
+                            <p>Category: {restaurant.category}</p>
+                            <p>Phone: {restaurant.phone}</p>
+                        </div>
+                    )}
+                    {user && (
+                        <div>
+                            <p>User ID: {user.id}</p>
+                        </div>
+                    )}
+
+                    <DatePicker
+                        selected={values.date}
+                        onChange={date => setFieldValue('date', date)}
+                        minDate={new Date()}
+                        maxDate={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
+                        showTimeSelect={false}
+                        className="form-control"
+                    />
+
+                    <Field as="select" name="time" className="form-control" onChange={(e) => setFieldValue('time', e.target.value)}>
+                        {[10, 11, 12, 13, 14, 15, 16, 17, 18, 19].map(hour => (
+                            <optgroup key={hour} label={`${hour}:00`}>
+                                <option value={`${hour}:00`}>{`${hour}:00 ${hour < 12 ? 'AM' : 'PM'}`}</option>
+                                <option value={`${hour}:30`}>{`${hour}:30 ${hour < 12 ? 'AM' : 'PM'}`}</option>
+                            </optgroup>
+                        ))}
+                    </Field>
+
+                    <Field as="select" name="partySize" className="form-control" onChange={(e) => setFieldValue('partySize', e.target.value)}>
                         {Array.from({ length: 12 }, (_, i) => (
-                            <option key={i + 1} value={i + 1}>
+                            <option key={i} value={i + 1}>
                                 {i + 1}
                             </option>
                         ))}
-                    </select>
-                    <DatePicker
-                        selected={startDate}
-                        onChange={date => setStartDate(date)}
-                        minDate={new Date()}
-                        maxDate={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
-                        showMonthDropdown
-                        showYearDropdown
-                        dropdownMode="select"
-                        filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
-                        style={{ width: '100%', maxWidth: '250px', padding: '10px' }}
-                    />
-                </div>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    flexWrap: 'wrap',
-                    gap: '10px',
-                    margin: '10px 0',
-                    maxWidth: '540px'
-                }}>
-                    {[9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].flatMap(hour => (
-                        [`${hour}:00`, `${hour}:30`].map(time => (
-                            <button key={time} type="button" onClick={() => setReservation({...reservation, time: time})}
-                            style={{ 
-                                padding: '10px 20px',
-                                minWidth: '100px',
-                                width: '100px',
-                                background: '#A3CEF1',
-                                color: '#4a4a4a',
-                                border: 'none',
-                                borderRadius: '5px'
-                            }}>
-                                {hour % 12 === 0 ? 12 : hour % 12}:{time.slice(-2)} {hour < 12 || hour === 24 ? 'AM' : 'PM'}
+                    </Field>
 
-                            </button>
-                        ))
-                    ))}
-                </div>
-                <button type="submit" style={{ 
-                    alignSelf: 'center', 
-                    padding: '10px 20px', 
-                    marginTop: '20px', 
-                    fontSize: '16px', 
-                    background: 'blue', 
-                    color: 'white', 
-                    border: 'none', borderRadius: '5px' }}>
-                    Submit Reservation
-                </button>
-            </form>
-        </div>
+                    <Field as="textarea" name="notes" placeholder="Additional notes" className="form-control" />
+                    <button type="submit" className="btn btn-primary">Submit Reservation</button>
+                </Form>
+            )}
+        </Formik>
     );
 };
 
