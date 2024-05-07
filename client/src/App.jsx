@@ -18,10 +18,13 @@ import { useState } from "react";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false); // State to store the login status
+  const [isAdmin, setIsAdmin] = useState(false); // State to store the admin status
 
   return (
     <>
-      <UserContext.Provider value={{ isLogin, setIsLogin }}>
+      <UserContext.Provider
+        value={{ isLogin, setIsLogin, isAdmin, setIsAdmin }}
+      >
         <div className="app">
           <NavBar />
           <Routes>

@@ -1,10 +1,14 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import "./RegistrationForm.css"; // Import the CSS file
+import UserContext from "../UserContext";
 
 const RegistrationForm = () => {
   const navigate = useNavigate(); // Initialize useNavigate
+  const { setIsLogin } = useContext(UserContext); // Use the UserContext to access the user's login status
+  const { setIsAdmin } = useContext(UserContext); // Use the UserContext to access the user's admin status
 
   const validationSchema = Yup.object().shape({
     first_name: Yup.string().required("First Name is required"),
@@ -35,32 +39,37 @@ const RegistrationForm = () => {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
+    const url = "api/signup";
 
-    const url = "api/users";
-
-    fetch(url,{
-      method: 'POST',
+    fetch(url, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(values)
+      body: JSON.stringify({
+        ...values,
+        isAdmin: values.isAdmin ? 1 : 0,
+      }),
     })
-    .then (res=>{
-      if(res.ok){
-        return res.json();
-      }
-      throw new Error('Network response was not ok')
-    })
-    .then(data=>{
-        console.log('Registration was successful', data);
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error("Network response was not ok");
+      })
+      .then((data) => {
+        console.log("Registration was successful", data);
         setSubmitting(false);
-        navigate('/');
-    })
-    .catch(error=> {
-        console.error('Registration failed:', error);
-    });
+        setIsLogin(true); // Set the login status to true
+        if (values.isAdmin) {
+          setIsAdmin(true); // Set the admin status to true
+        }
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Registration failed:", error);
+      });
   };
-
 
   return (
     <div className="registration-form-container">
