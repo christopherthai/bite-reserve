@@ -15,6 +15,7 @@ const LoginForm = () => {
   const [open, setOpen] = useState(false); // State to store the open status of the Snackbar
   const [errorMessage, setErrorMessage] = useState(""); // State to store the error message
   const { setIsLogin } = useContext(UserContext); // Use the UserContext to access the user's login status
+  const { setIsAdmin } = useContext(UserContext); // Use the UserContext to access the user's admin status
 
   // Function to handle the close event of the Snackbar
   const handleClose = (event, reason) => {
@@ -51,9 +52,12 @@ const LoginForm = () => {
         }
         return response.json(); // Return the response as JSON
       })
-      .then(() => {
+      .then((user_data) => {
         setSubmitting(false); // Set the submitting state to false
         setIsLogin(true); // Set the login status to true
+        if (user_data.IsAdmin === true) {
+          setIsAdmin(true); // Set the admin status to true
+        }
         navigate("/"); // Navigate to the home page
       })
       .catch((error) => {

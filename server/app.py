@@ -46,7 +46,11 @@ class Signup(Resource):
         password = request_json.get("password")
         phone = request_json.get("phone")
         email = request_json.get("email")
-        IsAdmin = request_json.get("IsAdmin")
+        IsAdmin_from_request = request_json.get("isAdmin")
+
+        IsAdmin = (
+            False if IsAdmin_from_request == 0 else True
+        )  # If IsAdmin is 0, then False, else True
 
         user = User(
             first_name=first_name,
@@ -825,7 +829,7 @@ class AllReservations(Resource):
 
     def get(self):
         reservations = Reservation.query.all()
-        reservations_list = [reservation.to_dict() for reservation in reservations]
+        reservations_list = [reservation.to_dict(rules=("-restaurant.reviews",)) for reservation in reservations]
 
         return make_response(reservations_list, 200)
 
