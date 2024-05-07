@@ -75,49 +75,89 @@ const ReservationForm = () => {
         >
             {({ setFieldValue, values }) => (
                 <Form>
-                    {restaurant && (
-                        <div>
-                            <img src={restaurant.image} alt={restaurant.name} className="restaurant-image" />
-                            <h2>{restaurant.name}</h2>
-                            <p>Category: {restaurant.category}</p>
-                            <p>Phone: {restaurant.phone}</p>
-                        </div>
-                    )}
-                    {user && (
-                        <div>
-                            <p>User ID: {user.id}</p>
-                        </div>
-                    )}
-
-                    <DatePicker
-                        selected={values.date}
-                        onChange={date => setFieldValue('date', date)}
-                        minDate={new Date()}
-                        maxDate={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
-                        showTimeSelect={false}
-                        className="form-control"
+                {restaurant && (
+                  <div>
+                    <img
+                      src={restaurant.image}
+                      alt={restaurant.name}
+                      className="restaurant-image"
+                      style={{ width: '100%', height: 'auto' }}
                     />
-
-                    <Field as="select" name="time" className="form-control" onChange={(e) => setFieldValue('time', e.target.value)}>
-                        {[10, 11, 12, 13, 14, 15, 16, 17, 18, 19].map(hour => (
-                            <optgroup key={hour} label={`${hour}:00`}>
-                                <option value={`${hour}:00`}>{`${hour}:00 ${hour < 12 ? 'AM' : 'PM'}`}</option>
-                                <option value={`${hour}:30`}>{`${hour}:30 ${hour < 12 ? 'AM' : 'PM'}`}</option>
-                            </optgroup>
-                        ))}
-                    </Field>
-
-                    <Field as="select" name="partySize" className="form-control" onChange={(e) => setFieldValue('partySize', e.target.value)}>
-                        {Array.from({ length: 12 }, (_, i) => (
-                            <option key={i} value={i + 1}>
-                                {i + 1}
-                            </option>
-                        ))}
-                    </Field>
-
-                    <Field as="textarea" name="notes" placeholder="Additional notes" className="form-control" />
-                    <button type="submit" className="btn btn-primary">Submit Reservation</button>
-                </Form>
+                    <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                      <h2 style={{ fontSize: '3rem', fontWeight: 'bold', marginBottom: '5px' }}>{restaurant.name}</h2>
+                      <p style={{ fontSize: '1.5rem', marginBottom: '2px' }}>Category: {restaurant.category}</p>
+                      <p style={{ fontSize: '1.5rem' }}>Phone: {restaurant.phone}</p>
+                    </div>
+                    <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                      <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px' }}>Please select your party size:</p>
+                      <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '5px' }}>
+                          {Array.from({ length: 20 }, (_, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              className={`btn btn-${values.partySize === i + 1 ? 'primary' : 'outline-primary'}`}
+                              style={{ fontSize: '1rem', padding: '5px' }}
+                              onClick={() => setFieldValue('partySize', i + 1)}
+                            >
+                              {i + 1}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                  <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px' }}>Please select your desired date and time:</p>
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <DatePicker
+                      selected={values.date}
+                      onChange={date => setFieldValue('date', date)}
+                      minDate={new Date()}
+                      maxDate={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
+                      showTimeSelect={false}
+                      inline
+                      calendarClassName="custom-calendar"
+                    />
+                    <div style={{ marginLeft: '10px' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '5px' }}>
+                        {[...Array(20)].map((_, index) => {
+                          const hour = 10 + Math.floor(index / 2);
+                          const minute = index % 2 === 0 ? '00' : '30';
+                          const time = `${hour}:${minute}`;
+                          return (
+                            <button
+                              key={time}
+                              type="button"
+                              className={`btn btn-${values.time === time ? 'primary' : 'outline-primary'}`}
+                              style={{ fontSize: '0.9rem', padding: '5px 10px' }}
+                              onClick={() => setFieldValue('time', time)}
+                            >
+                              {`${time} ${hour < 12 ? 'AM' : 'PM'}`}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px' }}>If you have any special requests, please write them below:</p>
+                  <Field
+                    as="textarea"
+                    name="notes"
+                    placeholder="Enter any special requests or notes"
+                    className="form-control"
+                    style={{ width: '50%' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                  <button type="submit" className="btn btn-primary">
+                    Submit Reservation
+                  </button>
+                </div>
+              </Form>
             )}
         </Formik>
     );
