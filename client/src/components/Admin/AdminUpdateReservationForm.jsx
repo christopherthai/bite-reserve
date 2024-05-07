@@ -17,12 +17,17 @@ import {
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import MuiAlert from "@mui/material/Alert";
+import { DatePicker } from "@mui/lab";
 
-// Convert Unix timestamp to Date time
-function convertUnixToDateTime(unixTimestamp) {
-  const date = new Date(unixTimestamp * 1000);
-  return date;
-}
+// Function to convert Unix timestamp to local datetime string
+const convertUnixToLocalDateTime = (unixTime) => {
+  return new Date(unixTime * 1000).toLocaleString();
+};
+
+// Function to convert local datetime string to Unix timestamp
+const convertLocalDateTimeToUnix = (localDateTime) => {
+  return Math.floor(new Date(localDateTime).getTime() / 1000);
+};
 
 // Alert component to display success message in snackbar after updating restaurant data
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -68,6 +73,9 @@ function AdminUpdateReservationForm({ reservation, onReservationChange }) {
     setOpenSnackbar(false);
   };
 
+  // convert Unix timestamp to local datetime string
+  const reservation_time_string = convertUnixToLocalDateTime(reservation_time);
+
   // form validation schema
   const validationSchema = Yup.object().shape({
     table_size: Yup.number().required("Required"),
@@ -107,7 +115,7 @@ function AdminUpdateReservationForm({ reservation, onReservationChange }) {
           <Formik
             initialValues={{
               id: id,
-              reservation_time: reservation_time,
+              reservation_time: reservation_time_string,
               table_size: table_size,
               status: status,
               notes: notes,
@@ -119,7 +127,12 @@ function AdminUpdateReservationForm({ reservation, onReservationChange }) {
                 headers: {
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify(values),
+                body: JSON.stringify({
+                  ...values,
+                  reservation_time: convertLocalDateTimeToUnix(
+                    values.reservation_time
+                  ),
+                }),
               })
                 .then((response) => response.json())
                 .then((reservation_data) => {
@@ -144,9 +157,6 @@ function AdminUpdateReservationForm({ reservation, onReservationChange }) {
                       type="text"
                       label="Reservation Time"
                       style={{ width: "100%" }}
-                      value={convertUnixToDateTime(
-                        reservation_time
-                      ).toLocaleString()}
                     />
                   </ListItem>
                   <ErrorMessage
