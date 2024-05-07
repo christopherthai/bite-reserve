@@ -825,7 +825,7 @@ class AllReservations(Resource):
 
     def get(self):
         reservations = Reservation.query.all()
-        reservations_list = [reservation.to_dict() for reservation in reservations]
+        reservations_list = [reservation.to_dict(rules=("-restaurant.reviews",)) for reservation in reservations]
 
         return make_response(reservations_list, 200)
 

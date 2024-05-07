@@ -110,13 +110,13 @@ const handlePageChange = (pageNumber) => {
         <TableHead>
           <TableRow>
             <TableCell>Reservation ID</TableCell>
-            <TableCell align="right">Time</TableCell>
-            <TableCell align="right">Table Size</TableCell>
-            <TableCell align="right">Status</TableCell>
-            <TableCell align="right">Notes</TableCell>
-            <TableCell align="right">User ID</TableCell>
-            <TableCell align="right">Restaurant ID</TableCell>
-            <TableCell align="right">Actions</TableCell>
+            <TableCell align="left">Restaurant Name</TableCell>
+            <TableCell align="left">Time</TableCell>
+            <TableCell align="left">Table Size</TableCell>
+            <TableCell align="left">Status</TableCell>
+            <TableCell align="left">Notes</TableCell>
+            <TableCell align="left">User Name</TableCell>
+            <TableCell align="left">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -124,13 +124,13 @@ const handlePageChange = (pageNumber) => {
             currentReservations.map((reservation) => (
               <TableRow key={reservation.id}>
                 <TableCell component="th" scope="row">{reservation.id}</TableCell>
-                <TableCell align="right">{reservation.reservation_time}</TableCell>
-                <TableCell align="right">{reservation.table_size}</TableCell>
-                <TableCell align="right">{reservation.status}</TableCell>
-                <TableCell align="right">{reservation.notes}</TableCell>
-                <TableCell align="right">{reservation.user_id}</TableCell>
-                <TableCell align="right">{reservation.restaurant_id}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left">{reservation.restaurant.name}</TableCell>
+                <TableCell align="left">{reservation.reservation_time}</TableCell>
+                <TableCell align="left">{reservation.table_size}</TableCell>
+                <TableCell align="left">{reservation.status}</TableCell>
+                <TableCell align="left">{reservation.notes}</TableCell>
+                <TableCell align="left">{reservation.user.first_name}</TableCell>
+                <TableCell align="left">
                   <Button
                     variant="contained"
                     color="primary"
