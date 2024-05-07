@@ -13,8 +13,8 @@ import ManageRestaurants from "./components/Admin/ManageRestaurants";
 import ManageReservations from "./components/Admin/ManageReservations";
 import NotFoundPage from "./pages/NotFoundPage";
 import UserContext from "./UserContext";
-import { useState } from "react";
 import ReviewsList from "./components/Reviews/ReviewsList";
+import { useState } from "react";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false); // State to store the login status
