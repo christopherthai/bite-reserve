@@ -73,6 +73,7 @@ function AdminUpdateReservationForm({ reservation, onReservationChange }) {
     setOpenSnackbar(false);
   };
 
+  // convert Unix timestamp to local datetime string
   const reservation_time_string = convertUnixToLocalDateTime(reservation_time);
 
   // form validation schema
