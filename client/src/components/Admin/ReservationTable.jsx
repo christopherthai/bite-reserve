@@ -99,10 +99,20 @@ function ReservationTable() {
       }}
     >
       <Grid item xs={12} sm={10}>
-        <Typography variant="h4" component="h2" gutterBottom>
-          <strong>Reservations List by Restaurants</strong>
-        </Typography>
-        <TableContainer component={Paper} style={{ maxWidth: "100%" }}>
+  <Typography
+    variant="h4"
+    component="h2"
+    gutterBottom
+    style={{
+      color: 'rgb(240, 236, 236)',
+      fontFamily: 'Boogaloo',
+      fontWeight: 'bold',
+      textShadow: '2px 4px 6px rgba(0, 0, 0, 2)' /* Adjusted alpha value */
+    }}
+  >
+    <strong>Reservations List by Restaurants</strong>
+    </Typography>
+        <TableContainer component={Paper} style={{ maxWidth: "100%", boxShadow: '0 4px 8px rgba(0, 0, 0, 2)' }}>
           <Table sx={{ minWidth: 800 }} aria-label="simple table">
             <TableHead>
               <TableRow>

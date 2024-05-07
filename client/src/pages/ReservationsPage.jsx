@@ -13,8 +13,10 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import LoginForm from "../components/LoginForm";
+import UpdateReservationForm from "../components/Reservations/UpdateReservation";
 
 const itemsPerPage = 10;
+
 
 const ReservationsTable = () => {
   const [reservations, setReservations] = useState([]);
@@ -22,6 +24,8 @@ const ReservationsTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [user, setUser] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+
 
   useEffect(() => {
     // 사용자 세션 확인
@@ -71,12 +75,24 @@ const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  const handleEdit = (reservationId) => {
-    // Edit button
-    console.log(`Editing reservation ${reservationId}`);
+  // Handle update reservation data from AdminUpdateReservationForm component and update the state
+const handleUpdateReservation = (reservation) => {
+    const updatedRestaurants = restaurants.map((restaurant) => {
+      return {
+        ...restaurant,
+        reservations: restaurant.reservations.map((r) =>
+          r.id === reservation.id ? reservation : r
+        ),
+      };
+    });
+    setRestaurants(updatedRestaurants);
   };
+
+
+
+
   //Cancels user reservation and updates the db
-  const handleCancel = (id) => {
+const handleCancel = (id) => {
       fetch(`/api/reservation/${id}`, {
         method: "DELETE",
       })
@@ -105,39 +121,36 @@ const handlePageChange = (pageNumber) => {
   
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} style = {{ boxShadow: '0 4px 8px rgba(0, 0, 0, 2)'}}>
       <Table sx={{ minWidth: 650 }} aria-label="reservation table">
         <TableHead>
-          <TableRow>
-            <TableCell>Reservation ID</TableCell>
-            <TableCell align="left">Restaurant Name</TableCell>
-            <TableCell align="left">Time</TableCell>
-            <TableCell align="left">Table Size</TableCell>
-            <TableCell align="left">Status</TableCell>
-            <TableCell align="left">Notes</TableCell>
-            <TableCell align="left">User Name</TableCell>
-            <TableCell align="left">Actions</TableCell>
+          <TableRow >
+            <TableCell align="right">Time</TableCell>
+            <TableCell align="right">Table Size</TableCell>
+            <TableCell align="right">Status</TableCell>
+            <TableCell align="right">Notes</TableCell>
+            
+            <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody> 
           {currentReservations.length > 0 ? (
-            currentReservations.map((reservation) => (
-              <TableRow key={reservation.id}>
-                <TableCell component="th" scope="row">{reservation.id}</TableCell>
-                <TableCell align="left">{reservation.restaurant.name}</TableCell>
-                <TableCell align="left">{reservation.reservation_time}</TableCell>
-                <TableCell align="left">{reservation.table_size}</TableCell>
-                <TableCell align="left">{reservation.status}</TableCell>
-                <TableCell align="left">{reservation.notes}</TableCell>
-                <TableCell align="left">{reservation.user.first_name}</TableCell>
-                <TableCell align="left">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleEdit(reservation.id)}
-                  >
-                    Edit
-                  </Button>
+            currentReservations.map((reservation, index) => (
+              <TableRow key={reservation.id} style={{ backgroundColor: index % 2 === 0 ? '#f0f0f0' : 'white' }}>
+                <TableCell align="right">{reservation.reservation_time}</TableCell>
+                <TableCell align="right">{reservation.table_size}</TableCell>
+                <TableCell align="right">{reservation.status}</TableCell>
+                <TableCell align="right">{reservation.notes}</TableCell>
+                
+                <TableCell align="right" style={{ width: "100px" }}>
+                      <UpdateReservationForm
+                        reservation={reservation}
+                        onReservationChange={
+                          handleUpdateReservation
+                        }
+                      />
+                  </TableCell>
+                  <TableCell style={{ width: "100px" }}>
                   <Button
                     variant="contained"
                     color="secondary"
