@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,6 +11,8 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
+import LoginForm from "../components/LoginForm";
 
 const itemsPerPage = 10;
 
@@ -38,6 +41,10 @@ const ReservationsTable = () => {
 
     // 의존성 배열을 빈 배열로 설정하여 이 효과가 한 번만 실행되도록 함
 }, []);
+
+if (!user) {
+  return <LoginForm />;
+}
     
     // 예약 목록을 가져오는 함수 정의
     function fetchReservations(userId) {
@@ -65,7 +72,7 @@ const handlePageChange = (pageNumber) => {
   };
 
   const handleEdit = (reservationId) => {
-    // 수정 버튼 클릭 시 실행될 코드
+    // Edit button
     console.log(`Editing reservation ${reservationId}`);
   };
   //Cancels user reservation and updates the db
@@ -106,7 +113,7 @@ const handlePageChange = (pageNumber) => {
             <TableCell align="right">Time</TableCell>
             <TableCell align="right">Table Size</TableCell>
             <TableCell align="right">Status</TableCell>
-            <TableCell align="right">Note</TableCell>
+            <TableCell align="right">Notes</TableCell>
             <TableCell align="right">User ID</TableCell>
             <TableCell align="right">Restaurant ID</TableCell>
             <TableCell align="right">Actions</TableCell>
@@ -120,7 +127,7 @@ const handlePageChange = (pageNumber) => {
                 <TableCell align="right">{reservation.reservation_time}</TableCell>
                 <TableCell align="right">{reservation.table_size}</TableCell>
                 <TableCell align="right">{reservation.status}</TableCell>
-                <TableCell align="right">{reservation.note}</TableCell>
+                <TableCell align="right">{reservation.notes}</TableCell>
                 <TableCell align="right">{reservation.user_id}</TableCell>
                 <TableCell align="right">{reservation.restaurant_id}</TableCell>
                 <TableCell align="right">

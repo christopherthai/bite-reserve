@@ -17,6 +17,7 @@ import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import React from "react";
+import AdminUpdateReservationForm from "./AdminUpdateReservationForm";
 
 // Convert Unix timestamp to Date time
 function convertUnixToDateTime(unixTimestamp) {
@@ -69,10 +70,16 @@ function ReservationTable() {
       .catch((error) => console.error("Error:", error));
   };
 
-  const handleUpdateRestaurant = (restaurant) => {
-    const updatedRestaurants = restaurants.map((r) =>
-      r.id === restaurant.id ? restaurant : r
-    );
+  // Handle update reservation data from AdminUpdateReservationForm component and update the state
+  const handleUpdateReservation = (reservation) => {
+    const updatedRestaurants = restaurants.map((restaurant) => {
+      return {
+        ...restaurant,
+        reservations: restaurant.reservations.map((r) =>
+          r.id === reservation.id ? reservation : r
+        ),
+      };
+    });
     setRestaurants(updatedRestaurants);
   };
 
@@ -100,7 +107,7 @@ function ReservationTable() {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <strong>Drop Down</strong>
+                  <strong>Drop Down to View Reservations</strong>
                 </TableCell>
                 <TableCell align="right" style={{ width: "700px" }}>
                   <strong>Restaurants</strong>
@@ -157,7 +164,7 @@ function ReservationTable() {
                                 <TableCell>Status</TableCell>
                                 <TableCell>Notes</TableCell>
                                 <TableCell>View</TableCell>
-                                <TableCell>Delete</TableCell>
+                                <TableCell>Cancel</TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -175,15 +182,12 @@ function ReservationTable() {
                                     <TableCell>{reservation.status}</TableCell>
                                     <TableCell>{reservation.notes}</TableCell>
                                     <TableCell style={{ width: "100px" }}>
-                                      <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() =>
-                                          handleDeleteRestaurant(restaurant.id)
+                                      <AdminUpdateReservationForm
+                                        reservation={reservation}
+                                        onReservationChange={
+                                          handleUpdateReservation
                                         }
-                                      >
-                                        View
-                                      </Button>
+                                      />
                                     </TableCell>
                                     <TableCell style={{ width: "100px" }}>
                                       <Button
@@ -195,7 +199,7 @@ function ReservationTable() {
                                           )
                                         }
                                       >
-                                        Delete
+                                        Cancel
                                       </Button>
                                     </TableCell>
                                   </TableRow>

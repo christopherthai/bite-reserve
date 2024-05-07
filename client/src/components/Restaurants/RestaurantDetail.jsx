@@ -43,12 +43,20 @@ const RestaurantDetail = () => {
         // Check user login status
         if (!user) {
             if (window.confirm("You are not logged in. Would you like to go to the login page?")) {
-                navigate("/login");
+              navigate("/login");
+            } else {
+              navigate("/");
             }
-        } else {
-            navigate(`/reservationsform/${restaurant.id}`);
+          } else {
+            if (user.IsAdmin) {
+              if (window.confirm("Admin users cannot make a reservation.")) {
+                navigate("/");
+              }
+            } else {
+              navigate(`/reservationsform/${restaurant.id}`);
+            }
+          }
         }
-    };
 
   if (!restaurant) return <div>Loading...</div>;
 

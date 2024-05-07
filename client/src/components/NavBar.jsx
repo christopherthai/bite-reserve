@@ -31,7 +31,7 @@ function NavBar() {
     // auto-login
     fetch("/api/check_session").then((r) => {
       if (r.ok) {
-        r.json().then(() => setIsLogin(true)); // Update the user's login status
+        r.json().then(() => setIsLogin(true)); // Update the user's login status if the user is logged in
       }
     });
   }, [setIsLogin]);
@@ -61,31 +61,32 @@ function NavBar() {
     <ThemeProvider theme={theme}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" 
+            sx={{ flexGrow: 1, fontSize: '40px', fontFamily: 'Boogaloo', fontWeight: 'bold', letterSpacing: '2px', textShadow: '2px 4px 6px rgba(0, 0, 0, 2)'}}>
             BiteReserve
           </Typography>
           {isMobile ? (
             <Button color="inherit">Menu</Button>
           ) : (
             <>
-              <Button color="inherit" component={NavLink} to="/" exact>
+              <Button color="inherit" sx={{ fontSize: '20px', fontFamily: 'Boogaloo', fontWeight: 'bold', letterSpacing: '2px', textShadow: '2px 4px 6px rgba(0, 0, 0, 2)'}} component={NavLink} to="/" exact>
                 Home
               </Button>
-              <Button color="inherit" component={NavLink} to="/about">
+              <Button color="inherit" sx={{ fontSize: '20px', fontFamily: 'Boogaloo', fontWeight: 'bold', letterSpacing: '2px', textShadow: '2px 4px 6px rgba(0, 0, 0, 2)'}} component={NavLink} to="/about">
                 About
               </Button>
-              <Button color="inherit" component={NavLink} to="/reservations">
+              <Button color="inherit" sx={{ fontSize: '20px', fontFamily: 'Boogaloo', fontWeight: 'bold', letterSpacing: '2px', textShadow: '2px 4px 6px rgba(0, 0, 0, 2)'}} component={NavLink} to="/reservations">
                 Reservations
               </Button>
-              <Button color="inherit" component={NavLink} to="/admindashboard/">
+              <Button color="inherit" sx={{ fontSize: '20px', fontFamily: 'Boogaloo', fontWeight: 'bold', letterSpacing: '2px', textShadow: '2px 4px 6px rgba(0, 0, 0, 2)'}} component={NavLink} to="/admindashboard/">
                 Admin
               </Button>
               {isLogin ? (
-                <Button color="inherit" onClick={handleLogout}>
+                <Button color="inherit" sx={{ fontSize: '20px', fontFamily: 'Boogaloo', fontWeight: 'bold', letterSpacing: '2px', textShadow: '2px 4px 6px rgba(0, 0, 0, 2)'}} onClick={handleLogout}>
                   Logout
                 </Button>
               ) : (
-                <Button color="inherit" component={NavLink} to="/login">
+                <Button color="inherit" sx={{ fontSize: '20px', fontFamily: 'Boogaloo', fontWeight: 'bold', letterSpacing: '2px', textShadow: '2px 4px 6px rgba(0, 0, 0, 2)'}} component={NavLink} to="/login">
                   Login
                 </Button>
               )}
