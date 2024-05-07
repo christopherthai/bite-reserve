@@ -123,7 +123,7 @@ function NavBar() {
                 component={NavLink}
                 to="/reservations"
               >
-                Reservations
+                My Reservations
               </Button>
               {isLogin && isAdmin && (
                 <Button
