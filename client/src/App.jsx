@@ -11,6 +11,7 @@ import ReservationForm from "./components/Reservations/ReservationForm";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import ManageRestaurants from "./components/Admin/ManageRestaurants";
 import ManageReservations from "./components/Admin/ManageReservations";
+import SetAdmin from "./components/Admin/SetAdmin";
 import NotFoundPage from "./pages/NotFoundPage";
 import UserContext from "./UserContext";
 import ReviewsList from "./components/Reviews/ReviewsList";
@@ -38,10 +39,8 @@ function App() {
             <Route path="/reservationsform/:id" element={<ReservationForm />} />
             <Route path="/admindashboard" element={<AdminDashboardPage />} />
             <Route path="/manage-restaurants" element={<ManageRestaurants />} />
-            <Route
-              path="/manage-reservations"
-              element={<ManageReservations />}
-            />
+            <Route path="/manage-administrators" element={<SetAdmin />} />
+            <Route path="/manage-reservations" element={<ManageReservations />} />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="/restaurants/:id/reviews" element={<ReviewsList />} />
           </Routes>

@@ -43,10 +43,8 @@ function AdminDashboardPage() {
   const classes = useStyles();
   const drawerItems = [
     { name: "Manage Restaurants", path: "/admindashboard" },
-    {
-      name: "Manage Reservations",
-      path: "/manage-reservations",
-    },
+    { name: "Manage Reservations", path: "/manage-reservations" },
+    { name: "Manage Administrators", path: "/manage-administrators" },
   ];
 
   // user state to store the logged in user
