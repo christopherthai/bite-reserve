@@ -87,10 +87,10 @@ function SetAdmin() {
       <Grid container direction="column">
         <Grid item>
           {/* <AppBar position="static" className={classes.appBar}>
-                    <Toolbar>
-                        <Typography variant="h6">Admin Dashboard</Typography>
-                    </Toolbar>
-                </AppBar> */}
+            <Toolbar>
+              <Typography variant="h6">Admin Dashboard</Typography>
+            </Toolbar>
+          </AppBar> */}
         </Grid>
         <Grid item>
           <Drawer
@@ -139,7 +139,6 @@ function SetAdmin() {
             onChange={handleChange}
           />
           <Button
-            size="small"
             type="submit"
             color="primary"
             variant="contained"
@@ -154,7 +153,6 @@ function SetAdmin() {
               {user.username} ({user.first_name} {user.last_name}) -{" "}
               {user.IsAdmin ? "Admin" : "User"}
               <Button
-                size="small"
                 onClick={() => toggleAdminStatus(user)}
                 color="primary"
                 variant="contained"
