@@ -102,7 +102,7 @@ const ReservationForm = () => {
             }}
         >
             {({ setFieldValue, values }) => (
-                <div style={{ backgroundColor: 'white' }}>
+                <div style={{ backgroundColor: 'white', padding: '50px 0' }}>
                     <Form>
                         {restaurant && (
                             <div>
@@ -110,15 +110,15 @@ const ReservationForm = () => {
                                     src={restaurant.image}
                                     alt={restaurant.name}
                                     className="restaurant-image"
-                                    style={{ width: '1000px', height: 'auto' }}
+                                    style={{ width: '100%', height: '300px', objectFit: 'cover', boxShadow: '0 4px 8px rgba(0, 0, 1, 1.4)' }}
                                 />
                                 <div style={{ marginTop: '20px', textAlign: 'center' }}>
                                     <h2 style={{ fontSize: '3rem', fontWeight: 'bold', marginBottom: '5px' }}>{restaurant.name}</h2>
                                     
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 180px' }}>
-                                        <p style={{ fontSize: '1.5rem', margin: 0 }}>Phone: {restaurant.phone}</p>
-                                        <p style={{ fontSize: '1.5rem', margin: 0 }}>
-                                            Open: {formatTime(restaurant.open_time)} ~ Close: {formatTime(restaurant.close_time)}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 100px' }}>
+                                        <p style={{ fontSize: '1.5rem', margin: 0, }}><strong>Phone</strong>: {restaurant.phone}</p>
+                                        <p style={{ fontSize: '1.5rem', margin: 0, }}>
+                                            <strong>Open</strong>: {formatTime(restaurant.open_time)} ~ <strong>Close</strong>: {formatTime(restaurant.close_time)}
                                         </p>
                                     </div>                   
                                 </div>
@@ -127,12 +127,12 @@ const ReservationForm = () => {
                         
                         <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
                             <div style={{ textAlign: 'left' }}>
-                                <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px' , marginLeft: '100px'}}>Please select your party size:</p>
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '80px' }}>
-                                    {Array.from({ length: Math.ceil(20 / 4) }, (_, rowIndex) => (
-                                        <Stack key={rowIndex} direction="row" spacing={2} style={{ marginBottom: '10px' }}>
-                                            {Array.from({ length: 4 }, (_, colIndex) => {
-                                                const index = rowIndex * 4 + colIndex;
+                                <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px' , marginLeft: '80px'}}>Please select your party size:</p>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '100px' }}>
+                                    {Array.from({ length: Math.ceil(20 / 3) }, (_, rowIndex) => (
+                                        <Stack key={rowIndex} direction="row" spacing={1} style={{ marginBottom: '10px' }}>
+                                            {Array.from({ length: 3 }, (_, colIndex) => {
+                                                const index = rowIndex * 3 + colIndex;
                                                 return index < 20 ? (
                                                     <Button
                                                         key={index}
@@ -148,7 +148,7 @@ const ReservationForm = () => {
                                 </div>
                             </div>
                             <div style={{ textAlign: 'right' }}>
-                                <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px', marginRight: '130px' }}>Please select your desired date and time:</p>
+                                <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px', marginRight: '100px' }}>Please select your desired date and time:</p>
                                 <div style={{ display: 'flex', justifyContent: 'right', alignItems: 'center' }}>
                                     <DatePicker
                                         selected={values.date}
@@ -160,7 +160,7 @@ const ReservationForm = () => {
                                         calendarClassName="custom-calendar"
                                     />
                                     <div style={{ marginLeft: '20px' }}>
-                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginBottom: '30px', marginRight: '80px' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginBottom: '30px', marginRight: '50px' }}>
                                             {Array.from({ length: Math.ceil(calculateTimeRange(restaurant.open_time, restaurant.close_time).length / 4) }, (_, rowIndex) => (
                                                 <Stack key={rowIndex} direction="row" spacing={2} style={{ marginBottom: '10px' }}>
                                                     {calculateTimeRange(restaurant.open_time, restaurant.close_time).slice(rowIndex * 3, rowIndex * 3 + 3).map(time => (
