@@ -1,15 +1,18 @@
 .review-card {
     width: 90%; /* Set the width to 100% */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
     padding: 20px;
     margin-bottom: 20px;
+    background-color: rgb(236, 229, 229);
   }
   
   .review-form-card {
-    width: 90%; /* Set the width to 100% */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%; /* Set the width to 90% */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
     padding: 20px;
     margin-bottom: 20px;
+    background-color: #c2ceed; /* Light blue color */
+    border-radius: 10px; /* Round the corners */
   }
 
   .centered-heading {

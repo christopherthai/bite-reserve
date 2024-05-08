@@ -85,7 +85,7 @@ const RestaurantDetail = () => {
                     <h3>{restaurant.category} Style Restaurant</h3>
                     <h3>
                         <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(restaurant.address)}`}
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${restaurant.address}, ${restaurant.city}, ${restaurant.zip}`)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                         >

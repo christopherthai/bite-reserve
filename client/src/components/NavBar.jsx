@@ -73,7 +73,7 @@ function NavBar() {
               fontFamily: "Boogaloo",
               fontWeight: "bold",
               letterSpacing: "2px",
-              textShadow: "2px 4px 6px rgba(0, 0, 0, 2)",
+              textShadow: "2px 4px 6px rgba(0, 0, 0, .75)",
             }}
           >
             BiteReserve
@@ -89,7 +89,9 @@ function NavBar() {
                   fontFamily: "Boogaloo",
                   fontWeight: "bold",
                   letterSpacing: "2px",
-                  textShadow: "2px 4px 6px rgba(0, 0, 0, 2)",
+                  textShadow: "2px 4px 6px rgba(0, 0, 0, .75)",
+                  marginRight: "15px",
+
                 }}
                 component={NavLink}
                 to="/"
@@ -104,7 +106,9 @@ function NavBar() {
                   fontFamily: "Boogaloo",
                   fontWeight: "bold",
                   letterSpacing: "2px",
-                  textShadow: "2px 4px 6px rgba(0, 0, 0, 2)",
+                  textShadow: "2px 4px 6px rgba(0, 0, 0, .75)",
+                  marginRight: "15px",
+
                 }}
                 component={NavLink}
                 to="/about"
@@ -118,12 +122,14 @@ function NavBar() {
                   fontFamily: "Boogaloo",
                   fontWeight: "bold",
                   letterSpacing: "2px",
-                  textShadow: "2px 4px 6px rgba(0, 0, 0, 2)",
+                  textShadow: "2px 4px 6px rgba(0, 0, 0, .75)",
+                  marginRight: "15px",
+
                 }}
                 component={NavLink}
                 to="/reservations"
               >
-                Reservations
+                My Reservations
               </Button>
               {isLogin && isAdmin && (
                 <Button
@@ -133,7 +139,8 @@ function NavBar() {
                     fontFamily: "Boogaloo",
                     fontWeight: "bold",
                     letterSpacing: "2px",
-                    textShadow: "2px 4px 6px rgba(0, 0, 0, 2)",
+                    textShadow: "2px 4px 6px rgba(0, 0, 0, .75)",
+                    marginRight: "15px",
                   }}
                   component={NavLink}
                   to="/admindashboard/"
@@ -149,7 +156,7 @@ function NavBar() {
                     fontFamily: "Boogaloo",
                     fontWeight: "bold",
                     letterSpacing: "2px",
-                    textShadow: "2px 4px 6px rgba(0, 0, 0, 2)",
+                    textShadow: "2px 4px 6px rgba(0, 0, 0, .75)",
                   }}
                   onClick={handleLogout}
                 >
@@ -163,7 +170,7 @@ function NavBar() {
                     fontFamily: "Boogaloo",
                     fontWeight: "bold",
                     letterSpacing: "2px",
-                    textShadow: "2px 4px 6px rgba(0, 0, 0, 2)",
+                    textShadow: "2px 4px 6px rgba(0, 0, 0, .75)",
                   }}
                   component={NavLink}
                   to="/login"

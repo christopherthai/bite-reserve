@@ -1,5 +1,5 @@
 .restaurant-page-container {
-  background-color: white;
+  background-color: rgb(237, 237, 244);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 2);
   margin: 20px; /* Adjust margin as needed */
   padding: 20px; /* Adjust padding as needed */
@@ -8,7 +8,7 @@
 }
 
 .reviews-list-container {
-  background-color: white;
+  background-color: rgb(237, 237, 244);
   margin: 20px; /* Adjust margin as needed */
   padding: 20px; /* Adjust padding as needed */
   border-radius: 8px; /* Add border radius for rounded corners */
