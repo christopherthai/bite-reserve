@@ -58,13 +58,15 @@ function SetAdmin() {
     };
 
     const toggleAdminStatus = async (user) => {
+        console.log(user.IsAdmin)
         const updatedStatus = !user.IsAdmin;
+        console.log(updatedStatus)
         const response = await fetch(`/api/users/${user.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ...user, IsAdmin: updatedStatus })
+            body: JSON.stringify({ "IsAdmin": updatedStatus })
         });
         if (response.ok) {
             setUsers(users.map(u => u.id === user.id ? { ...u, IsAdmin: updatedStatus } : u));
@@ -105,13 +107,13 @@ function SetAdmin() {
                     <TextField name="username" label="Username" value={searchParams.username} onChange={handleChange} />
                     <TextField name="first_name" label="First Name" value={searchParams.first_name} onChange={handleChange} />
                     <TextField name="last_name" label="Last Name" value={searchParams.last_name} onChange={handleChange} />
-                    <Button type="submit" color="primary" variant="contained" style={{ marginTop: '10px' }}>Search</Button>
+                    <Button size="small" type="submit" color="primary" variant="contained" style={{ marginTop: '10px' }}>Search</Button>
                 </form>
                 <div style={{ marginTop: '20px' }}>
                     {users.map(user => (
                         <div key={user.id} style={{ marginTop: '10px' }}>
                             {user.username} ({user.first_name} {user.last_name}) - {user.IsAdmin ? 'Admin' : 'User'}
-                            <Button onClick={() => toggleAdminStatus(user)} color="primary" variant="contained" style={{ marginLeft: '10px' }}>
+                            <Button size="small" onClick={() => toggleAdminStatus(user)} color="primary" variant="contained" style={{ marginLeft: '10px' }}>
                                 {user.IsAdmin ? 'Revoke Admin' : 'Make Admin'}
                             </Button>
                         </div>
