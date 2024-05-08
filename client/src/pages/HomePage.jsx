@@ -58,7 +58,7 @@ function HomePage() {
                 <div className="card-content">
                   <h3 className="restaurant-name">{restaurant.name}</h3>
                   <div className="category-container">
-                    <span className="category">{restaurant.category}</span>
+                    <span className="category">{restaurant.category.split(' ')[0]}</span>
                     {renderStarRating(restaurant.averageRating)}
                   </div>
                 </div>
