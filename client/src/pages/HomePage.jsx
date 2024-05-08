@@ -3,7 +3,8 @@ import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import './HomePage.css'; // Import the CSS file
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 
 
 
@@ -36,9 +37,9 @@ function HomePage() {
     const stars = [];
     for (let i = 0; i < 5; i++) {
       if (i < averageRating) {
-        stars.push(<FontAwesomeIcon key={i} icon={faStar} color="orange" />);
+        stars.push(<FontAwesomeIcon key={i} icon={solidStar} color="blue" />);
       } else {
-        stars.push(<FontAwesomeIcon key={i} icon={faStar} color="gray" />);
+        stars.push(<FontAwesomeIcon key={i} icon={regularStar} color="blue" />);
       }
     }
     return stars;
@@ -56,19 +57,21 @@ function HomePage() {
               <div className="card">
                 <img src={restaurant.image} alt={restaurant.name} />
                 <div className="card-content">
+                <div>
                   <h3 className="restaurant-name">{restaurant.name}</h3>
-                  <div className="category-container">
-                    <span className="category">{restaurant.category.split(' ')[0]}</span>
-                    {renderStarRating(restaurant.averageRating)}
-                  </div>
+                  <span className="category">{restaurant.category.split(' ')[0]}</span>
+                </div>
+                <div className="star-rating-container">
+                  {renderStarRating(restaurant.averageRating)}
                 </div>
               </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-    </div>
-  );
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  </div>
+);
 }
      
     export default HomePage;

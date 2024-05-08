@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import ReviewsList from '../Reviews/ReviewsList';
 import "./RestaurantDetail.css";
 
@@ -65,9 +66,9 @@ const RestaurantDetail = () => {
         const stars = [];
         for (let i = 0; i < 5; i++) {
             if (i < averageRating) {
-                stars.push(<FontAwesomeIcon key={i} icon={faStar} color="orange" />);
+                stars.push(<FontAwesomeIcon key={i} icon={solidStar} color="blue" />);
             } else {
-                stars.push(<FontAwesomeIcon key={i} icon={faStar} color="gray" />);
+                stars.push(<FontAwesomeIcon key={i} icon={regularStar} color="blue" />);
             }
         }
         return stars;
@@ -75,14 +76,14 @@ const RestaurantDetail = () => {
 
     return (
         <div className="restaurant-detail-container">
-            <div className="restaurant-page-container" style={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }}>
+            <div className="restaurant-page-container" style={{ height: 'calc(100vh - 100px)', overflowY: 'auto', position: 'center'}}>
                 <div style={{ padding: '20px', textAlign: 'center' }}>
                     <img src={restaurant.image} alt={restaurant.name} style={{ width: '100%', height: '300px', objectFit: 'cover', boxShadow: '0 4px 8px rgba(0, 0, 1, 1.4)' }} />
                     <h1 style={{ marginBottom: '10px' }}>{restaurant.name}</h1>
                     <div>
                         {renderStarRating()} {/* Render dynamic star rating */}
                     </div>
-                    <h3>{restaurant.category} Style Restaurant</h3>
+                    <h3>{restaurant.category}</h3>
                     <h3>
                         <a
                             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${restaurant.address}, ${restaurant.city}, ${restaurant.zip}`)}`}

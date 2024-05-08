@@ -60,11 +60,13 @@
 
 }
 
-category-container {
+.category-container {
   position: absolute;
   top: 10px; /* Adjust the distance from the top */
   right: 10px; /* Adjust the distance from the right */
   text-align: center;
+  
+
 }
 
 
@@ -76,4 +78,6 @@ category-container {
   margin-right: 15px;
 }
 
-
+.star-rating-container {
+  margin-left: auto; /* Push the star rating to the right */
+}

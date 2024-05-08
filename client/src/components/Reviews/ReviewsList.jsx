@@ -31,13 +31,13 @@ function ReviewsList() {
     });
   }, []);
 
+  // State to manage selected rating
+  const [selectedRating, setSelectedRating] = useState(0);
+
   const validationSchema = Yup.object().shape({
-    rating: Yup.number()
-      .required("Rating is required")
-      .min(1, "Rating must be at least 1")
-      .max(5, "Rating cannot exceed 5"),
     comment: Yup.string().required("Comment is required"),
   });
+
 
   const handleSubmit = async (values, { resetForm }) => {
     // Get current timestamp
@@ -45,13 +45,12 @@ function ReviewsList() {
 
     // Assuming you have the user ID from the session
     const userId = user.id;
-    const ratingInteger = parseInt(values.rating, 10);
     const restaurantIdInteger = parseInt(id, 10);
 
     // Create review object
     const newReview = {
       timestamp,
-      rating: ratingInteger,
+      rating: selectedRating,
       comment: values.comment,
       user_id: userId,
       restaurant_id: restaurantIdInteger,
@@ -69,6 +68,8 @@ function ReviewsList() {
     if (response.ok) {
       // Clear form fields after successful submission
       resetForm();
+      setSelectedRating(0); // Reset selectedRating to 0
+
 
       await fetchReviews();
       // Update reviews after adding new review
@@ -112,6 +113,10 @@ function ReviewsList() {
     return stars;
   };
 
+  const handleStarClick = (rating) => {
+    setSelectedRating(rating);
+  };
+
   return (
     <div className="reviewslist-container">
       <div className="centered-heading">
@@ -119,36 +124,42 @@ function ReviewsList() {
       </div>
       <div className="review-form-card">
         <Formik
-          initialValues={{ rating: 0, comment: "" }}
+          initialValues={{ rating: "", comment: "" }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          <Form>
-            <div>
-              <label>
-                Rating:
-                <Field type="number" name="rating" min="1" max="5" />
-                <ErrorMessage
-                  name="rating"
-                  component="div"
-                  className="error-message"
+          {({ values, handleChange, handleSubmit }) => (
+          <Form onSubmit={handleSubmit} className="review-form">
+          <div className="star-rating">
+            {[...Array(5)].map((_, index) => {
+              const ratingValue = index + 1;
+              return (
+                <FontAwesomeIcon
+                  key={index}
+                  icon={ratingValue <= selectedRating ? solidStar : regularStar}
+                  onClick={() => handleStarClick(ratingValue)}
+                  size="lg" // Increase the size of the stars
+                  className="star-icon"
                 />
-              </label>
-            </div>
-            <div>
-              <label>
-                Comment:
-                <Field as="textarea" name="comment" />
-                <ErrorMessage
-                  name="comment"
-                  component="div"
-                  className="error-message"
-                />
-              </label>
-            </div>
-            <button type="submit">Submit Review</button>
-          </Form>
-        </Formik>
+              );
+            })}
+            <span className="select-rating">(Select Rating)</span>
+          </div>
+          <div className="comment-box">
+            <ErrorMessage name="comment" component="div" className="error-message" />
+            <Field
+              as="textarea"
+              name="comment"
+              placeholder="Write your review here..."
+              value={values.comment}
+              onChange={handleChange}
+              className="comment-input"
+            />
+          </div>
+          <button type="submit">Submit Review</button>
+        </Form>
+        )}
+      </Formik>
       </div>
       <div className="centered-heading">
         <h2>Guest Reviews</h2>
