@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Formik, Form, Field } from 'formik';
-
-
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 
 const convertToUnixTimestamp = (date, time) => {
     const [hours, minutes] = time.split(':').map(Number);
@@ -51,7 +51,7 @@ const ReservationForm = () => {
 
         for (let hour = startHour; hour <= endHour; hour++) {
             times.push(`${hour.toString().padStart(2, '0')}:00`);
-            if (hour !== endHour) { // 종료 시간 바로 전 시간까지 ':30' 추가
+            if (hour !== endHour) {
                 times.push(`${hour.toString().padStart(2, '0')}:30`);
             }
         }
@@ -127,25 +127,28 @@ const ReservationForm = () => {
                         
                         <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
                             <div style={{ textAlign: 'left' }}>
-                                <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px' , marginLeft: '90px'}}>Please select your party size:</p>
-                                <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '120px'}}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '3px' }}>
-                                        {Array.from({ length: 20 }, (_, i) => (
-                                            <button
-                                                key={i}
-                                                type="button"
-                                                className={`btn btn-${values.partySize === i + 1 ? 'primary' : 'outline-primary'}`}
-                                                style={{ fontSize: '1rem', padding: '8px' }}
-                                                onClick={() => setFieldValue('partySize', i + 1)}
-                                            >
-                                                {i + 1}
-                                            </button>
-                                        ))}
-                                    </div>
+                                <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px' , marginLeft: '100px'}}>Please select your party size:</p>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '80px' }}>
+                                    {Array.from({ length: Math.ceil(20 / 4) }, (_, rowIndex) => (
+                                        <Stack key={rowIndex} direction="row" spacing={2} style={{ marginBottom: '10px' }}>
+                                            {Array.from({ length: 4 }, (_, colIndex) => {
+                                                const index = rowIndex * 4 + colIndex;
+                                                return index < 20 ? (
+                                                    <Button
+                                                        key={index}
+                                                        onClick={() => setFieldValue('partySize', index + 1)}
+                                                        variant={values.partySize === index + 1 ? 'contained' : 'outlined'}
+                                                    >
+                                                        {index + 1}
+                                                    </Button>
+                                                ) : null;
+                                            })}
+                                        </Stack>
+                                    ))}
                                 </div>
                             </div>
                             <div style={{ textAlign: 'right' }}>
-                                <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px', marginRight: '150px' }}>Please select your desired date and time:</p>
+                                <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px', marginRight: '130px' }}>Please select your desired date and time:</p>
                                 <div style={{ display: 'flex', justifyContent: 'right', alignItems: 'center' }}>
                                     <DatePicker
                                         selected={values.date}
@@ -157,17 +160,19 @@ const ReservationForm = () => {
                                         calendarClassName="custom-calendar"
                                     />
                                     <div style={{ marginLeft: '20px' }}>
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', marginBottom: '30px', marginRight: '80px' }}>
-                                            {calculateTimeRange(restaurant.open_time, restaurant.close_time).map(time => (
-                                                <button
-                                                    key={time}
-                                                    type="button"
-                                                    className={`btn btn-${values.time === time ? 'primary' : 'outline-primary'}`}
-                                                    style={{ fontSize: '0.9rem', padding: '5px 10px'}}
-                                                    onClick={() => setFieldValue('time', time)}
-                                                >
-                                                    {time}
-                                                </button>
+                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginBottom: '30px', marginRight: '80px' }}>
+                                            {Array.from({ length: Math.ceil(calculateTimeRange(restaurant.open_time, restaurant.close_time).length / 4) }, (_, rowIndex) => (
+                                                <Stack key={rowIndex} direction="row" spacing={2} style={{ marginBottom: '10px' }}>
+                                                    {calculateTimeRange(restaurant.open_time, restaurant.close_time).slice(rowIndex * 3, rowIndex * 3 + 3).map(time => (
+                                                        <Button
+                                                            key={time}
+                                                            onClick={() => setFieldValue('time', time)}
+                                                            variant={values.time === time ? 'contained' : 'outlined'}
+                                                        >
+                                                            {time}
+                                                        </Button>
+                                                    ))}
+                                                </Stack>
                                             ))}
                                         </div>
                                     </div>
@@ -185,9 +190,9 @@ const ReservationForm = () => {
                             />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
-                            <button type="submit" className="btn btn-primary">
+                            <Button type="submit" variant="outlined">
                                 Submit Reservation
-                            </button>
+                            </Button>
                         </div>
                     </Form>
                 </div>
