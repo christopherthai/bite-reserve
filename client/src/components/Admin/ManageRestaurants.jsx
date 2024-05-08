@@ -40,11 +40,9 @@ It will also contain a RestaurantTable component that will display the list of r
 function ManageRestaurant() {
   const classes = useStyles();
   const drawerItems = [
-    { name: "Manage Restaurants", path: "/admindashboard/manage-restaurants" },
-    {
-      name: "Manage Reservations",
-      path: "/admindashboard/manage-reservations",
-    },
+    { name: "Manage Restaurants", path: "/admindashboard" },
+    { name: "Manage Reservations", path: "/manage-reservations" },
+    { name: "Manage Administrators", path: "/manage-administrators" }
   ];
 
   return (

@@ -32,10 +32,15 @@ function NavBar() {
     // auto-login
     fetch("/api/check_session").then((r) => {
       if (r.ok) {
-        r.json().then(() => setIsLogin(true)); // Update the user's login status if the user is logged in
+        r.json().then((user_data) => {
+          setIsLogin(true); // Update the user's login status if the user is logged in
+          if (user_data.IsAdmin === true) {
+            setIsAdmin(true); // Set the admin status to true
+          }
+        });
       }
     });
-  }, [setIsLogin]);
+  }, [setIsLogin, setIsAdmin]);
 
   // Handle the logout event
   const handleLogout = () => {
@@ -91,7 +96,6 @@ function NavBar() {
                   letterSpacing: "2px",
                   textShadow: "2px 4px 6px rgba(0, 0, 0, .75)",
                   marginRight: "15px",
-
                 }}
                 component={NavLink}
                 to="/"
@@ -108,7 +112,6 @@ function NavBar() {
                   letterSpacing: "2px",
                   textShadow: "2px 4px 6px rgba(0, 0, 0, .75)",
                   marginRight: "15px",
-
                 }}
                 component={NavLink}
                 to="/about"
@@ -124,7 +127,6 @@ function NavBar() {
                   letterSpacing: "2px",
                   textShadow: "2px 4px 6px rgba(0, 0, 0, .75)",
                   marginRight: "15px",
-
                 }}
                 component={NavLink}
                 to="/reservations"

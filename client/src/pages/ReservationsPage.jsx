@@ -141,48 +141,45 @@ const ReservationsTable = () => {
     >
       <Table sx={{ minWidth: 650 }} aria-label="reservation table">
         <TableHead>
-          <TableRow>
-            <TableCell align="right">Date & Time</TableCell>
-            <TableCell align="right">Table Size</TableCell>
-            <TableCell align="right">Status</TableCell>
-            <TableCell align="right">Notes</TableCell>
-
-            <TableCell align="right"></TableCell>
+          <TableRow >
+            <TableCell align="left">Restaurant Name</TableCell>
+            <TableCell align="left">Reservation Time</TableCell>
+            <TableCell align="left">Table Size</TableCell>            
+            <TableCell align="left">Notes</TableCell>
+            <TableCell align="left">Users Name</TableCell>
+            <TableCell align="center">View</TableCell>
+            <TableCell align="center">Cancel</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {currentReservations.length > 0 ? (
             currentReservations.map((reservation, index) => (
-              <TableRow
-                key={reservation.id}
-                style={{
-                  backgroundColor: index % 2 === 0 ? "#f0f0f0" : "white",
-                }}
-              >
-                <TableCell align="right">
-                  {reservation.reservation_time}
-                </TableCell>
-                <TableCell align="right">{reservation.table_size}</TableCell>
-                <TableCell align="right">{reservation.status}</TableCell>
-                <TableCell align="right">{reservation.notes}</TableCell>
-
-                <TableCell align="right" style={{ width: "100px" }}>
-                  <UpdateReservationForm
-                    reservation={reservation}
-                    onReservationChange={handleUpdateReservation}
-                  />
-                </TableCell>
-                <TableCell style={{ width: "100px" }}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleCancel(reservation.id)}
-                    style={{ marginLeft: "8px" }}
-                  >
-                    Cancel
-                  </Button>
-                </TableCell>
-              </TableRow>
+              <TableRow key={reservation.id} style={{ backgroundColor: index % 2 === 0 ? '#f0f0f0' : 'white' }}>
+                <TableCell align="left">{reservation.restaurant.name}</TableCell>
+                <TableCell align="left">{reservation.reservation_time}</TableCell>
+                <TableCell align="left">{reservation.table_size}</TableCell>
+                <TableCell align="left">{reservation.notes}</TableCell>
+                <TableCell align="left">{reservation.user.first_name} {reservation.user.last_name}</TableCell>
+                          
+                <TableCell align="left" style={{ width: "50px" }}>
+                        <UpdateReservationForm
+                          reservation={reservation}
+                          onReservationChange={
+                            handleUpdateReservation
+                          }
+                        />
+                    </TableCell>
+                    <TableCell style={{ width: "50px" }}>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleCancel(reservation.id)}
+                      style={{ marginLeft: '4px' }}
+                    >
+                      Cancel
+                    </Button>
+                  </TableCell>
+                </TableRow>
             ))
           ) : (
             <TableRow>
