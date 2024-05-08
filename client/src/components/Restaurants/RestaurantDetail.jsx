@@ -75,7 +75,7 @@ const RestaurantDetail = () => {
 
     return (
         <div className="restaurant-detail-container">
-            <div className="restaurant-page-container" style={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }}>
+            <div className="restaurant-page-container" style={{ marginBottom:'300px', height: '800px', overflowY: 'auto' }}>
                 <div style={{ padding: '20px', textAlign: 'center' }}>
                     <img src={restaurant.image} alt={restaurant.name} style={{ width: '100%', height: '300px', objectFit: 'cover', boxShadow: '0 4px 8px rgba(0, 0, 1, 1.4)' }} />
                     <h1 style={{ marginBottom: '10px' }}>{restaurant.name}</h1>
