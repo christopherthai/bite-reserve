@@ -140,10 +140,10 @@ const RegistrationForm = () => {
             </div>
 
             <div className="registration-form-field">
-              <label>
+              {/* <label>
                 <Field type="checkbox" name="isAdmin" />
                 Register as Admin
-              </label>
+              </label> */}
             </div>
 
             <button

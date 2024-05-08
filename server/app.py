@@ -49,7 +49,7 @@ class Signup(Resource):
         IsAdmin_from_request = request_json.get("isAdmin")
 
         IsAdmin = (
-            False if IsAdmin_from_request == 0 else True
+            True if IsAdmin_from_request == 1 else False
         )  # If IsAdmin is 0, then False, else True
 
         user = User(
@@ -829,7 +829,10 @@ class AllReservations(Resource):
 
     def get(self):
         reservations = Reservation.query.all()
-        reservations_list = [reservation.to_dict(rules=("-restaurant.reviews",)) for reservation in reservations]
+        reservations_list = [
+            reservation.to_dict(rules=("-restaurant.reviews",))
+            for reservation in reservations
+        ]
 
         return make_response(reservations_list, 200)
 
@@ -843,32 +846,32 @@ api.add_resource(AllReservations, "/reservations")
 class Users(Resource):
 
     def get(self):
-                
-        user_id = request.args.get('id')
-        username = request.args.get('username')
-        first_name = request.args.get('first_name')
-        last_name = request.args.get('last_name')
-        
+
+        user_id = request.args.get("id")
+        username = request.args.get("username")
+        first_name = request.args.get("first_name")
+        last_name = request.args.get("last_name")
+
         query = User.query
-                
-         # Filter by user_id if provided
+
+        # Filter by user_id if provided
         if user_id:
             query = query.filter(User.id == user_id)
 
         # Filter by username if provided
         if username:
-            query = query.filter(User.username.ilike(f'%{username}%'))
+            query = query.filter(User.username.ilike(f"%{username}%"))
 
         # Filter by first name if provided
         if first_name:
-            query = query.filter(User.first_name.ilike(f'%{first_name}%'))
+            query = query.filter(User.first_name.ilike(f"%{first_name}%"))
 
         # Filter by last name if provided
         if last_name:
-            query = query.filter(User.last_name.ilike(f'%{last_name}%'))
-        
+            query = query.filter(User.last_name.ilike(f"%{last_name}%"))
+
         users = query.all()
-        
+
         users_list = [user.to_dict() for user in users]
 
         return make_response(users_list, 200)
