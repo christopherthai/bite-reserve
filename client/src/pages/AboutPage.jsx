@@ -45,7 +45,7 @@ function AboutPage() {
           srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
           src={`${item.img}?w=248&fit=crop&auto=format`}
           alt="Decorative image"
-          loading="lazy"
+          loading="eager"
           style={{ width: '100%', height: '100%', objectFit: 'cover' }} // Makes the image cover the item area
         />
         
