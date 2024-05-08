@@ -58,13 +58,15 @@ function SetAdmin() {
     };
 
     const toggleAdminStatus = async (user) => {
+        console.log(user.IsAdmin)
         const updatedStatus = !user.IsAdmin;
+        console.log(updatedStatus)
         const response = await fetch(`/api/users/${user.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ...user, IsAdmin: updatedStatus })
+            body: JSON.stringify({ "IsAdmin": updatedStatus })
         });
         if (response.ok) {
             setUsers(users.map(u => u.id === user.id ? { ...u, IsAdmin: updatedStatus } : u));
