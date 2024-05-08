@@ -10,6 +10,12 @@ import {
   ListItemText,
   makeStyles,
   Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "64px",
     backgroundColor: "#f5f5f5",
   },
+  scrollableGrid: {
+    maxHeight: "1100px",
+    overflowY: "auto",
+  },
 }));
 
 function SetAdmin() {
@@ -35,33 +45,30 @@ function SetAdmin() {
     { name: "Manage Reservations", path: "/manage-reservations" },
     { name: "Manage Administrators", path: "/manage-administrators" },
   ];
-  const [searchParams, setSearchParams] = useState({
-    id: "",
-    username: "",
-    first_name: "",
-    last_name: "",
-  });
+  const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setSearchParams((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  // Fetch users from the server
+  useEffect(() => {
+    fetch("/api/users")
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data);
+      }),
+      [];
+  });
+
+  // Handle search input change
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const query = Object.entries(searchParams)
-      .filter(([_, value]) => value)
-      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-      .join("&");
-    const response = await fetch(`/api/users?${query}`);
-    const data = await response.json();
-    setUsers(data);
-  };
+  // Filter users based on search input
+  const filteredUsers = users.filter((user) => {
+    return user.username.toLowerCase().includes(search.toLowerCase());
+  });
 
+  // Toggle admin status of a user (make admin or revoke admin)
   const toggleAdminStatus = async (user) => {
     console.log(user.IsAdmin);
     const updatedStatus = !user.IsAdmin;
@@ -85,13 +92,7 @@ function SetAdmin() {
   return (
     <>
       <Grid container direction="column">
-        <Grid item>
-          {/* <AppBar position="static" className={classes.appBar}>
-            <Toolbar>
-              <Typography variant="h6">Admin Dashboard</Typography>
-            </Toolbar>
-          </AppBar> */}
-        </Grid>
+        <Grid item>{/* ... existing code ... */}</Grid>
         <Grid item>
           <Drawer
             className={classes.drawer}
@@ -109,61 +110,76 @@ function SetAdmin() {
             </List>
           </Drawer>
         </Grid>
-      </Grid>
-      <Paper
-        style={{ padding: "20px", margin: "20px", backgroundColor: "white" }}
-      >
-        <form onSubmit={handleSubmit}>
-          <TextField
-            name="id"
-            label="User ID"
-            value={searchParams.id}
-            onChange={handleChange}
-          />
-          <TextField
-            name="username"
-            label="Username"
-            value={searchParams.username}
-            onChange={handleChange}
-          />
-          <TextField
-            name="first_name"
-            label="First Name"
-            value={searchParams.first_name}
-            onChange={handleChange}
-          />
-          <TextField
-            name="last_name"
-            label="Last Name"
-            value={searchParams.last_name}
-            onChange={handleChange}
-          />
-          <Button
-            type="submit"
-            color="primary"
-            variant="contained"
-            style={{ marginTop: "10px" }}
-          >
-            Search
-          </Button>
-        </form>
-        <div style={{ marginTop: "20px" }}>
-          {users.map((user) => (
-            <div key={user.id} style={{ marginTop: "10px" }}>
-              {user.username} ({user.first_name} {user.last_name}) -{" "}
-              {user.IsAdmin ? "Admin" : "User"}
-              <Button
-                onClick={() => toggleAdminStatus(user)}
-                color="primary"
-                variant="contained"
-                style={{ marginLeft: "10px" }}
-              >
-                {user.IsAdmin ? "Revoke Admin" : "Make Admin"}
-              </Button>
-            </div>
-          ))}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            marginRight: "-200px",
+            marginTop: "350px",
+          }}
+        >
+          <Grid item style={{ marginTop: "-300px" }}>
+            <Grid item>
+              <TextField
+                id="search"
+                label="Search by Username"
+                type="search"
+                value={search}
+                onChange={handleSearchChange}
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "5px",
+                  width: "900px",
+                  margin: "0px",
+                }}
+              />
+            </Grid>
+            <Grid
+              container
+              direction="column"
+              className={classes.scrollableGrid}
+            >
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>ID</TableCell>
+                      <TableCell>Username</TableCell>
+                      <TableCell>First Name</TableCell>
+                      <TableCell>Last Name</TableCell>
+                      <TableCell>Role</TableCell>
+                      <TableCell>Action</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {filteredUsers.map((user) => (
+                      <TableRow key={user.id}>
+                        <TableCell>{user.id}</TableCell>
+                        <TableCell>{user.username}</TableCell>
+                        <TableCell>{user.first_name}</TableCell>
+                        <TableCell>{user.last_name}</TableCell>
+                        <TableCell>{user.IsAdmin ? "Admin" : "User"}</TableCell>
+                        <TableCell>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color={user.IsAdmin ? "secondary" : "primary"}
+                            onClick={() => toggleAdminStatus(user)}
+                          >
+                            {user.IsAdmin ? "Revoke Admin" : "Make Admin"}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          </Grid>
         </div>
-      </Paper>
+      </Grid>
     </>
   );
 }
