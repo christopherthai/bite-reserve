@@ -7,7 +7,7 @@ import "./ReviewsList.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-function ReviewsList() {
+function ReviewsList({ calculateAverageRating }) {
   const [reviews, setReviews] = useState([]);
   const { id } = useParams();
 
@@ -37,7 +37,6 @@ function ReviewsList() {
   const validationSchema = Yup.object().shape({
     comment: Yup.string().required("Comment is required"),
   });
-
 
   const handleSubmit = async (values, { resetForm }) => {
     // Get current timestamp
@@ -70,7 +69,6 @@ function ReviewsList() {
       resetForm();
       setSelectedRating(0); // Reset selectedRating to 0
 
-
       await fetchReviews();
       // Update reviews after adding new review
     } else {
@@ -85,6 +83,7 @@ function ReviewsList() {
       if (response.ok) {
         const reviewsData = await response.json();
         setReviews(reviewsData);
+        calculateAverageRating(reviewsData);
       } else {
         console.error("Failed to fetch reviews");
       }
@@ -129,37 +128,43 @@ function ReviewsList() {
           onSubmit={handleSubmit}
         >
           {({ values, handleChange, handleSubmit }) => (
-          <Form onSubmit={handleSubmit} className="review-form">
-          <div className="star-rating">
-            {[...Array(5)].map((_, index) => {
-              const ratingValue = index + 1;
-              return (
-                <FontAwesomeIcon
-                  key={index}
-                  icon={ratingValue <= selectedRating ? solidStar : regularStar}
-                  onClick={() => handleStarClick(ratingValue)}
-                  size="lg" // Increase the size of the stars
-                  className="star-icon"
+            <Form onSubmit={handleSubmit} className="review-form">
+              <div className="star-rating">
+                {[...Array(5)].map((_, index) => {
+                  const ratingValue = index + 1;
+                  return (
+                    <FontAwesomeIcon
+                      key={index}
+                      icon={
+                        ratingValue <= selectedRating ? solidStar : regularStar
+                      }
+                      onClick={() => handleStarClick(ratingValue)}
+                      size="lg" // Increase the size of the stars
+                      className="star-icon"
+                    />
+                  );
+                })}
+                <span className="select-rating">(Select Rating)</span>
+              </div>
+              <div className="comment-box">
+                <ErrorMessage
+                  name="comment"
+                  component="div"
+                  className="error-message"
                 />
-              );
-            })}
-            <span className="select-rating">(Select Rating)</span>
-          </div>
-          <div className="comment-box">
-            <ErrorMessage name="comment" component="div" className="error-message" />
-            <Field
-              as="textarea"
-              name="comment"
-              placeholder="Write your review here..."
-              value={values.comment}
-              onChange={handleChange}
-              className="comment-input"
-            />
-          </div>
-          <button type="submit">Submit Review</button>
-        </Form>
-        )}
-      </Formik>
+                <Field
+                  as="textarea"
+                  name="comment"
+                  placeholder="Write your review here..."
+                  value={values.comment}
+                  onChange={handleChange}
+                  className="comment-input"
+                />
+              </div>
+              <button type="submit">Submit Review</button>
+            </Form>
+          )}
+        </Formik>
       </div>
       <div className="centered-heading">
         <h2>Guest Reviews</h2>

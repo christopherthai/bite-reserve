@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
-import ReviewsList from '../Reviews/ReviewsList';
+import ReviewsList from "../Reviews/ReviewsList";
 import "./RestaurantDetail.css";
 
 const RestaurantDetail = () => {
@@ -64,55 +64,136 @@ const RestaurantDetail = () => {
 
   if (!restaurant) return <div>Loading...</div>;
 
-    // Function to render star rating based on average rating
-    const renderStarRating = () => {
-        const stars = [];
-        for (let i = 0; i < 5; i++) {
-            if (i < averageRating) {
-                stars.push(<FontAwesomeIcon key={i} icon={solidStar} color="blue" />);
-            } else {
-                stars.push(<FontAwesomeIcon key={i} icon={regularStar} color="blue" />);
-            }
-        }
-        return stars;
-    };
+  // Function to render star rating based on average rating
+  const renderStarRating = () => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      if (i < averageRating) {
+        stars.push(<FontAwesomeIcon key={i} icon={solidStar} color="blue" />);
+      } else {
+        stars.push(<FontAwesomeIcon key={i} icon={regularStar} color="blue" />);
+      }
+    }
+    return stars;
+  };
 
-    return (
-        <div className="restaurant-detail-container">
-            <div className="restaurant-page-container" style={{ marginBottom:'0px', height: '800px', overflowY: 'auto' }}>
-                <div style={{ padding: '20px', textAlign: 'center' }}>
-                    <img src={restaurant.image} alt={restaurant.name} style={{ width: '100%', height: '300px', objectFit: 'cover', boxShadow: '0 4px 8px rgba(0, 0, 1, 1.4)' }} />
-                    <h1 style={{ marginBottom: '10px' }}>{restaurant.name}</h1>
-                    <div>
-                        {renderStarRating()} {/* Render dynamic star rating */}
-                    </div>
-                    <h3>{restaurant.category}</h3>
-                    <h3>
-                        <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${restaurant.address}, ${restaurant.city}, ${restaurant.zip}`)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            {restaurant.address}, {restaurant.city}, {restaurant.state} {restaurant.zip}
-                        </a>
-                    </h3>
-                    <h3>Phone: {restaurant.phone}</h3>
-                    
-                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                    <button onClick={handleReservationClick} style={{ margin: '0 5px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>Make a Reservation</button>
-                    <a href={restaurant.menu_link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                        <button style={{ margin: '0 5px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>View Menu</button>
-                    </a>
-                    <a href={restaurant.website} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                        <button style={{ margin: '0 5px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>View Website</button>
-                    </a>
-                    <button onClick={() => setShowReviews(!showReviews)} style={{ margin: '0 5px', padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>{showReviews ? 'Close Reviews' : 'Reviews'}</button>
-                </div>
-            </div>
+  return (
+    <div className="restaurant-detail-container">
+      <div
+        className="restaurant-page-container"
+        style={{ marginBottom: "0px", height: "800px", overflowY: "auto" }}
+      >
+        <div style={{ padding: "20px", textAlign: "center" }}>
+          <img
+            src={restaurant.image}
+            alt={restaurant.name}
+            style={{
+              width: "100%",
+              height: "300px",
+              objectFit: "cover",
+              boxShadow: "0 4px 8px rgba(0, 0, 1, 1.4)",
+            }}
+          />
+          <h1 style={{ marginBottom: "10px" }}>{restaurant.name}</h1>
+          <div>
+            {renderStarRating()} {/* Render dynamic star rating */}
+          </div>
+          <h3>{restaurant.category}</h3>
+          <h3>
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                `${restaurant.address}, ${restaurant.city}, ${restaurant.zip}`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {restaurant.address}, {restaurant.city}, {restaurant.state}{" "}
+              {restaurant.zip}
+            </a>
+          </h3>
+          <h3>Phone: {restaurant.phone}</h3>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "20px",
+            }}
+          >
+            <button
+              onClick={handleReservationClick}
+              style={{
+                margin: "0 5px",
+                padding: "10px 20px",
+                fontSize: "16px",
+                cursor: "pointer",
+              }}
+            >
+              Make a Reservation
+            </button>
+            <a
+              href={restaurant.menu_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: "none" }}
+            >
+              <button
+                style={{
+                  margin: "0 5px",
+                  padding: "10px 20px",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                }}
+              >
+                View Menu
+              </button>
+            </a>
+            <a
+              href={restaurant.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: "none" }}
+            >
+              <button
+                style={{
+                  margin: "0 5px",
+                  padding: "10px 20px",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                }}
+              >
+                View Website
+              </button>
+            </a>
+            <button
+              onClick={() => setShowReviews(!showReviews)}
+              style={{
+                margin: "0 5px",
+                padding: "10px 20px",
+                fontSize: "16px",
+                cursor: "pointer",
+              }}
+            >
+              {showReviews ? "Close Reviews" : "Reviews"}
+            </button>
+          </div>
         </div>
-        <div className="reviews-list-container" style={{ maxHeight: showReviews ? 'calc(100vh - 200px)' : 0, overflowY: 'auto', padding: showReviews ? '20px' : '0' }}>
-            {showReviews && <ReviewsList restaurantId={id} />}
-        </div>
+      </div>
+      <div
+        className="reviews-list-container"
+        style={{
+          maxHeight: showReviews ? "calc(100vh - 200px)" : 0,
+          overflowY: "auto",
+          padding: showReviews ? "20px" : "0",
+        }}
+      >
+        {showReviews && (
+          <ReviewsList
+            restaurantId={id}
+            calculateAverageRating={calculateAverageRating}
+          />
+        )}
+      </div>
     </div>
   );
 };
