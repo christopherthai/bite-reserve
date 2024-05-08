@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
   },
   drawerPaper: {
-    width: 200,
+    width: 220,
     height: "100vh",
     marginTop: "64px",
     backgroundColor: "#f5f5f5",
@@ -44,7 +44,7 @@ function ManageReservations() {
   const drawerItems = [
     { name: "Manage Restaurants", path: "/admindashboard" },
     { name: "Manage Reservations", path: "/manage-reservations" },
-    { name: "Manage Administrators", path: "/manage-administrators" }
+    { name: "Manage Administrators", path: "/manage-administrators" },
   ];
 
   // user state to store the logged in user
