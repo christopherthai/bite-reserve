@@ -38,7 +38,7 @@
   overflow: hidden;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 1, 1.4);
-  background-color: rgba(255, 255, 255, 1.0);
+  background-color: rgb(237, 237, 244);
 }
 
 .card img {
@@ -50,4 +50,30 @@
 .card-content {
   padding: 10px;
 }
+.card-content {
+  position: relative; /* Position relative for absolute positioning */
+}
+
+.restaurant-name {
+  margin-top: 10px; /* Adjust the margin to move closer to the image */
+  text-align: center;
+
+}
+
+category-container {
+  position: absolute;
+  top: 10px; /* Adjust the distance from the top */
+  right: 10px; /* Adjust the distance from the right */
+  text-align: center;
+}
+
+
+.category {
+  color: white;
+  background-color: rgb(60, 56, 56);
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
 

@@ -113,7 +113,7 @@ function UpdateReservationForm({ reservation, onReservationChange }) {
           <Formik
             initialValues={{
               id: id,
-              reservation_time: reservation_time_string,
+              reservation_time: reservation_time,
               table_size: table_size,
               status: status,
               notes: notes,
