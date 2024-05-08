@@ -261,7 +261,7 @@ const ReservationForm = () => {
                             calculateTimeRange(
                               restaurant.open_time,
                               restaurant.close_time
-                            ).length / 4
+                            ).length / 3
                           ),
                         },
                         (_, rowIndex) => (
