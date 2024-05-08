@@ -47,7 +47,7 @@ class Restaurant(db.Model, SerializerMixin):
     reservations = db.relationship(
         "Reservation", back_populates="restaurant", cascade="all, delete-orphan"
     )
-    reviews = db.relationship("Review", back_populates="restaurant")
+    reviews = db.relationship("Review", back_populates="restaurant", cascade="all, delete-orphan")
 
     # Define association proxies with unique names
     reservation_users = association_proxy("reservations", "user")
