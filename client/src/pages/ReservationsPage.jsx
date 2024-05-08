@@ -143,11 +143,12 @@ const ReservationsTable = () => {
         <TableHead>
           <TableRow >
             <TableCell align="left">Restaurant Name</TableCell>
-            <TableCell align="left">Time</TableCell>
+            <TableCell align="left">Reservation Time</TableCell>
             <TableCell align="left">Table Size</TableCell>            
             <TableCell align="left">Notes</TableCell>
-            <TableCell align="left">User Name</TableCell>
-            <TableCell align="left">Actions</TableCell>
+            <TableCell align="left">Users Name</TableCell>
+            <TableCell align="center">View</TableCell>
+            <TableCell align="center">Cancel</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -158,9 +159,9 @@ const ReservationsTable = () => {
                 <TableCell align="left">{reservation.reservation_time}</TableCell>
                 <TableCell align="left">{reservation.table_size}</TableCell>
                 <TableCell align="left">{reservation.notes}</TableCell>
-                <TableCell align="left">{reservation.user.first_name}</TableCell>
+                <TableCell align="left">{reservation.user.first_name} {reservation.user.last_name}</TableCell>
                           
-                <TableCell align="left" style={{ width: "100px" }}>
+                <TableCell align="left" style={{ width: "50px" }}>
                         <UpdateReservationForm
                           reservation={reservation}
                           onReservationChange={
@@ -168,12 +169,12 @@ const ReservationsTable = () => {
                           }
                         />
                     </TableCell>
-                    <TableCell style={{ width: "100px" }}>
+                    <TableCell style={{ width: "50px" }}>
                     <Button
                       variant="contained"
                       color="secondary"
                       onClick={() => handleCancel(reservation.id)}
-                      style={{ marginLeft: '8px' }}
+                      style={{ marginLeft: '4px' }}
                     >
                       Cancel
                     </Button>
