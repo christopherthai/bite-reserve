@@ -1,62 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import ReviewsList from '../Reviews/ReviewsList';
 import "./RestaurantDetail.css";
 
 const RestaurantDetail = () => {
-    const { id } = useParams();
-    const [restaurant, setRestaurant] = useState(null);
-    const [user, setUser] = useState(null);
-    const [mapExpanded, setMapExpanded] = useState(true); // Change initial state to true
-    const [showReviews, setShowReviews] = useState(false); // State to manage visibility of ReviewsList
-    const navigate = useNavigate();
-    const [averageRating, setAverageRating] = useState(0);
+  const { id } = useParams();
+  const [restaurant, setRestaurant] = useState(null);
+  const [user, setUser] = useState(null);
+  const [mapExpanded, setMapExpanded] = useState(true); // Change initial state to true
+  const [showReviews, setShowReviews] = useState(false); // State to manage visibility of ReviewsList
+  const navigate = useNavigate();
+  const [averageRating, setAverageRating] = useState(0);
 
-    useEffect(() => {
-        fetch(`/api/restaurants/${id}`)
-            .then(response => response.json())
-            .then(data => {
-                setRestaurant(data);
-                calculateAverageRating(data.reviews); // Calculate average rating when restaurant data is fetched
-            })
-            .catch(error => console.error('Error loading the restaurant', error));
+  useEffect(() => {
+    fetch(`/api/restaurants/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setRestaurant(data);
+        calculateAverageRating(data.reviews); // Calculate average rating when restaurant data is fetched
+      })
+      .catch((error) => console.error("Error loading the restaurant", error));
 
-        // Check user session
-        fetch("/api/check_session")
-            .then((r) => {
-                if (r.ok) {
-                    r.json().then((user) => setUser(user));
-                }
-            });
-    }, [id]);
+    // Check user session
+    fetch("/api/check_session").then((r) => {
+      if (r.ok) {
+        r.json().then((user) => setUser(user));
+      }
+    });
+  }, [id]);
 
-    // Function to calculate average rating
-    const calculateAverageRating = (reviews) => {
-        const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
-        const average = reviews.length > 0 ? totalRating / reviews.length : 0;
-        setAverageRating(average);
-    };
+  // Function to calculate average rating
+  const calculateAverageRating = (reviews) => {
+    const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+    const average = reviews.length > 0 ? totalRating / reviews.length : 0;
+    setAverageRating(average);
+  };
 
-    const handleReservationClick = () => {
-        // Check user login status
-        if (!user) {
-            if (window.confirm("You are not logged in. Would you like to go to the login page?")) {
-              navigate("/login");
-            } else {
-              navigate("/");
-            }
-          } else {
-            if (user.IsAdmin) {
-              if (window.confirm("Admin users cannot make a reservation.")) {
-                navigate("/");
-              }
-            } else {
-              navigate(`/reservationsform/${restaurant.id}`);
-            }
-          }
+  const handleReservationClick = () => {
+    // Check user login status
+    if (!user) {
+      if (
+        window.confirm(
+          "You are not logged in. Would you like to go to the login page?"
+        )
+      ) {
+        navigate("/login");
+      } else {
+        navigate("/");
+      }
+    } else {
+      if (user.IsAdmin) {
+        if (window.confirm("Admin users cannot make a reservation.")) {
+          navigate("/");
         }
+      } else {
+        navigate(`/reservationsform/${restaurant.id}`);
+      }
+    }
+  };
 
   if (!restaurant) return <div>Loading...</div>;
 
@@ -65,9 +69,9 @@ const RestaurantDetail = () => {
         const stars = [];
         for (let i = 0; i < 5; i++) {
             if (i < averageRating) {
-                stars.push(<FontAwesomeIcon key={i} icon={faStar} color="orange" />);
+                stars.push(<FontAwesomeIcon key={i} icon={solidStar} color="blue" />);
             } else {
-                stars.push(<FontAwesomeIcon key={i} icon={faStar} color="gray" />);
+                stars.push(<FontAwesomeIcon key={i} icon={regularStar} color="blue" />);
             }
         }
         return stars;
@@ -82,7 +86,7 @@ const RestaurantDetail = () => {
                     <div>
                         {renderStarRating()} {/* Render dynamic star rating */}
                     </div>
-                    <h3>{restaurant.category} Style Restaurant</h3>
+                    <h3>{restaurant.category}</h3>
                     <h3>
                         <a
                             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${restaurant.address}, ${restaurant.city}, ${restaurant.zip}`)}`}
@@ -110,7 +114,7 @@ const RestaurantDetail = () => {
             {showReviews && <ReviewsList restaurantId={id} />}
         </div>
     </div>
-);
-}
+  );
+};
 
 export default RestaurantDetail;
