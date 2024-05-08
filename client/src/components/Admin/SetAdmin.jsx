@@ -131,7 +131,7 @@ function SetAdmin() {
                 style={{
                   backgroundColor: "white",
                   borderRadius: "5px",
-                  width: "900px",
+                  width: "1110px",
                   margin: "0px",
                 }}
               />
@@ -149,6 +149,8 @@ function SetAdmin() {
                       <TableCell>Username</TableCell>
                       <TableCell>First Name</TableCell>
                       <TableCell>Last Name</TableCell>
+                      <TableCell>Phone Number</TableCell>
+                      <TableCell>Email Address</TableCell>
                       <TableCell>Role</TableCell>
                       <TableCell>Action</TableCell>
                     </TableRow>
@@ -160,6 +162,8 @@ function SetAdmin() {
                         <TableCell>{user.username}</TableCell>
                         <TableCell>{user.first_name}</TableCell>
                         <TableCell>{user.last_name}</TableCell>
+                        <TableCell>{user.phone}</TableCell>
+                        <TableCell>{user.email}</TableCell>
                         <TableCell>{user.IsAdmin ? "Admin" : "User"}</TableCell>
                         <TableCell>
                           <Button
