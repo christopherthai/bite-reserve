@@ -37,36 +37,28 @@ const ReservationForm = () => {
   if (!restaurant) return <div>Loading...</div>;
 
   function formatTime(time) {
-    let hour = Math.floor(time / 100);
+    const hour = Math.floor(time / 100);
     const minute = time % 100;
-    const isPM = hour >= 12; // 오후인지 확인
-    hour = hour % 12; // 12시간제로 변환
-    if (hour === 0) hour = 12; // 0시는 12시로 표시
-
-    return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")} ${isPM ? 'PM' : 'AM'}`;
-}
+    return `${hour.toString().padStart(2, "0")}:${minute
+      .toString()
+      .padStart(2, "0")}`;
+  }
 
   function calculateTimeRange(openTime, closeTime) {
-    const formatAndSplitTime = (time) => {
-        const [timeStr, period] = formatTime(time).split(" ");
-        const [hour, minute] = timeStr.split(":").map(Number);
-        return { hour: hour + (period === 'PM' && hour !== 12 ? 12 : 0), minute };
-    };
-
-    const startTime = formatAndSplitTime(openTime);
-    const endTime = formatAndSplitTime(closeTime);
-    const startHour = startTime.hour;
-    const endHour = endTime.hour;
+    const startTime = formatTime(openTime).split(":").map(Number);
+    const endTime = formatTime(closeTime).split(":").map(Number);
+    const startHour = startTime[0];
+    const endHour = endTime[0];
     const times = [];
 
     for (let hour = startHour; hour <= endHour; hour++) {
-        times.push(`${((hour - 1) % 12 + 1).toString().padStart(2, "0")}:00 ${hour >= 12 && hour < 24 ? 'PM' : 'AM'}`);
-        if (hour !== endHour) {
-            times.push(`${((hour - 1) % 12 + 1).toString().padStart(2, "0")}:30 ${hour >= 12 && hour < 24 ? 'PM' : 'AM'}`);
-        }
+      times.push(`${hour.toString().padStart(2, "0")}:00`);
+      if (hour !== endHour) {
+        times.push(`${hour.toString().padStart(2, "0")}:30`);
+      }
     }
     return times;
-}
+  }
 
   return (
     <Formik
