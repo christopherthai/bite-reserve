@@ -1,0 +1,45 @@
+.about-page {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+  }
+  
+  .background-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .overlay-text-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: rgb(237, 237, 244);
+  }
+  
+  .heading {
+    font-family: 'EB Garamond', sans-serif; /* Replace 'Your Font Name' with your desired font */
+    font-size: 3rem; /* Adjust font size as needed */
+    color: rgb(237, 237, 244); /* Set text color to white */
+  text-shadow: 2px 2px 2zpx rgb(132, 126, 126); /* Add t/* Center the paragraph */
+  }
+  
+  .paragraph {
+    font-family: 'EB Garamond', sans-serif; /* Replace 'Your Font Name' with your desired font */
+    font-size: 1.4rem; /* Adjust font size as needed */
+    max-width: 400px; /* Adjust maximum width as needed */
+    margin: 0 auto; 
+    margin: 0 auto;
+  padding: 20px; /* Add padding to enhance the embedded look */
+  border-radius: 10px; /* Add border-radius for rounded corners */
+  color: #fff; /* Set text color to white */
+  text-shadow: 2px 2px 2px rgb(132, 126, 126); /* Add t/* Center the paragraph */
+  }
