@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#f5f5f5",
   },
   scrollableGrid: {
-    maxHeight: "1100px",
+    maxHeight: "1200px",
     overflowY: "auto",
   },
 }));
@@ -117,10 +117,10 @@ function SetAdmin() {
             alignItems: "center",
             height: "100vh",
             marginRight: "-200px",
-            marginTop: "350px",
+            marginTop: "270px",
           }}
         >
-          <Grid item style={{ marginTop: "-300px" }}>
+          <Grid item style={{ marginTop: "-130px" }}>
             <Grid item>
               <TextField
                 id="search"
