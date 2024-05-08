@@ -101,20 +101,6 @@ const ReservationForm = () => {
             restaurant_id: id,
           }),
         });
-        const response = await fetch(`/api/restaurants/${id}/reservations`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            reservation_time: reservationTime,
-            table_size: parseInt(values.partySize),
-            status: "confirmed",
-            user_id: user.id,
-            notes: values.notes.toString(),
-            restaurant_id: id,
-          }),
-        });
 
         if (response.ok) {
           const reservationData = await response.json();
