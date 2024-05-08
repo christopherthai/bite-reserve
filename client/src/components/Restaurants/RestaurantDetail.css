@@ -1,17 +1,21 @@
 .restaurant-page-container {
   background-color: rgb(237, 237, 244);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 2);
-  margin: 20px; /* Adjust margin as needed */
+  margin: 20px auto;/* Adjust margin as needed */
   padding: 20px; /* Adjust padding as needed */
   border-radius: 8px; /* Add border radius for rounded corners */
   margin-top: 100px;
+  max-width: 75%;
+  
 }
 
 .reviews-list-container {
   background-color: rgb(237, 237, 244);
-  margin: 20px; /* Adjust margin as needed */
+  margin: 20px auto; /* Adjust margin as needed */
   padding: 20px; /* Adjust padding as needed */
-  border-radius: 8px; /* Add border radius for rounded corners */
+  border-radius: 8px;
+  width: 75%;
+   /* Add border radius for rounded corners */
 }
 
 .restaurant-detail {
