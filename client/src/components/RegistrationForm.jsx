@@ -139,13 +139,6 @@ const RegistrationForm = () => {
               <ErrorMessage name="email" component="div" className="error" />
             </div>
 
-            <div className="registration-form-field">
-              {/* <label>
-                <Field type="checkbox" name="isAdmin" />
-                Register as Admin
-              </label> */}
-            </div>
-
             <button
               type="submit"
               disabled={isSubmitting}
