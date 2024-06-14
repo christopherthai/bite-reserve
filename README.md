@@ -6,6 +6,26 @@
 
 BiteReserve is an intuitive web application that simplifies restaurant reservations by allowing users to seamlessly browse, book, and manage their dining experiences online.
 
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- You have installed [Git](https://git-scm.com/).
+- You have a [GitHub](https://github.com/) account.
+- You have installed [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/get-npm).
+- You have installed [Python](https://www.python.org/) and [pipenv](https://pipenv.pypa.io/en/latest/).
+- You have installed [Honcho](https://honcho.readthedocs.io/en/latest/) (to manage Procfile-based applications).
+
+## Running the Application
+
+1. Ensure you are in the root directory of the project.
+
+2. Start the application using Honcho:
+
+   ```bash
+   honcho start -f Procfile.dev
+   ```
+
 ## Wireframe
 
 ### Home Page
