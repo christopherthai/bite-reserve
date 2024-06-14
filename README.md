@@ -20,7 +20,7 @@ Before you begin, ensure you have met the following requirements:
 
 1. Ensure you are in the root directory of the project.
 
-2. Start the application using Honcho
+2. Start the application using Honcho:
 
    ```bash
    honcho start -f Procfile.dev
