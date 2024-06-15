@@ -52,6 +52,22 @@ To get a local copy up and running, follow these steps.
    npm install
    ```
 
+### Back-end Installation
+
+1. Ensure you are in the root directory of the project.
+
+2. Install pipenv and dependencies:
+
+   ```bash
+   pipenv install
+   ```
+
+3. Activate the virtual environment:
+
+   ```bash
+   pipenv shell
+   ```
+
 ## Running the Application
 
 1. Ensure you are in the root directory of the project.
