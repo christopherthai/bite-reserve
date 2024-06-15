@@ -16,6 +16,42 @@ Before you begin, ensure you have met the following requirements:
 - You have installed [Python](https://www.python.org/) and [pipenv](https://pipenv.pypa.io/en/latest/).
 - You have installed [Honcho](https://honcho.readthedocs.io/en/latest/) (to manage Procfile-based applications).
 
+## Getting Started
+
+To get a local copy up and running, follow these steps.
+
+### Front-end Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone git@github.com:your-username/bite-reserve.git
+   ```
+
+2. Navigate to the root directory:
+
+   ```bash
+   cd bite-reserve
+   ```
+
+3. Install npm packages:
+
+   ```bash
+   npm install
+   ```
+
+4. Navigate to the front-end directory:
+
+   ```bash
+   cd client
+   ```
+
+5. Install npm packages:
+
+   ```bash
+   npm install
+   ```
+
 ## Running the Application
 
 1. Ensure you are in the root directory of the project.
