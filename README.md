@@ -68,6 +68,20 @@ To get a local copy up and running, follow these steps.
    pipenv shell
    ```
 
+### Database Setup
+
+1. Navigate to the data directory:
+
+   ```bash
+   cd server/Database-Imports
+   ```
+
+2. Create a database file from the SQL file:
+
+   ```bash
+   sqlite3 app.db < backup.sql
+   ```
+
 ## Running the Application
 
 1. Ensure you are in the root directory of the project.
