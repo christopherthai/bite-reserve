@@ -78,6 +78,10 @@ To get a local copy up and running, follow these steps.
    honcho start -f Procfile.dev
    ```
 
+## Additional Notes
+
+- Ensure your SQLite database file is correctly set up before starting the back-end server.
+
 ## Wireframe
 
 ### Home Page
