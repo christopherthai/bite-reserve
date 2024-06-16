@@ -70,13 +70,13 @@ To get a local copy up and running, follow these steps.
 
 ### Database Setup
 
-1. Navigate to the data directory:
+1. Navigate to the data directory
 
    ```bash
    cd server/Database-Imports
    ```
 
-2. Create a database file from the SQL file:
+2. Create a database file from the SQL file
 
    ```bash
    sqlite3 app.db < backup.sql
