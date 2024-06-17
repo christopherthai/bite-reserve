@@ -46,7 +46,7 @@ To get a local copy up and running, follow these steps.
    cd client
    ```
 
-5. Install npm packages
+5. Install npm packages:
 
    ```bash
    npm install
