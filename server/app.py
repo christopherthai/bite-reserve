@@ -12,7 +12,9 @@ from models import db, Restaurant, User, Reservation, Review
 
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
+DATABASE = os.environ.get(
+    "DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'Database-Imports/app.db')}"
+)
 
 
 app = Flask(__name__)
